@@ -10,7 +10,7 @@ class CoastAgent:
         self.tokens = tokens
         self.direction = randomint(1, 8)
 
-    def generateCoast(self, seedpoint, tokens, size, limit): #Static method, user specified seed, called by user?
+    def generateCoast(self, seedpoint, tokens, limit): #Static method, user specified seed, called by user?
         CoastAgent(seedpoint, tokens, limit)
 
     def recurCoast(self, agent, limit):
