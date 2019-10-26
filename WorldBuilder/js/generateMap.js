@@ -69,7 +69,7 @@ class Map {
     }
 
     point(x, y){
-        if(x < 0 || x > this.width || y < 0 || y > this.height){
+        if(x < 0 || x > this.width-1 || y < 0 || y > this.height-1){
             console.error("Map Error: Attempted to access non existant point (" + x + ", " + y + ")");
             return null;
         }
