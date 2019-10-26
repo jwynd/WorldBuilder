@@ -69,6 +69,10 @@ class Map {
     }
 
     point(x, y){
+        if(x < 0 || x > this.width || y < 0 || y > this.height){
+            console.error("Map Error: Attempted to access non existant point (" + x + ", " + y + ")");
+            return null;
+        }
         return this.map[(y*this.width) + x];
     }
 
@@ -133,7 +137,8 @@ class Map {
     /*
     // generate a map by calling each individual agent
     generate(){
-
+        construct agents
+        
         generateCoast(this, other params);
         generateBeach(this, other paramsS);
         // etc
