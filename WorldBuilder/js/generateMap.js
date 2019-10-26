@@ -69,6 +69,10 @@ class Map {
     }
 
     point(x, y){
+        if(x < 0 || x > this.width-1 || y < 0 || y > this.height-1){
+            console.error("Map Error: Attempted to access non existant point (" + x + ", " + y + ")");
+            return null;
+        }
         return this.map[(y*this.width) + x];
     }
 
@@ -130,10 +134,16 @@ class Map {
         return result;
     }
 
+    static randomDirection(){
+        let dir = ["west", "northwest", "north", "northeast", "east", "southeast", "south", "southwest"];
+        return random(dir);
+    }
+
     /*
     // generate a map by calling each individual agent
     generate(){
-
+        construct agents
+        
         generateCoast(this, other params);
         generateBeach(this, other paramsS);
         // etc
