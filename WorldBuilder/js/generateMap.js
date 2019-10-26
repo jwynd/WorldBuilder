@@ -134,6 +134,11 @@ class Map {
         return result;
     }
 
+    static randomDirection(){
+        let dir = ["west", "northwest", "north", "northeast", "east", "southeast", "south", "southwest"];
+        return random(dir);
+    }
+
     /*
     // generate a map by calling each individual agent
     generate(){
