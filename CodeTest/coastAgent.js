@@ -66,7 +66,7 @@ class CoastAgent{
         this.direction = map.randomDirection();
     }
 
-    generateCoast(map){
+    generate(map){
         /*
         Generates a new landmass centered around this agent on map.
         */
