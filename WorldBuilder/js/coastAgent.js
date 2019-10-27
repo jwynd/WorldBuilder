@@ -12,7 +12,7 @@ class CoastAgent{
         this.seed = seedpoint;
         this.tokens = tokens;
         this.limit = limit;
-        this.direction = map.randomDirection();
+        this.direction = Map.randomDirection();
     }
 
     getSeed(){
@@ -64,7 +64,7 @@ class CoastAgent{
         /*
         Sets the direction of the agent to a new random direction.
         */
-        this.direction = map.randomDirection();
+        this.direction = Map.randomDirection();
     }
 
     generate(map){
