@@ -11,6 +11,7 @@ class CoastAgent{
         */
         this.seed = seedpoint;
         this.tokens = tokens;
+        this.limit = limit;
         this.direction = map.randomDirection();
     }
 
