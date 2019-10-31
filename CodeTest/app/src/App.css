@@ -1,0 +1,45 @@
+body {
+  font-family: 'Nunito', sans-serif;
+}
+
+.App-title {
+  position: absolute;
+  font-size: 48px;
+  color:#E0E1DD;
+  top: -10px;
+  left: 95px;
+}
+
+.fill {
+  background: #0D1B2A;
+  width: 100%;
+  height: 100px;
+}
+
+.App-logo {
+  position: absolute;
+  top: 0px;
+  left: 400px;
+}
+
+.App-download {
+  fill: #E0E1DD;
+  position: absolute;
+  top: 23px;
+  right: 235px;
+}
+
+.login-button {
+  color: #E0E1DD;
+  position: absolute;
+  font-size: 24px;
+  top: 35px;
+  right: 40px;
+}
+
+.App-menu {
+  fill: #E0E1DD;
+  position: absolute;
+  top: 30px;
+  left: 25px;
+}
