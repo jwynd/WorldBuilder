@@ -36,9 +36,16 @@ function makeHeightmap(m){
   heightmap.loadPixels();
   let pixIndex = 0;
   for(let i = 0; i < heightmap.width; ++i){
-    for(let j = 0; j < heightmap.height; ++i){
+    for(let j = 0; j < heightmap.height; ++j){
       let raw = m.point(i, j).getElevation();
-      let col = (raw===0)?color(30,60,200):color(200, 100, 0);
+      let col = 0;
+      if(raw == 0){
+        col = color(0, 0, 255);
+      } else if(raw == 1){
+        col = color(0, 255, 0);
+      } else {
+        col = color(255, 0, 0);
+      }
       heightmap.set(i, j, col);
     }
   }
