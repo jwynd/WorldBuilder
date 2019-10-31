@@ -71,6 +71,7 @@ class CoastAgent{
         /*
         Generates a new landmass centered around this agent on map.
         */
+        map.nothing();
         this.recurCoast(this, map);
     }
 
@@ -79,6 +80,7 @@ class CoastAgent{
         Recursively divides agents into child agents until all child agents are at or below the specified limit.
         Child agents then procedurally move around the map and raise points out of the ocean.
         */
+        map.nothing();
         if(agent.tokens > agent.limit){
             let child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens/2), agent.limit);
             let child2 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens/2), agent.limit);
