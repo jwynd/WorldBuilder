@@ -42,11 +42,15 @@ function makeHeightmap(m){
   let pixIndex = 0;
   for(let i = 0; i < heightmap.width; ++i){
     for(let j = 0; j < heightmap.height; ++j){
-      let b = m.point(i, j).getBiome();
-      let e = m.point(i, j).getElevation();
-      let r = (b==="coast")?255:0;
-      let g = (e!==0)?255:0;
-      let col = color(r, g, 255);
+      let raw = m.point(i, j).getElevation();
+      let col = 0;
+      if(raw == 0){
+        col = color(0, 0, 255);
+      } else if(raw == 1){
+        col = color(0, 255, 0);
+      } else {
+        col = color(255, 0, 0);
+      }
       heightmap.set(i, j, col);
     }
   }
