@@ -71,7 +71,6 @@ class CoastAgent{
         /*
         Generates a new landmass centered around this agent on map.
         */
-        map.nothing();
         this.recurCoast(this, map);
     }
 
@@ -80,12 +79,12 @@ class CoastAgent{
         Recursively divides agents into child agents until all child agents are at or below the specified limit.
         Child agents then procedurally move around the map and raise points out of the ocean.
         */
-        map.nothing();
         if(agent.tokens > agent.limit){
             let child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens/2), agent.limit);
             let child2 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens/2), agent.limit);
-            this.recurCoast(child1);
-            this.recurCoast(child2);
+            this.recurCoast(child1, map);
+            this.recurCoast(child2, map);
+            
         }
         else{
             while(agent.tokens > 0){
@@ -95,11 +94,16 @@ class CoastAgent{
                     break;
                 }
                 let beacons = this.assignBeacons(agent.seed, map);
-                let scoreSet = [];
+                let maxScore = Number.NEGATIVE_INFINITY;
+                let maxP = null;
                 for(let p of map.getNeighbors(agent.seed)){
-                    scoreSet.push(score(p, beacons));
+                    let pointScore = this.score(p, beacons, map);
+                    if(pointScore > maxScore){
+                        maxScore = pointScore;
+                        maxP = p;
+                    }
                 }
-                this.raisePoint(Math.max(scoreSet));
+                this.raisePoint(maxP);
                 agent.tokens--;
             }
         }
@@ -131,8 +135,8 @@ class CoastAgent{
         /*
         Moves an agent in its preferred direction until it falls off the map or finds a non-landlocked point.
         */
-        while(map.getNeighborsOfType(agent.seed, ocean).length == 0){
-            agent.seed = getNeighbor(agent.seed, map.getNeighbor(agent.seed, agent.direction));
+        while(map.getNeighborsOfType(agent.seed, "ocean").length == 0){
+            agent.seed = map.getNeighbor(agent.seed, map.getNeighbor(agent.seed, agent.direction));
             if (agent.seed === null){
                 return;
             }
@@ -147,7 +151,7 @@ class CoastAgent{
         let attractor = beacons[1];
         let dR = point.dist(repulsor);
         let dA = point.dist(attractor);
-        let dE = min[(map.width-1 - point.getX()), (point.getX()), (map.height-1 - point.getY()), (point.getY())];
+        let dE = Math.min((map.width-1 - point.getX()), (point.getX()), (map.height-1 - point.getY()), (point.getY()));
         return Math.pow(dR, 2) - Math.pow(dA, 2) + 3 * Math.pow(dE, 2);
     }
 }

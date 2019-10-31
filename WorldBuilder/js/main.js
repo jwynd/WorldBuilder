@@ -16,7 +16,7 @@ let m;
 let c;
 let mWidth = 1280;
 let mHeight = 720;
-let tokens = 1000;
+let tokens = 10000;
 let limit = 100;
 let worldSeed = 0xa12413adff;
 function setup(){
@@ -28,6 +28,11 @@ function setup(){
   let p = m.point(sPointX, sPointY);
   c = new CoastAgent(p, tokens, limit);
   c.generate(m);
+  sPointX = floor(mWidth/4);
+  sPointY = floor(mHeight/4);
+  p = m.point(sPointX, sPointY);
+  c.setSeed(p);
+  c.generate(m);
   makeHeightmap(m);
 }
 
@@ -36,9 +41,12 @@ function makeHeightmap(m){
   heightmap.loadPixels();
   let pixIndex = 0;
   for(let i = 0; i < heightmap.width; ++i){
-    for(let j = 0; j < heightmap.height; ++i){
-      let raw = m.point(i, j).getElevation();
-      let col = (raw===0)?color(30,60,200):color(200, 100, 0);
+    for(let j = 0; j < heightmap.height; ++j){
+      let b = m.point(i, j).getBiome();
+      let e = m.point(i, j).getElevation();
+      let r = (b==="coast")?255:0;
+      let g = (e!==0)?255:0;
+      let col = color(r, g, 255);
       heightmap.set(i, j, col);
     }
   }

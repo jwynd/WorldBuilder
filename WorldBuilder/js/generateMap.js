@@ -134,10 +134,6 @@ class Map {
         return result;
     }
 
-    nothing(){
-        return 1;
-    }
-
     static randomDirection(){
         let dir = ["west", "northwest", "north", "northeast", "east", "southeast", "south", "southwest"];
         return random(dir);
