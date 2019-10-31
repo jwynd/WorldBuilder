@@ -64,7 +64,7 @@ class Map {
         for(let i = 0; i < x*y; i++){
             xpos = i % this.width;
             if(xpos === 0) ypos++;
-            this.map[this.map.length] = new Point(0, "Ocean", xpos, ypos);
+            this.map[this.map.length] = new Point(0, "ocean", xpos, ypos);
         }
     }
 
