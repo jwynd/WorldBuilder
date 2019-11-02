@@ -1,8 +1,6 @@
 
-class Mountain_Agent 
-{
-    constructor(number_of_mountains, tokens, width, height_min, height_max, turn_period, foothill_period, dropoff, min_elevation, noise_amount)
-    {
+class MountainAgent{
+    constructor(number_of_mountains, tokens, width, height_min, height_max, turn_period, foothill_period, dropoff, min_elevation, noise_amount){
         this.x = -1;
         this.y = -1;
         this.number_of_mountains = number_of_mountains;
@@ -17,8 +15,7 @@ class Mountain_Agent
         this.min_elevation = min_elevation;
         this.noise_amount = noise_amount;
     }
-    generate(map)
-    {
+    generate(map){
         let mountain_count;
         for(mountain_count = 0; mountain_count < this.number_of_mountains; mountain_count++)
         {

@@ -20,6 +20,22 @@ let mHeight = 720;
 let tokens = 300000;
 let limit = 3000;
 let worldSeed = 0xa12413adff;
+
+///////////////////
+//Mountain Params//
+///////////////////
+let m1 =6;
+let m2 = 10000;
+let m3 = 500;
+let m4 = 5;
+let m5 = 10;
+let m6 = 2500;
+let m7 = 500;
+let m8 = 0.9;
+let m9 = 1;
+let m10 = 5;
+
+
 function setup(){
   createCanvas(mWidth, mHeight);
   m = new Map(mWidth, mHeight);
@@ -28,7 +44,7 @@ function setup(){
   let sPointY = floor(mHeight/2);
   let p = m.point(sPointX, sPointY);
   c = new CoastAgent(p, tokens, limit);
-  ma = new Mountain_Agent(6, 10000, 500, 5, 10, 2500, 500, 0.9, 1, 5);
+  ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
   let l = [c, ma];
   for(let i = 0; i < l.length; i++){
     l[i].generate(m);
