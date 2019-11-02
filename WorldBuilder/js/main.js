@@ -17,7 +17,7 @@ let c;
 let mWidth = 1280;
 let mHeight = 720;
 let tokens = 10000;
-let limit = 100;
+let limit = 1;
 let worldSeed = 0xa12413adff;
 function setup(){
   createCanvas(mWidth, mHeight);
@@ -27,11 +27,6 @@ function setup(){
   let sPointY = floor(mHeight/2);
   let p = m.point(sPointX, sPointY);
   c = new CoastAgent(p, tokens, limit);
-  c.generate(m);
-  sPointX = floor(mWidth/4);
-  sPointY = floor(mHeight/4);
-  p = m.point(sPointX, sPointY);
-  c.setSeed(p);
   c.generate(m);
   makeHeightmap(m);
 }
