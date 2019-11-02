@@ -13,6 +13,7 @@ class CoastAgent{
         this.tokens = tokens;
         this.limit = limit;
         this.direction = Map.randomDirection();
+        this.counter = 0;
     }
 
     getSeed(){
@@ -91,6 +92,7 @@ class CoastAgent{
                 agent.seed = map.getRandomNeighbor(agent.seed);
                 this.moveAgent(agent, map);
                 if(agent.seed === null){
+                    console.log("You goofed!")
                     break;
                 }
                 let beacons = this.assignBeacons(agent.seed, map);
@@ -113,7 +115,8 @@ class CoastAgent{
         /*
         Raises a point out of the ocean and sets its biome to coast.
         */
-        point.setElevation(1);
+        let elevation = point.getElevation();
+        point.setElevation(++elevation);
         point.setBiome("coast");
         return point;
     }
@@ -136,7 +139,7 @@ class CoastAgent{
         Moves an agent in its preferred direction until it falls off the map or finds a non-landlocked point.
         */
         while(map.getNeighborsOfType(agent.seed, "ocean").length == 0){
-            agent.seed = map.getNeighbor(agent.seed, map.getNeighbor(agent.seed, agent.direction));
+            agent.seed = map.getNeighbor(agent.seed, agent.direction);
             if (agent.seed === null){
                 return;
             }
@@ -147,6 +150,9 @@ class CoastAgent{
         /*
         Scores a point relative to an attractor and a repulsor.
         */
+        if(point.getBiome() !== "ocean"){
+            return Number.NEGATIVE_INFINITY;
+        }
         let repulsor = beacons[0];
         let attractor = beacons[1];
         let dR = point.dist(repulsor);
