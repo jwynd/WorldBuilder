@@ -88,6 +88,7 @@ class CoastAgent{
             
         }
         else{
+            //this.raisePoint(agent.seed)
             while(agent.tokens > 0){
                 agent.seed = map.getRandomNeighbor(agent.seed);
                 this.moveAgent(agent, map);
@@ -105,6 +106,7 @@ class CoastAgent{
                         maxP = p;
                     }
                 }
+                agent.randDirection();
                 this.raisePoint(maxP);
                 agent.tokens--;
             }
@@ -144,6 +146,7 @@ class CoastAgent{
                 return;
             }
         }
+        //agent.randDirection();
     }
 
     score(point, beacons, map){
