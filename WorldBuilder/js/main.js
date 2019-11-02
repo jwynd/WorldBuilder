@@ -16,8 +16,8 @@ let m;
 let c;
 let mWidth = 1280;
 let mHeight = 720;
-let tokens = 10000;
-let limit = 1;
+let tokens = 100000;
+let limit = 1000;
 let worldSeed = 0xa12413adff;
 function setup(){
   createCanvas(mWidth, mHeight);
