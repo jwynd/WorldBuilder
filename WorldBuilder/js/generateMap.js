@@ -133,6 +133,16 @@ class Map {
         }
         return result;
     }
+    
+    getPointsOfType(biome){
+        let result = [];
+        for(let i = 0; i < this.map.length; ++i){
+            if(this.map[i].getBiome() === biome){
+                result.push(this.map[i]);
+            }
+        }
+        return result;
+    }
 
     static randomDirection(){
         let dir = ["west", "northwest", "north", "northeast", "east", "southeast", "south", "southwest"];
