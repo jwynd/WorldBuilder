@@ -64,7 +64,7 @@ class Map {
         for(let i = 0; i < x*y; i++){
             xpos = i % this.width;
             if(xpos === 0) ypos++;
-            this.map[this.map.length] = new Point(0, "Ocean", xpos, ypos);
+            this.map[this.map.length] = new Point(0, "ocean", xpos, ypos);
         }
     }
 
@@ -132,6 +132,21 @@ class Map {
             }
         }
         return result;
+    }
+    
+    getPointsOfType(biome){
+        let result = [];
+        for(let i = 0; i < this.map.length; ++i){
+            if(this.map[i].getBiome() === biome){
+                result.push(this.map[i]);
+            }
+        }
+        return result;
+    }
+
+    getRandomPointOfType(biome){
+        let b = this.getPointsOfType(biome);
+        return random(b);
     }
 
     static randomDirection(){
