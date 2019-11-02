@@ -144,6 +144,11 @@ class Map {
         return result;
     }
 
+    getRandomPointOfType(biome){
+        let b = this.getPointsOfType(biome);
+        return random(b);
+    }
+
     static randomDirection(){
         let dir = ["west", "northwest", "north", "northeast", "east", "southeast", "south", "southwest"];
         return random(dir);
