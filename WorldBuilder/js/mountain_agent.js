@@ -184,10 +184,13 @@ class Mountain_Agent
     }
     add_elevation(map, x, y, amount)
     {
-        if(map.point(x, y) === null || map.point(x, y).getElevation() < this.min_elevation)
+        if(map.point(x, y) === null || map.point(x, y).getElevation() < this.min_elevation){
             return true;
-        else
+        }
+        else{
             map.point(x,y).setElevation(map.point(x,y).getElevation + amount);
+            map.point(x,y).setBiome("mountain");
+        }
         return false;
     }
     move_agent()

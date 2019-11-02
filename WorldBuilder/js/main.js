@@ -14,10 +14,11 @@
 let heightmap;
 let m;
 let c;
+let ma; // mountain agent
 let mWidth = 1280;
 let mHeight = 720;
-let tokens = 100000;
-let limit = 1000;
+let tokens = 300000;
+let limit = 3000;
 let worldSeed = 0xa12413adff;
 function setup(){
   createCanvas(mWidth, mHeight);
@@ -27,7 +28,11 @@ function setup(){
   let sPointY = floor(mHeight/2);
   let p = m.point(sPointX, sPointY);
   c = new CoastAgent(p, tokens, limit);
-  c.generate(m);
+  ma = new Mountain_Agent(6, 10000, 500, 5, 10, 2500, 500, 0.9, 1, 5);
+  let l = [c, ma];
+  for(let i = 0; i < l.length; i++){
+    l[i].generate(m);
+  }
   makeHeightmap(m);
 }
 
@@ -44,7 +49,7 @@ function makeHeightmap(m){
       } else if(raw == 1){
         col = color(0, 255, 0);
       } else {
-        col = color(255, 0, 0);
+        col = color(raw, 0, 0);
       }
       heightmap.set(i, j, col);
     }
