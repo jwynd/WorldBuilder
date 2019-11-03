@@ -1,7 +1,7 @@
 
-class CoastAgent{
-    constructor(seedpoint, tokens, limit){
-        /*
+class CoastAgent {
+  constructor (seedpoint, tokens, limit) {
+    /*
         seedpoint is a point, where the first agent will begin and the landmass will center around.
         tokens determines how many tokens the first agent starts with, and determines the size
         of the landmass.
@@ -9,158 +9,156 @@ class CoastAgent{
         determines the jaggedness of the landscape.
         The agent's preferred direction is randomly assigned.
         */
-        this.seed = seedpoint;
-        this.tokens = tokens;
-        this.limit = limit;
-        this.direction = Map.randomDirection();
-        this.counter = 0;
-    }
+    this.seed = seedpoint;
+    this.tokens = tokens;
+    this.limit = limit;
+    this.direction = Map.randomDirection();
+    this.counter = 0;
+  }
 
-    getSeed(){
-        /*
+  getSeed () {
+    /*
         Returns the seed point of the agent
         */
-        return this.seed;
-    }
+    return this.seed;
+  }
 
-    setSeed(newSeed){
-        /*
+  setSeed (newSeed) {
+    /*
         Sets the seed point of the agent
         newSeed must be a Point object
         */
-        this.seed = newSeed;
-    }
+    this.seed = newSeed;
+  }
 
-    getTokens(){
-        /*
+  getTokens () {
+    /*
         Returns the number of tokens of the agent
         */
-        return this.tokens;
-    }
+    return this.tokens;
+  }
 
-    setTokens(newTokens){
-        /*
+  setTokens (newTokens) {
+    /*
         Sets the number of tokens of the agent
         newTokens must be an integer
         */
-        this.tokens = newTokens;
-    }
+    this.tokens = newTokens;
+  }
 
-    getDirection(){
-        /*
+  getDirection () {
+    /*
         Returns the direction of the agent
         */
-        return this.direction;
-    }
+    return this.direction;
+  }
 
-    setDirection(newDirection){
-        /*
+  setDirection (newDirection) {
+    /*
         Sets the direction of the agent.
         newDirection must be a string denoting a legal direction.
         */
-        this.direction = newDirection;
-    }
+    this.direction = newDirection;
+  }
 
-    randDirection(){
-        /*
+  randDirection () {
+    /*
         Sets the direction of the agent to a new random direction.
         */
-        this.direction = Map.randomDirection();
-    }
+    this.direction = Map.randomDirection();
+  }
 
-    generate(map){
-        /*
+  generate (map) {
+    /*
         Generates a new landmass centered around this agent on map.
         */
-        this.recurCoast(this, map);
-    }
+    this.recurCoast(this, map);
+  }
 
-    recurCoast(agent, map){
-        /*
+  recurCoast (agent, map) {
+    /*
         Recursively divides agents into child agents until all child agents are at or below the specified limit.
         Child agents then procedurally move around the map and raise points out of the ocean.
         */
-        if(agent.tokens > agent.limit){
-            let child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens/2), agent.limit);
-            let child2 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens/2), agent.limit);
-            this.recurCoast(child1, map);
-            this.recurCoast(child2, map);
-            
+    if (agent.tokens > agent.limit) {
+      const child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
+      const child2 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
+      this.recurCoast(child1, map);
+      this.recurCoast(child2, map);
+    } else {
+      // this.raisePoint(agent.seed)
+      while (agent.tokens > 0) {
+        agent.seed = map.getRandomNeighbor(agent.seed);
+        this.moveAgent(agent, map);
+        if (agent.seed === null) {
+          console.log('Agent with null seed found');
+          break;
         }
-        else{
-            //this.raisePoint(agent.seed)
-            while(agent.tokens > 0){
-                agent.seed = map.getRandomNeighbor(agent.seed);
-                this.moveAgent(agent, map);
-                if(agent.seed === null){
-                    console.log("You goofed!")
-                    break;
-                }
-                let beacons = this.assignBeacons(agent.seed, map);
-                let maxScore = Number.NEGATIVE_INFINITY;
-                let maxP = null;
-                for(let p of map.getNeighbors(agent.seed)){
-                    let pointScore = this.score(p, beacons, map);
-                    if(pointScore > maxScore){
-                        maxScore = pointScore;
-                        maxP = p;
-                    }
-                }
-                agent.randDirection();
-                this.raisePoint(maxP);
-                agent.tokens--;
-            }
+        const beacons = this.assignBeacons(agent.seed, map);
+        let maxScore = Number.NEGATIVE_INFINITY;
+        let maxP = null;
+        for (const p of map.getNeighbors(agent.seed)) {
+          const pointScore = this.score(p, beacons, map);
+          if (pointScore > maxScore) {
+            maxScore = pointScore;
+            maxP = p;
+          }
         }
+        agent.randDirection();
+        this.raisePoint(maxP);
+        agent.tokens--;
+      }
     }
-    
-    raisePoint(point){
-        /*
+  }
+
+  raisePoint (point) {
+    /*
         Raises a point out of the ocean and sets its biome to coast.
         */
-        let elevation = point.getElevation();
-        point.setElevation(++elevation);
-        point.setBiome("coast");
-        return point;
-    }
+    let elevation = point.getElevation();
+    point.setElevation(++elevation);
+    point.setBiome('coast');
+    return point;
+  }
 
-    assignBeacons(point, map){
-        /*
+  assignBeacons (point, map) {
+    /*
         Creates an attractor and a repulsor near a specified point on a map.
         */
-        let repulsor = map.getRandomNeighbor(point);
-        let attractor = map.getRandomNeighbor(point);
-        while(repulsor === attractor){
-            repulsor = map.getRandomNeighbor(point);
-            attractor = map.getRandomNeighbor(point);
-        }
-        return [repulsor, attractor];
+    let repulsor = map.getRandomNeighbor(point);
+    let attractor = map.getRandomNeighbor(point);
+    while (repulsor === attractor) {
+      repulsor = map.getRandomNeighbor(point);
+      attractor = map.getRandomNeighbor(point);
     }
+    return [repulsor, attractor];
+  }
 
-    moveAgent(agent, map){
-        /*
+  moveAgent (agent, map) {
+    /*
         Moves an agent in its preferred direction until it falls off the map or finds a non-landlocked point.
         */
-        while(map.getNeighborsOfType(agent.seed, "ocean").length == 0){
-            agent.seed = map.getNeighbor(agent.seed, agent.direction);
-            if (agent.seed === null){
-                return;
-            }
-        }
-        //agent.randDirection();
+    while (map.getNeighborsOfType(agent.seed, 'ocean').length == 0) {
+      agent.seed = map.getNeighbor(agent.seed, agent.direction);
+      if (agent.seed === null) {
+        return;
+      }
     }
+    // agent.randDirection();
+  }
 
-    score(point, beacons, map){
-        /*
+  score (point, beacons, map) {
+    /*
         Scores a point relative to an attractor and a repulsor.
         */
-        if(point.getBiome() !== "ocean"){
-            return Number.NEGATIVE_INFINITY;
-        }
-        let repulsor = beacons[0];
-        let attractor = beacons[1];
-        let dR = point.dist(repulsor);
-        let dA = point.dist(attractor);
-        let dE = Math.min((map.width-1 - point.getX()), (point.getX()), (map.height-1 - point.getY()), (point.getY()));
-        return Math.pow(dR, 2) - Math.pow(dA, 2) + 3 * Math.pow(dE, 2);
+    if (point.getBiome() !== 'ocean') {
+      return Number.NEGATIVE_INFINITY;
     }
+    const repulsor = beacons[0];
+    const attractor = beacons[1];
+    const dR = point.dist(repulsor);
+    const dA = point.dist(attractor);
+    const dE = Math.min((map.width - 1 - point.getX()), (point.getX()), (map.height - 1 - point.getY()), (point.getY()));
+    return Math.pow(dR, 2) - Math.pow(dA, 2) + 3 * Math.pow(dE, 2);
+  }
 }
