@@ -10,6 +10,8 @@
   floor
   CoastAgent
   MountainAgent
+  map
+  lerpColor
 */
 /* jshint esversion: 6 */
 let heightmap;
@@ -55,6 +57,7 @@ function setup () { // ignore error, called by p5
 function makeHeightmap (m) {
   heightmap = createImage(mWidth, mHeight);
   heightmap.loadPixels();
+
   for (let i = 0; i < heightmap.width; ++i) {
     for (let j = 0; j < heightmap.height; ++j) {
       const raw = m.point(i, j).getBiome();
@@ -62,9 +65,14 @@ function makeHeightmap (m) {
       if (raw === 'ocean') {
         col = color(0, 0, 255);
       } else if (raw === 'coast') {
+        console.log('c_elevation ' + m.point(i, j).getElevation());
         col = color(0, 255, 0);
-      } else {
-        col = color(255, 0, 0);
+      } else if (raw === 'mountain') {
+        const col1 = color(0, 255, 0);
+        const col2 = color(255, 0, 0);
+        const elvLerp = map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
+        console.log('M_elevation ' + m.point(i, j).getElevation());
+        col = lerpColor(col1, col2, elvLerp);
       }
       heightmap.set(i, j, col);
     }

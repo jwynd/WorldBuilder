@@ -209,7 +209,7 @@ class MountainAgent{
         }
         else
         {
-            map.point(x, y).setElevation(map.point(x, y).getElevation + amount);
+            map.point(x, y).setElevation(map.point(x, y).getElevation() + amount);
             map.point(x, y).setBiome("mountain");
         }
         return false;
