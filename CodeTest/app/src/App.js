@@ -4,8 +4,6 @@ import logo from './icons/logo.png';
 import download from './icons/download.svg';
 import menu from './icons/menu.svg';
 import Login from './Login.js';
-import loginModal from './Login.js';
-
 
 class App extends React.Component {
   render() {

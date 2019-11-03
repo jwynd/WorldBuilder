@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.scss';
-import { Modal, Button } from 'react-bootstrap';
+import './scss/_modal.scss';
+import closeIcon from './icons/close.svg';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 function close() {
   this.setState( {showModal: false} );
@@ -23,16 +25,27 @@ class Login extends React.Component {
       <>
         <div className="login-button" span style={{cursor:"pointer"}} onClick={open}><div className="login-buttonText">Register/Log In</div></div>
 
-        <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header closeButton>
+        <Modal show={this.state.showModal} onHide={close}>
+            <Modal.Header>
                 <Modal.Title>Log in to WorldBuilder</Modal.Title>
+                <img src={closeIcon} span style={{cursor:"pointer"}} onClick={close} align="right" />
             </Modal.Header>
           
             <Modal.Body>
-                <h4>Text in a modal</h4>
+                <Form>
+                  <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" />
+                  </Form.Group>
+
+                  <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" />
+                  </Form.Group>
+                </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={close}>Close</Button>
+                <Button variant="primary" type="submit">Submit</Button>
             </Modal.Footer>
         </Modal>
       </>
