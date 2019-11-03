@@ -1,64 +1,65 @@
 
 class MountainAgent{
-    constructor(number_of_mountains, tokens, width, height_min, height_max, turn_period, foothill_period, dropoff, min_elevation, noise_amount){
+    constructor(numberOfMountains, tokens, width, heightMin, heightMax, turnPeriod, foothillPeriod, dropoff, minElevation, noiseAmount){
         this.x = -1;
         this.y = -1;
-        this.number_of_mountains = number_of_mountains;
+
+        this.numberOfMountains = numberOfMountains;
         this.tokens = tokens;
         this.direction = "north";
         this.width = width;
-        this.height_min = height_min;
-        this.height_max = height_max;
-        this.turn_period = turn_period;
-        this.foothill_period = foothill_period;
+        this.heightMin = heightMin;
+        this.heightMax = heightMax;
+        this.turnPeriod = turnPeriod;
+        this.foothillPeriod = foothillPeriod;
         this.dropoff = dropoff;
-        this.min_elevation = min_elevation;
-        this.noise_amount = noise_amount;
+        this.minElevation = minElevation;
+        this.noiseAmount = noiseAmount;
     }
     generate(map){
-        let mountain_count;
-        for(mountain_count = 0; mountain_count < this.number_of_mountains; mountain_count++)
+        let mountainCount;
+        for(mountainCount = 0; mountainCount < this.numberOfMountains; mountainCount++)
         {
-            this.pick_random_start(map);
-            this.direction = map.pick_random_direction();
-            while(map.point(this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.min_elevation)
+            this.pickRandomStart(map);
+            this.direction = map.randomDirection();
+            while(map.point(this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.minElevation)
             {
                 //if our starting point is invalid pick a new one
-                this.pick_random_start(map);
+                this.pickRandomStart(map);
             }
 
             let i;
-            let reached_edge = false;
+            let reachedEdge = false;
             for(i = 0; i < this.tokens; i++)
             {
-                reached_edge = this.elevate_wedge(map);
-                this.noise_wedge(map);
-                this.smooth_wedge(map);
-                if(this.foothill_period > 0 && i % this.foothill_period === 0)
+                reachedEdge = this.elevateWedge(map);
+                this.noiseWedge(map);
+                this.smoothWedge(map);
+                if(this.foothillPeriod > 0 && i % this.foothillPeriod === 0)
                 {
-                    this.make_foothills(map);
+                    this.makeFoothills(map);
                 }
-                if(this.turn_period > 0 && i % this.turn_period === 0)
+                if(this.turnPeriod > 0 && i % this.turnPeriod === 0)
                 {
-                    this.rotate_agent();
+                    this.rotateAgent();
                 }
-                if(reached_edge)
+                if(reachedEdge)
                     break;
-                this.move_agent();
+                this.moveAgent();
             }
         }
     }
-    pick_random_start(map)
+    pickRandomStart(map)
     {
         this.x = random(0, map.width - 1);
         this.y = random(0, map.height - 1);
     }
-    elevate_wedge(map)
+    elevateWedge(map)
     {
-        let height = random(this.height_min, this.height_max);
-        reached_edge = false;
+        let height = random(this.heightMin, this.heightMax);
+        let reachedEdge = false;
 
-        reached_edge = reached_edge || this.add_elevation(map, x, y, height);
+        reachedEdge = reachedEdge || this.addElevation(map, x, y, height);
         
         if(this.direction % 2 === 0)
         {
@@ -68,13 +69,13 @@ class MountainAgent{
                 let j;
                 for(j = 0; j < i + 1; j++)
                 {
-                    reached_edge = reached_edge || this.add_elevation(map, x+i-j, y+j, height * Math.pow(this.dropoff, i));
+                    reachedEdge = reachedEdge || this.addElevation(map, x+i-j, y+j, height * Math.pow(this.dropoff, i));
                     if(i > 0 && i != j)
-                        reached_edge = reached_edge || this.add_elevation(map, x-i+j, y+j, height * Math.pow(this.dropoff, i));
+                        reachedEdge = reachedEdge || this.addElevation(map, x-i+j, y+j, height * Math.pow(this.dropoff, i));
                     if(j > 0)
-                        reached_edge = reached_edge || this.add_elevation(map, x+i-j, y-j, height * Math.pow(this.dropoff, i));
+                        reachedEdge = reachedEdge || this.addElevation(map, x+i-j, y-j, height * Math.pow(this.dropoff, i));
                     if(j > 0 && i != j)
-                        reached_edge = reached_edge || this.add_elevation(map, x-i+j, y-j, height * Math.pow(this.dropoff, i));
+                        reachedEdge = reachedEdge || this.addElevation(map, x-i+j, y-j, height * Math.pow(this.dropoff, i));
                 }
             }
         }
@@ -86,18 +87,18 @@ class MountainAgent{
                 let j;
                 for(j = -i; j < i; j++)
                 {
-                    reached_edge = reached_edge || this.add_elevation(map, x+i, y+j, height * Math.pow(this.dropoff, i));
-                    reached_edge = reached_edge || this.add_elevation(map, x+i, y-j, height * Math.pow(this.dropoff, i));
-                    reached_edge = reached_edge || this.add_elevation(map, x-i, y-j, height * Math.pow(this.dropoff, i));
-                    reached_edge = reached_edge || this.add_elevation(map, x-i, y+j, height * Math.pow(this.dropoff, i));
+                    reachedEdge = reachedEdge || this.addElevation(map, x+i, y+j, height * Math.pow(this.dropoff, i));
+                    reachedEdge = reachedEdge || this.addElevation(map, x+i, y-j, height * Math.pow(this.dropoff, i));
+                    reachedEdge = reachedEdge || this.addElevation(map, x-i, y-j, height * Math.pow(this.dropoff, i));
+                    reachedEdge = reachedEdge || this.addElevation(map, x-i, y+j, height * Math.pow(this.dropoff, i));
                 }
             }
         }
-        return reached_edge;
+        return reachedEdge;
     }
-    smooth_wedge(map)
+    smoothWedge(map)
     {
-        this.smooth_point(x, y);
+        this.smoothPoint(x, y);
         if(this.direction % 2 === 0)
         {
             let i;
@@ -106,18 +107,18 @@ class MountainAgent{
                 let j;
                 for(j = 0; j < i + 1; j++)
                 {
-                    this.smooth_point(x+i-j,y+j)
+                    this.smoothPoint(x+i-j,y+j)
                     if(i > 0 && i != j)
                     {
-                        this.smooth_point(x-i+j,y+j);
+                        this.smoothPoint(x-i+j,y+j);
                     }
                     if(j > 0)
                     {
-                        this.smooth_point(x+i-j,y-j);
+                        this.smoothPoint(x+i-j,y-j);
                     }
                     if(j > 0 && i != j)
                     {
-                        this.smooth_point(x-i+j,y-j);
+                        this.smoothPoint(x-i+j,y-j);
                     }
                 }
             }
@@ -130,19 +131,19 @@ class MountainAgent{
                 let j;
                 for(j = -i; j < i; j++)
                 {
-                    this.smooth_point(x+i,y+j);
-                    this.smooth_point(x+j,y-i);
-                    this.smooth_point(x-i,y-j);
-                    this.smooth_point(x-j,y+i);
+                    this.smoothPoint(x+i,y+j);
+                    this.smoothPoint(x+j,y-i);
+                    this.smoothPoint(x-i,y-j);
+                    this.smoothPoint(x-j,y+i);
                 }
             }
         }
     }
-    noise_wedge(map)
+    noiseWedge(map)
     {
-        reached_edge = false;
+        let reachedEdge = false;
 
-        reached_edge = reached_edge || this.add_elevation(map, x, y, random(0, this.noise_amount));
+        reachedEdge = reachedEdge || this.addElevation(map, x, y, random(0, this.noiseAmount));
         
         if(this.direction % 2 === 0)
         {
@@ -152,13 +153,13 @@ class MountainAgent{
                 let j;
                 for(j = 0; j < i + 1; j++)
                 {
-                    reached_edge = reached_edge || this.add_elevation(map, x+i-j, y+j, random(0, this.noise_amount));
+                    reachedEdge = reachedEdge || this.addElevation(map, x+i-j, y+j, random(0, this.noiseAmount));
                     if(i > 0 && i != j)
-                        reached_edge = reached_edge || this.add_elevation(map, x-i+j, y+j, random(0, this.noise_amount));
+                        reachedEdge = reachedEdge || this.addElevation(map, x-i+j, y+j, random(0, this.noiseAmount));
                     if(j > 0)
-                        reached_edge = reached_edge || this.add_elevation(map, x+i-j, y-j, random(0, this.noise_amount));
+                        reachedEdge = reachedEdge || this.addElevation(map, x+i-j, y-j, random(0, this.noiseAmount));
                     if(j > 0 && i != j)
-                        reached_edge = reached_edge || this.add_elevation(map, x-i+j, y-j, random(0, this.noise_amount));
+                        reachedEdge = reachedEdge || this.addElevation(map, x-i+j, y-j, random(0, this.noiseAmount));
                 }
             }
         }
@@ -170,18 +171,18 @@ class MountainAgent{
                 let j;
                 for(j = -i; j < i; j++)
                 {
-                    reached_edge = reached_edge || this.add_elevation(map, x+i, y+j, random(0, this.noise_amount));
-                    reached_edge = reached_edge || this.add_elevation(map, x+i, y-j, random(0, this.noise_amount));
-                    reached_edge = reached_edge || this.add_elevation(map, x-i, y-j, random(0, this.noise_amount));
-                    reached_edge = reached_edge || this.add_elevation(map, x-i, y+j, random(0, this.noise_amount));
+                    reachedEdge = reachedEdge || this.addElevation(map, x+i, y+j, random(0, this.noiseAmount));
+                    reachedEdge = reachedEdge || this.addElevation(map, x+i, y-j, random(0, this.noiseAmount));
+                    reachedEdge = reachedEdge || this.addElevation(map, x-i, y-j, random(0, this.noiseAmount));
+                    reachedEdge = reachedEdge || this.addElevation(map, x-i, y+j, random(0, this.noiseAmount));
                 }
             }
         }
-        return reached_edge;
+        return reachedEdge;
     }
-    add_elevation(map, x, y, amount)
+    addElevation(map, x, y, amount)
     {
-        if(map.point(x, y) === null || map.point(x, y).getElevation() < this.min_elevation){
+        if(map.point(x, y) === null || map.point(x, y).getElevation() < this.minElevation){
             return true;
         }
         else{
@@ -190,7 +191,7 @@ class MountainAgent{
         }
         return false;
     }
-    move_agent()
+    moveAgent()
     {
         switch(this.direction)
         {
@@ -227,7 +228,7 @@ class MountainAgent{
         }
         //check if we hit the edge
     }
-    rotate_agent()
+    rotateAgent()
     {
         switch(random(0,2))
         {
@@ -297,14 +298,14 @@ class MountainAgent{
                 //error
         }
     }
-    make_foothills(map)
+    makeFoothills(map)
     {
-        let left_foothill = new Mountain_Agent(this.xPos, this.yPos, this.width * 2, this.get_90_degree_offset, this.wdith / 4, this.height_min / 2, this.height_max / 2, 0, 0, this.dropoff);
-        let right_foothill = new Mountain_Agent(this.xPos, this.yPos, this.width * 2, this.get_neg_90_degree_offset, this.wdith / 4, this.height_min / 2, this.height_max / 2, 0, 0, this.dropoff);
+        let left_foothill = new Mountain_Agent(this.xPos, this.yPos, this.width * 2, this.get90DegreeOffset, this.wdith / 4, this.heightMin / 2, this.heightMax / 2, 0, 0, this.dropoff);
+        let right_foothill = new Mountain_Agent(this.xPos, this.yPos, this.width * 2, this.getNeg90DegreeOffset, this.wdith / 4, this.heightMin / 2, this.heightMax / 2, 0, 0, this.dropoff);
         left_foothill.run_agent(map);
         right_foothill.run_agent(map);
     }
-    get_90_degree_offset()
+    get90DegreeOffset()
     {
         switch(this.direction)
         {
@@ -328,7 +329,7 @@ class MountainAgent{
                 //error
         }
     }
-    get_neg_90_degree_offset()
+    getNeg90DegreeOffset()
     {
         switch(this.direction)
         {
@@ -352,7 +353,7 @@ class MountainAgent{
                 //error
         }
     }
-    smooth_point(map, x, y)
+    smoothPoint(map, x, y)
     {
         if(map.point(x, y) === null)
             return;
