@@ -57,14 +57,14 @@ function makeHeightmap (m) {
   heightmap.loadPixels();
   for (let i = 0; i < heightmap.width; ++i) {
     for (let j = 0; j < heightmap.height; ++j) {
-      const raw = m.point(i, j).getElevation();
+      const raw = m.point(i, j).getBiome();
       let col = 0;
-      if (raw === 0) {
+      if (raw === 'ocean') {
         col = color(0, 0, 255);
-      } else if (raw === 1) {
+      } else if (raw === 'coast') {
         col = color(0, 255, 0);
       } else {
-        col = color(raw, 0, 0);
+        col = color(255, 0, 0);
       }
       heightmap.set(i, j, col);
     }
