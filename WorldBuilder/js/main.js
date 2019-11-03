@@ -25,13 +25,13 @@ const worldSeed = 0xa12413adff;
 // /////////////////
 // Mountain Params//
 // /////////////////
-const m1 = 6;
+const m1 = 8;
 const m2 = 10000;
-const m3 = 500;
+const m3 = 25;
 const m4 = 5;
 const m5 = 10;
-const m6 = 2500;
-const m7 = 500;
+const m6 = 100;
+const m7 = 50;
 const m8 = 0.9;
 const m9 = 1;
 const m10 = 5;
