@@ -91,7 +91,6 @@ class CoastAgent {
         agent.seed = map.getRandomNeighbor(agent.seed);
         this.moveAgent(agent, map);
         if (agent.seed === null) {
-          console.log('Agent with null seed found');
           break;
         }
         const beacons = this.assignBeacons(agent.seed, map);
@@ -138,7 +137,7 @@ class CoastAgent {
     /*
         Moves an agent in its preferred direction until it falls off the map or finds a non-landlocked point.
         */
-    while (map.getNeighborsOfType(agent.seed, 'ocean').length == 0) {
+    while (map.getNeighborsOfType(agent.seed, 'ocean').length === 0) {
       agent.seed = map.getNeighbor(agent.seed, agent.direction);
       if (agent.seed === null) {
         return;
