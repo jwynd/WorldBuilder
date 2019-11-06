@@ -5,10 +5,12 @@ class biomeAgent {
     this.tokens = tokens;
     this.limit = limit;
     this.direction = Map.randomDirection();
-    this.counter = 0;
   }
 
   findCoastline (map) {
+    let visited = new List();
+    visited.append(map.getRandomPointOfType('ocean'));
+
     return 0;
   }
 
