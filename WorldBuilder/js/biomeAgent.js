@@ -1,29 +1,40 @@
 /* jshint esversion: 6 */
 class biomeAgent {
   findLakesShores (map) {
+    /*
+    Assigns water to be ocean or lake as appropriate for a whole map.
+    Also assigns coastpoints as land adjacent to ocean.
+    */
     this.approximateLakes(map);
     const lakes = map.getPointsOfType('lake');
     const visitedLakes = [];
     while (visitedLakes.length() < lakes) {
       const lakePoint = lakes[random(0, lakes.length())];
-      this.findOcean(lakePoint, map, visitedLakes);
-      const visitedNeighbors = [];
-      this.assignOcean(lakePoint, map, visitedNeighbors);
+      if (this.findOcean(lakePoint, map, visitedLakes)) {
+        const visitedNodes = [];
+        this.assignOcean(lakePoint, map, visitedNodes);
+      }
     }
   }
 
   approximateLakes (map) {
+    /*
+    Overestimates the number of lake points in the map
+    */
     const beachPoints = map.getPointsOfType('beach');
     for (const b of beachPoints) {
       const oceanPoints = map.getNeighborsOfType(b, 'ocean', true);
       for (const o of oceanPoints) {
         const direction = b.dir(o);
-        this.moveAlong(o, direction, map);
+        this._moveAlong(o, direction, map);
       }
     }
   }
 
-  moveAlong (point, direction, map) {
+  _moveAlong (point, direction, map) {
+    /*
+    Helper function for approximateLakes, recursively checks a line of water to determine if it's a set of lake or ocean points.
+    */
     if (point === null) {
       return 'ocean';
     } else if (point.getBiome() === 'coast') {
@@ -57,7 +68,7 @@ class biomeAgent {
     }
   }
 
-  assignOcean (point, map, visitedNeighbors) {
+  assignOcean (point, map, visitedNodes) {
     /*
     Discovers and sets the biomes of all reachable lake points from point ocean.
     */
@@ -68,11 +79,11 @@ class biomeAgent {
       point.setBiome('ocean');
       const successors = map.getNeighbors(point);
       for (const s of successors) {
-        if (visitedNeighbors.includes(s)) {
+        if (visitedNodes.includes(s)) {
           continue;
         } else {
-          visitedNeighbors.append(s);
-          this.assignOcean(s);
+          visitedNodes.append(s);
+          this.assignOcean(s, map, visitedNodes);
         }
       }
     } else if (point.getBiome() === 'coast') {
