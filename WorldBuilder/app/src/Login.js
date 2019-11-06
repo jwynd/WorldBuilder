@@ -1,8 +1,10 @@
 import React from 'react';
 import './App.scss';
 import './scss/_modal.scss';
+import './scss/_buttons.scss';
 import closeIcon from './icons/close.svg';
 import { Modal, Button, Form } from 'react-bootstrap';
+import firebase from './Firebase.js';
 
 function close() {
   this.setState( {showModal: false} );
@@ -15,15 +17,25 @@ function open() {
 class Login extends React.Component {
   constructor(){
     super();
-    this.state = { showModal: false }
+    this.state = { showModal: false, loggedIn: firebase.auth().currentUser ? true : false }
     open = open.bind(this);
     close = close.bind(this);
   }
 
   render() {
+    const loggedIn = this.state.loggedIn;
+    let loginOrWelcome;
+
+    if(!loggedIn){
+      loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={open}><div className="login-buttonText">Register/Log In</div></div>;
+    } else {
+      loginOrWelcome = <div className="welcome-text">Welcome, user!</div>;
+    }
+    console.log(loggedIn);
+    
     return (
       <>
-        <div className="login-button" span style={{cursor:"pointer"}} onClick={open}><div className="login-buttonText">Register/Log In</div></div>
+        {loginOrWelcome}
 
         <Modal show={this.state.showModal} onHide={close}>
             <Modal.Header>

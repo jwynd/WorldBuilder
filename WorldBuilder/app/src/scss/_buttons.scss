@@ -4,6 +4,9 @@
 // Base styles
 //
 
+@import "variables";
+@import "mixins";
+
 .btn {
   display: inline-block;
   font-family: $btn-font-family;
