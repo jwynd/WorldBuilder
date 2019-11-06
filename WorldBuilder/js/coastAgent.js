@@ -1,6 +1,9 @@
+/* global
+  noise
+*/
 /* jshint esversion: 6 */
 class CoastAgent {
-  constructor (seedpoint, tokens, limit) {
+  constructor (seedPoint, tokens, limit) {
     /*
     seedpoint is a point, where the first agent will begin and the landmass will center around.
 
@@ -12,11 +15,10 @@ class CoastAgent {
 
     The agent's preferred direction is randomly assigned.
     */
-    this.seed = seedpoint;
+    this.seed = seedPoint;
     this.tokens = tokens;
     this.limit = limit;
     this.direction = Map.randomDirection();
-    this.counter = 0;
   }
 
   getSeed () {
@@ -117,8 +119,11 @@ class CoastAgent {
     /*
     Raises a point out of the ocean and sets its biome to coast.
     */
-    let elevation = point.getElevation();
-    point.setElevation(++elevation);
+    let newElevation = 0;
+    newElevation += Math.ceil(80 * noise(point.getX(), point.getY()));
+    newElevation += Math.ceil(80 * noise(point.getX() / 10, point.getY() / 10));
+    newElevation += Math.ceil(80 * noise(point.getX() / 100, point.getY() / 100));
+    point.setElevation(newElevation);
     point.setBiome('coast');
     return point;
   }

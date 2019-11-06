@@ -13,6 +13,7 @@
   map
   lerpColor
   RiverAgent
+  noiseSeed
 */
 /* jshint esversion: 6 */
 let heightmap;
@@ -25,6 +26,7 @@ const mHeight = 720;
 const tokens = 300000;
 const limit = 3000;
 const worldSeed = 0xa12413adff;
+const debug = true;
 
 // /////////////////
 // Mountain Params//
@@ -44,6 +46,7 @@ function setup () { // ignore error, called by p5
   createCanvas(mWidth, mHeight);
   m = new Map(mWidth, mHeight);
   randomSeed(worldSeed);
+  noiseSeed(worldSeed);
   const sPointX = floor(mWidth / 2);
   const sPointY = floor(mHeight / 2);
   const p = m.point(sPointX, sPointY);
@@ -65,7 +68,9 @@ function makeHeightmap (m) {
     for (let j = 0; j < heightmap.height; ++j) {
       const raw = m.point(i, j).getBiome();
       let col = 0;
-      if (raw === 'ocean') {
+      if (debug === true) {
+        col = color(m.point(i, j).getElevation(), 0, 255);
+      } else if (raw === 'ocean') {
         col = color(0, 0, 255);
       } else if (raw === 'coast' || raw === 'beach') {
         col = color(0, 255, 0);
