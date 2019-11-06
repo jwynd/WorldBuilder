@@ -1,54 +1,82 @@
 /* jshint esversion: 6 */
 class biomeAgent {
-  constructor (seedPoint, tokens, limit) {
-    this.seed = seedPoint;
-    this.tokens = tokens;
-    this.limit = limit;
-    this.direction = Map.randomDirection();
+  findLakesShores (map) {
+    this.approximateLakes(map);
+    const lakes = map.getPointsOfType('lake');
+    const visitedLakes = [];
+    while (visitedLakes.length() < lakes) {
+      const lakePoint = lakes[random(0, lakes.length())];
+      this.findOcean(lakePoint, map, visitedLakes);
+      const visitedNeighbors = [];
+      this.assignOcean(lakePoint, map, visitedNeighbors);
+    }
   }
 
-  findCoastline (map) {
-    let visited = new List();
-    visited.append(map.getRandomPointOfType('ocean'));
-
-    return 0;
-  }
-
-  BFS (graph, s) {
-    if (graph === null) {
-      console.log('Graph Error: calling BFS() on null Graph reference');
-      return;
-    }
-    if (s < 1 || s > graph.order) {
-      console.log('Graph Error: calling BFS() on invalid source vertex');
-      return;
-    }
-    graph.source = graph.vertices[s - 1];
-    for (let i = 0; i < graph.order; i++) {
-      graph.vertices[i].color = 'w';
-      graph.vertices[i].distance = Number.POSITIVE_INFINITY;
-      graph.vertices[i].parent = null;
-    }
-    graph.source.color = 'g';
-    graph.source.distance = 0;
-    graph.source.parent = null;
-    const Q = new List();
-    Q.append(s);
-    while (Q.length() > 0) {
-      Q.moveFront();
-      const x = Q.get();
-      Q.deleteFront();
-      (graph.Adj[x - 1]).moveFront();
-      while ((graph.Adj[x - 1]).index() > -1) {
-        if (graph.vertices[(graph.Adj[x - 1]) - 1].get().color === 'w') {
-          graph.vertices[(graph.Adj[x - 1]) - 1].get().color = 'g';
-          graph.vertices[(graph.Adj[x - 1]) - 1].get().distance = (graph.vertices[x - 1].distance) + 1;
-          graph.vertices[(graph.Adj[x - 1]) - 1].get().parent = graph.vertices[x - 1];
-          Q.append((graph.Adj[x - 1]).get());
-        }
-        (graph.Adj[x - 1]).moveNext();
+  approximateLakes (map) {
+    const beachPoints = map.getPointsOfType('beach');
+    for (const b of beachPoints) {
+      const oceanPoints = map.getNeighborsOfType(b, 'ocean', true);
+      for (const o of oceanPoints) {
+        const direction = b.dir(o);
+        this.moveAlong(o, direction, map);
       }
-      (graph.vertices[x - 1].color) = 'b';
+    }
+  }
+
+  moveAlong (point, direction, map) {
+    if (point === null) {
+      return 'ocean';
+    } else if (point.getBiome() === 'coast') {
+      return 'lake';
+    } else {
+      const type = this.moveAlong(map.getNeighbor(point, direction));
+      point.setBiome(type);
+      return type;
+    }
+  }
+
+  findOcean (point, map, visitedLakes) {
+    /*
+    Returns true if the point is connected to an ocean point, otherwise false.
+    */
+    if (point === null) {
+      console.log('biomeAgent error in findOcean: point is null');
+      return null;
+    } else if (point.getBiome() === 'ocean') {
+      return true;
+    } else if (point.getBiome() === 'coast') {
+      return false;
+    } else {
+      const successors = map.getNeighbors(point);
+      let oceanBool = false;
+      for (const s of successors) {
+        oceanBool = oceanBool || this.findOcean(s);
+        visitedLakes.append(s);
+      }
+      return oceanBool;
+    }
+  }
+
+  assignOcean (point, map, visitedNeighbors) {
+    /*
+    Discovers and sets the biomes of all reachable lake points from point ocean.
+    */
+    if (point === null) {
+      console.log('biomeAgent error in assignOcean: point is null');
+      return null;
+    } else if (point.getBiome() === 'lake') {
+      point.setBiome('ocean');
+      const successors = map.getNeighbors(point);
+      for (const s of successors) {
+        if (visitedNeighbors.includes(s)) {
+          continue;
+        } else {
+          visitedNeighbors.append(s);
+          this.assignOcean(s);
+        }
+      }
+    } else if (point.getBiome() === 'coast') {
+      point.setBiome('shoreline');
     }
   }
 }

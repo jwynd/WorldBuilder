@@ -40,6 +40,19 @@ class List {
     return this.tail.val;
   }
 
+  isEmpty () {
+    if (this.listSize === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  popFront () {
+    const head = this.getFront();
+    this.deleteFront();
+    return head;
+  }
+
   // get(List this)
   // returns cursor element of this
   // pre: length() > 0, index() >= 0
