@@ -1,18 +1,28 @@
 /* jshint esversion: 6 */
-class biomeAgent {
-  findLakesShores (map) {
+class BiomeAgent {
+  generate (map) {
     /*
     Assigns water to be ocean or lake as appropriate for a whole map.
     Also assigns coastpoints as land adjacent to ocean.
     */
+    this.defineBeach(map);
     this.approximateLakes(map);
     const lakes = map.getPointsOfType('lake');
     const visitedLakes = [];
-    while (visitedLakes.length() < lakes) {
-      const lakePoint = lakes[random(0, lakes.length())];
+    while (visitedLakes.length < lakes.length) {
+      const lakePoint = lakes[random(0, lakes.length)];
       if (this.findOcean(lakePoint, map, visitedLakes)) {
         const visitedNodes = [];
         this.assignOcean(lakePoint, map, visitedNodes);
+      }
+    }
+  }
+
+  defineBeach (map) {
+    const c = map.getPointsOfType('coast');
+    for (const p of c) {
+      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
+        p.setBiome('beach');
       }
     }
   }
@@ -40,7 +50,7 @@ class biomeAgent {
     } else if (point.getBiome() === 'coast') {
       return 'lake';
     } else {
-      const type = this.moveAlong(map.getNeighbor(point, direction));
+      const type = this._moveAlong(map.getNeighbor(point, direction), direction, map);
       point.setBiome(type);
       return type;
     }
