@@ -1,9 +1,11 @@
 
 /* jshint esversion: 6 */
 /* global random */
+import p5 from 'p5';
 import Point from './point.js';
-class Map {
+class Map extends p5 {
   constructor (x, y) {
+    super();
     this.width = x;
     this.height = y;
     this.map = [];
