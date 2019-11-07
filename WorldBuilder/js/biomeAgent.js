@@ -7,10 +7,11 @@ class BiomeAgent {
     */
     this.defineBeach(map);
     this.approximateLakes(map);
-    const lakes = map.getPointsOfType('lake');
+    const unvisitedLakes = map.getPointsOfType('lake');
     const visitedLakes = [];
-    while (visitedLakes.length < lakes.length) {
-      const lakePoint = lakes[random(0, lakes.length)];
+    while (unvisitedLakes.length > 0) {
+      const lakePoint = unvisitedLakes.pop();
+      visitedLakes.push(lakePoint);
       if (this.findOcean(lakePoint, map, visitedLakes)) {
         const visitedNodes = [];
         this.assignOcean(lakePoint, map, visitedNodes);
@@ -71,8 +72,12 @@ class BiomeAgent {
       const successors = map.getNeighbors(point);
       let oceanBool = false;
       for (const s of successors) {
-        oceanBool = oceanBool || this.findOcean(s);
-        visitedLakes.append(s);
+        if (visitedLakes.includes(s)) {
+          continue;
+        } else {
+          visitedLakes.push(s);
+          oceanBool = oceanBool || this.findOcean(s, map, visitedLakes);
+        }
       }
       return oceanBool;
     }
@@ -92,7 +97,7 @@ class BiomeAgent {
         if (visitedNodes.includes(s)) {
           continue;
         } else {
-          visitedNodes.append(s);
+          visitedNodes.push(s);
           this.assignOcean(s, map, visitedNodes);
         }
       }
