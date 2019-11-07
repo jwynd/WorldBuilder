@@ -74,6 +74,8 @@ function makeHeightmap (m) {
       if (debug === true) {
         if (raw === 'lake') {
           col = color(0, 255, 0);
+        } else if (raw === 'river') {
+          col = color(0, 255, 255);
         } else {
           col = color(m.point(i, j).getElevation(), 0, 255);
         }
