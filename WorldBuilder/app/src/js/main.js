@@ -13,6 +13,8 @@
   map
   lerpColor
   RiverAgent
+  BiomeAgent
+  noiseSeed
 */
 /* jshint esversion: 6 */
 let heightmap;
@@ -20,11 +22,13 @@ let m;
 let c;
 let ma; // mountain agent
 let r; // river agent
+let b; // biome agent
 const mWidth = 1280;
 const mHeight = 720;
 const tokens = 300000;
 const limit = 3000;
 const worldSeed = 0xa12413adff;
+const debug = true;
 
 // /////////////////
 // Mountain Params//
@@ -44,13 +48,15 @@ function setup () { // ignore error, called by p5
   createCanvas(mWidth, mHeight);
   m = new Map(mWidth, mHeight);
   randomSeed(worldSeed);
+  noiseSeed(worldSeed);
   const sPointX = floor(mWidth / 2);
   const sPointY = floor(mHeight / 2);
   const p = m.point(sPointX, sPointY);
   c = new CoastAgent(p, tokens, limit);
+  b = new BiomeAgent();
   ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
   r = new RiverAgent(10);
-  const l = [c, ma, r];
+  const l = [c, b, ma, r];
   for (let i = 0; i < l.length; i++) {
     l[i].generate(m);
   }
@@ -65,7 +71,15 @@ function makeHeightmap (m) {
     for (let j = 0; j < heightmap.height; ++j) {
       const raw = m.point(i, j).getBiome();
       let col = 0;
-      if (raw === 'ocean') {
+      if (debug === true) {
+        if (raw === 'lake') {
+          col = color(0, 255, 0);
+        } else if (raw === 'river') {
+          col = color(0, 255, 255);
+        } else {
+          col = color(m.point(i, j).getElevation(), 0, 255);
+        }
+      } else if (raw === 'ocean') {
         col = color(0, 0, 255);
       } else if (raw === 'coast' || raw === 'beach') {
         col = color(0, 255, 0);

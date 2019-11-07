@@ -1,85 +1,90 @@
-
+/* global
+  noise
+*/
+/* jshint esversion: 6 */
 class CoastAgent {
-  constructor (seedpoint, tokens, limit) {
+  constructor (seedPoint, tokens, limit) {
     /*
-        seedpoint is a point, where the first agent will begin and the landmass will center around.
-        tokens determines how many tokens the first agent starts with, and determines the size
-        of the landmass.
-        limit defines the threshold above which an agent will split into two smaller agents to divide work, and
-        determines the jaggedness of the landscape.
-        The agent's preferred direction is randomly assigned.
-        */
-    this.seed = seedpoint;
+    seedpoint is a point, where the first agent will begin and the landmass will center around.
+
+    tokens determines how many tokens the first agent starts with, and determines the size
+    of the landmass.
+
+    limit defines the threshold above which an agent will split into two smaller agents to divide work, and
+    determines the jaggedness of the landscape.
+
+    The agent's preferred direction is randomly assigned.
+    */
+    this.seed = seedPoint;
     this.tokens = tokens;
     this.limit = limit;
     this.direction = Map.randomDirection();
-    this.counter = 0;
   }
 
   getSeed () {
     /*
-        Returns the seed point of the agent
-        */
+    Returns the seed point of the agent
+    */
     return this.seed;
   }
 
   setSeed (newSeed) {
     /*
-        Sets the seed point of the agent
-        newSeed must be a Point object
-        */
+    Sets the seed point of the agent
+    newSeed must be a Point object
+    */
     this.seed = newSeed;
   }
 
   getTokens () {
     /*
-        Returns the number of tokens of the agent
-        */
+    Returns the number of tokens of the agent
+    */
     return this.tokens;
   }
 
   setTokens (newTokens) {
     /*
-        Sets the number of tokens of the agent
-        newTokens must be an integer
-        */
+    Sets the number of tokens of the agent
+    newTokens must be an integer
+    */
     this.tokens = newTokens;
   }
 
   getDirection () {
     /*
-        Returns the direction of the agent
-        */
+    Returns the direction of the agent
+    */
     return this.direction;
   }
 
   setDirection (newDirection) {
     /*
-        Sets the direction of the agent.
-        newDirection must be a string denoting a legal direction.
-        */
+    Sets the direction of the agent.
+    newDirection must be a string denoting a legal direction.
+    */
     this.direction = newDirection;
   }
 
   randDirection () {
     /*
-        Sets the direction of the agent to a new random direction.
-        */
+    Sets the direction of the agent to a new random direction.
+    */
     this.direction = Map.randomDirection();
   }
 
   generate (map) {
     /*
-        Generates a new landmass centered around this agent on map.
-        */
+    Generates a new landmass centered around this agent on map.
+    */
     this.recurCoast(this, map);
   }
 
   recurCoast (agent, map) {
     /*
-        Recursively divides agents into child agents until all child agents are at or below the specified limit.
-        Child agents then procedurally move around the map and raise points out of the ocean.
-        */
+    Recursively divides agents into child agents until all child agents are at or below the specified limit.
+    Child agents then procedurally move around the map and raise points out of the ocean.
+    */
     if (agent.tokens > agent.limit) {
       const child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
       const child2 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
@@ -112,18 +117,21 @@ class CoastAgent {
 
   raisePoint (point) {
     /*
-        Raises a point out of the ocean and sets its biome to coast.
-        */
-    let elevation = point.getElevation();
-    point.setElevation(++elevation);
+    Raises a point out of the ocean and sets its biome to coast.
+    */
+    let newElevation = 0;
+    newElevation += Math.ceil(80 * noise(point.getX(), point.getY()));
+    newElevation += Math.ceil(80 * noise(point.getX() / 10, point.getY() / 10));
+    newElevation += Math.ceil(80 * noise(point.getX() / 100, point.getY() / 100));
+    point.setElevation(newElevation);
     point.setBiome('coast');
     return point;
   }
 
   assignBeacons (point, map) {
     /*
-        Creates an attractor and a repulsor near a specified point on a map.
-        */
+    Creates an attractor and a repulsor near a specified point on a map.
+    */
     let repulsor = map.getRandomNeighbor(point);
     let attractor = map.getRandomNeighbor(point);
     while (repulsor === attractor) {
@@ -135,8 +143,8 @@ class CoastAgent {
 
   moveAgent (agent, map) {
     /*
-        Moves an agent in its preferred direction until it falls off the map or finds a non-landlocked point.
-        */
+    Moves an agent in its preferred direction until it falls off the map or finds a non-landlocked point.
+    */
     while (map.getNeighborsOfType(agent.seed, 'ocean').length === 0) {
       agent.seed = map.getNeighbor(agent.seed, agent.direction);
       if (agent.seed === null) {
@@ -148,8 +156,8 @@ class CoastAgent {
 
   score (point, beacons, map) {
     /*
-        Scores a point relative to an attractor and a repulsor.
-        */
+    Scores a point relative to an attractor and a repulsor.
+    */
     if (point.getBiome() !== 'ocean') {
       return Number.NEGATIVE_INFINITY;
     }
