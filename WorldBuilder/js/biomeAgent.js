@@ -102,7 +102,7 @@ class BiomeAgent {
         }
       }
     } else if (point.getBiome() === 'coast') {
-      point.setBiome('shoreline');
+      point.setBiome('beach');
     }
   }
 }
