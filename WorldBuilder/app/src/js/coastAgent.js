@@ -2,6 +2,8 @@
   noise
 */
 /* jshint esversion: 6 */
+import Point from './point.js';
+import Map from './map.js';
 class CoastAgent {
   constructor (seedPoint, tokens, limit) {
     /*
@@ -169,3 +171,4 @@ class CoastAgent {
     return Math.pow(dR, 2) - Math.pow(dA, 2) + 3 * Math.pow(dE, 2);
   }
 }
+export default CoastAgent;

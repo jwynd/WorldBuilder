@@ -8,15 +8,19 @@
   color
   randomSeed
   floor
-  CoastAgent
-  MountainAgent
   map
   lerpColor
-  RiverAgent
-  BiomeAgent
   noiseSeed
 */
 /* jshint esversion: 6 */
+
+import Point from './point.js';
+import Map from './map.js';
+import CoastAgent from './coastAgent.js';
+import BiomeAgent from './biomeAgent.js';
+import MountainAgent from './mountainAgent.js';
+import RiverAgent from './riverAgent.js';
+
 let heightmap;
 let m;
 let c;

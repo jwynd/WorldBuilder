@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
-/* global sqrt random */
-
+/* global random */
+import Point from './point.js';
 class Map {
   constructor (x, y) {
     this.width = x;
@@ -105,4 +105,4 @@ class Map {
     return random(dir);
   }
 }
-export default 
+export default Map; // export the map class

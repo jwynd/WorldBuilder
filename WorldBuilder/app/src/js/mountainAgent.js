@@ -1,4 +1,5 @@
-
+import Point from './point.js';
+import Map from './map.js';
 class MountainAgent{
     constructor(numberOfMountains, tokens, width, heightMin, heightMax, turnPeriod, foothillPeriod, dropoff, minElevation, noiseAmount){
         this.x = 0;
@@ -439,3 +440,4 @@ class MountainAgent{
         }
     }
 }
+export default MountainAgent;

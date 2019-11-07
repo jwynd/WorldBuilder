@@ -62,3 +62,4 @@ class Point {
     return 'Point: (' + this.x + ', ' + this.y + ')\nElevation: ' + this.elevation + '\nBiome: ' + this.biome;
   }
 }
+export default Point;

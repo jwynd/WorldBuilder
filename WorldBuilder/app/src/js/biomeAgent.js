@@ -1,4 +1,6 @@
 /* jshint esversion: 6 */
+import Point from './point.js';
+import Map from './map.js';
 class BiomeAgent {
   generate (map) {
     /*
@@ -106,3 +108,4 @@ class BiomeAgent {
     }
   }
 }
+export default BiomeAgent;

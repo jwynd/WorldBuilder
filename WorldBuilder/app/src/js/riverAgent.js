@@ -2,6 +2,8 @@
 // Contains class definition and generate function
 /* global floor random */
 /* jshint esversion: 6 */
+import Point from './point.js';
+import Map from './map.js';
 class RiverAgent {
   constructor (maxRivers = 1, wanderSteps = 1000, wanderCut = 50) {
     this.maxRivers = maxRivers;
@@ -130,3 +132,4 @@ function pickN (ns, dest) {
   }
   return min;
 }
+export default RiverAgent;
