@@ -2,8 +2,6 @@
 import Point from './point.js';
 import Map from './map.js';
 
-let depth = 0;
-
 class BiomeAgent {
   generate (map) {
     /*
@@ -18,8 +16,7 @@ class BiomeAgent {
       const lakePoint = unvisitedLakes.pop();
       visitedLakes.push(lakePoint);
       if (this.findOcean(lakePoint, map, visitedLakes)) {
-        const visitedNodes = [];
-        this.assignOcean(lakePoint, map, visitedNodes);
+        this.assignOcean(lakePoint, map);
       }
     }
   }
@@ -66,51 +63,55 @@ class BiomeAgent {
     /*
     Returns true if the point is connected to an ocean point, otherwise false.
     */
-    if (point === null) {
-      console.log('biomeAgent error in findOcean: point is null');
-      return null;
-    } else if (point.getBiome() === 'ocean') {
-      return true;
-    } else if (point.getBiome() === 'coast') {
-      return false;
-    } else {
-      const successors = map.getNeighbors(point);
-      let oceanBool = false;
-      for (const s of successors) {
-        if (visitedLakes.includes(s)) {
-          continue;
-        } else {
-          visitedLakes.push(s);
-          oceanBool = oceanBool || this.findOcean(s, map, visitedLakes);
+    const fringe = [];
+    let oceanBool = false;
+    fringe.push(point);
+    while (fringe.length > 0) {
+      const parent = fringe.pop();
+      if (parent === null) {
+        console.log('biomeAgent error in findOcean: point is null');
+        return null;
+      } else if (parent.getBiome() === 'ocean') {
+        oceanBool = true;
+      } else if (parent.getBiome() === 'lake') {
+        const successors = map.getNeighbors(parent);
+        for (const s of successors) {
+          if (!visitedLakes.includes(s)) {
+            fringe.push(s);
+            visitedLakes.push(s);
+          }
         }
       }
-      return oceanBool;
     }
+    return oceanBool;
   }
 
-  assignOcean (point, map, visitedNodes) {
+  assignOcean (point, map) {
     /*
     Discovers and sets the biomes of all reachable lake points from point ocean.
     */
-    depth++;
-    console.log('rec Depth = ' + depth);
-    if (point === null) {
-      console.log('biomeAgent error in assignOcean: point is null');
-      return null;
-    } else if (point.getBiome() === 'lake') {
-      point.setBiome('ocean');
-      const successors = map.getNeighbors(point);
-      for (const s of successors) {
-        if (visitedNodes.includes(s)) {
-          continue;
-        } else {
-          visitedNodes.push(s);
-          this.assignOcean(s, map, visitedNodes);
+    const fringe = [];
+    const visitedNodes = [];
+    fringe.push(point);
+    while (fringe.length > 0) {
+      const parent = fringe.pop();
+      if (parent === null) {
+        console.log('biomeAgent error in findOcean: point is null');
+        return null;
+      } else if (parent.getBiome() === 'coast') {
+        parent.setBiome('beach');
+      } else if (parent.getBiome() === 'lake') {
+        parent.setBiome('ocean');
+        const successors = map.getNeighbors(parent);
+        for (const s of successors) {
+          if (!visitedNodes.includes(s)) {
+            fringe.push(s);
+            visitedNodes.push(s);
+          }
         }
       }
-    } else if (point.getBiome() === 'coast') {
-      point.setBiome('beach');
     }
   }
 }
+
 export default BiomeAgent;
