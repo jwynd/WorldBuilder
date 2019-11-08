@@ -1,3 +1,6 @@
+/* global
+noise
+*/
 /* jshint esversion: 6 */
 class beachAgent {
   constructor (seedPoint, tokens, limit, range, max, min, walk) {
@@ -11,10 +14,11 @@ class beachAgent {
 
   generate (map) {
     while (this.tokens > 0) {
-      if (this.location.getElevation() >= this.limit) {
+      while (this.location.getElevation() >= this.limit) {
         this.location = map.getRandomPointOfType('shore');
       }
       this.beachify(this.location);
+      this.location = map.getRandomPointOfType('shore');
     }
   }
 
