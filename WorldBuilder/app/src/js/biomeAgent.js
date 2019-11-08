@@ -1,6 +1,9 @@
 /* jshint esversion: 6 */
 import Point from './point.js';
 import Map from './map.js';
+
+let depth = 0;
+
 class BiomeAgent {
   generate (map) {
     /*
@@ -89,6 +92,8 @@ class BiomeAgent {
     /*
     Discovers and sets the biomes of all reachable lake points from point ocean.
     */
+    depth++;
+    console.log('rec Depth = ' + depth);
     if (point === null) {
       console.log('biomeAgent error in assignOcean: point is null');
       return null;

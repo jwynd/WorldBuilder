@@ -13,12 +13,22 @@ class RiverAgent {
 
   // will generate maxRivers
   generate (map) {
+    this.defineBeach(map);
     const altered = [];
     for (let i = 0; i < this.maxRivers; ++i) {
       console.log('river ' + (i + 1));
       Array.prototype.push.apply(altered, this.generateRiver(map)); // only way I found to concatinate arrays
     }
     return altered;
+  }
+
+  defineBeach (map) {
+    const c = map.getPointsOfType('coast');
+    for (const p of c) {
+      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
+        p.setBiome('beach');
+      }
+    }
   }
 
   // will generate 1 river
