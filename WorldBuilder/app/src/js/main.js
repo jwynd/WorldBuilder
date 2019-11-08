@@ -42,14 +42,15 @@ export default function sketch (p) {
     m = new Map(mWidth, mHeight, p);
     p.randomSeed(worldSeed);
     p.noiseSeed(worldSeed);
+    p.frameRate(1);
     const sPointX = p.floor(mWidth / 2);
     const sPointY = p.floor(mHeight / 2);
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
-    // b = new BiomeAgent();
+    b = new BiomeAgent();
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
-    const l = [c, ma, r];
+    const l = [c, b, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
