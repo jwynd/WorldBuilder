@@ -61,7 +61,6 @@ class BiomeAgent {
     Returns true if the point is connected to an ocean point, otherwise false.
     */
     const fringe = [];
-    let oceanBool = false;
     fringe.push(point);
     while (fringe.length > 0) {
       const parent = fringe.pop();
@@ -69,7 +68,7 @@ class BiomeAgent {
         console.log('biomeAgent error in findOcean: point is null');
         return null;
       } else if (parent.getBiome() === 'ocean') {
-        oceanBool = true;
+        return true;
       } else if (parent.getBiome() === 'lake') {
         const successors = map.getNeighbors(parent);
         for (const s of successors) {
@@ -80,7 +79,7 @@ class BiomeAgent {
         }
       }
     }
-    return oceanBool;
+    return false;
   }
 
   assignOcean (point, map) {
