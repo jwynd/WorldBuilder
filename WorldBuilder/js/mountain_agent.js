@@ -1,6 +1,24 @@
 
+/*
+#           #
+  #          #
+    #         #
+      #         #
+        #          #
+          #            #
+*/
+const NO = "no";
+const HIT_LEFT = "hit left";
+const HIT_RIGHT = "hit right";
+const HIT_FRONT_L = "hit front l";
+const HIT_FRONT_R = "hit front r";
+const MULTI_HIT_LEFT = "mulit hit left";
+const MULTI_HIT_RIGHT = "mulit hit right";
+
 class MountainAgent{
-    constructor(numberOfMountains, tokens, width, heightMin, heightMax, turnPeriod, foothillPeriod, dropoff, minElevation, noiseAmount){
+    
+
+    /*constructor(numberOfMountains, tokens, width, heightMin, heightMax, turnPeriod, foothillPeriod, dropoff, minElevation, noiseAmount){
         this.x = 0;
         this.y = 0;
 
@@ -15,6 +33,19 @@ class MountainAgent{
         this.dropoff = dropoff;
         this.minElevation = minElevation;
         this.noiseAmount = noiseAmount;
+    }*/
+    constructor(dropoff, turnPeriod)
+    {
+        this.x = 10;
+        this.y = 10;
+        this.width = 30;
+        this.direction = 25;
+        this.heightMin = 200;
+        this.heightMax = 120;
+        this.turnPeriod = turnPeriod;
+        this.turnMin = 10;
+        this.turnMax = 45;
+        this.dropoff = (.2 * dropoff / 100) + .8; //0-100 -> .8-1
     }
     generate(map){
         let mountainCount;
@@ -55,11 +86,62 @@ class MountainAgent{
                 this.moveAgent();
             }
         }
+        let w;
+        for(w = 0; w < map.width; w++)
+        {
+            let h;
+            for(h = 0; h < map.height; h++)
+            {
+                this.smoothPoint(map, w, h);
+            }
+        }
     }
-    runFoothill(map)
+    testMountainAgent(map, startx, starty, direction)
+    {
+        let mountainCount;
+        for(mountainCount = 0; mountainCount < this.numberOfMountains; mountainCount++)
+        {
+            console.log('mountain: ' + mountainCount);
+            
+            this.direction = direction;
+            this.x = startx;
+            this.y = starty;
+
+            let i;
+            let reachedEdge = false;
+            for(i = 0; i < this.tokens; i++)
+            {
+                reachedEdge = this.elevateWedge(map);
+                this.noiseWedge(map);
+                this.smoothWedge(map);
+                if(this.foothillPeriod > 0 && (i+1) % this.foothillPeriod === 0)
+                {
+                    console.log('make foothill');
+                    this.makeFoothills(map);
+                }
+                if(this.turnPeriod > 0 && (i+1) % this.turnPeriod === 0)
+                {
+                    console.log('make turn ' + this.direction);
+                    this.rotateAgent();
+                    console.log(this.direction);
+                }
+                if(reachedEdge)
+                {
+                    console.log('tokens finished before hitting edge: ' + i);
+                    break;
+                }
+                this.moveAgent();
+            }
+        }
+    }
+    runFoothill(map, direction, x, y)
     {
         let i;
         let reachedEdge = false;
+        this.direction = direction;
+        this.x = x;
+        this.y = y;
+        console.log(this.direction + ' ' + this.x + ' ' + this.y + ' ' + this.width + ' ' + this.tokens);
         for(i = 0; i < this.tokens; i++)
         {
             reachedEdge = this.elevateWedge(map);
@@ -323,10 +405,9 @@ class MountainAgent{
     }
     makeFoothills(map)
     {
-        let left_foothill = new MountainAgent(this.x, this.y, this.width * 2, this.get90DegreeOffset, Math.floor(this.wdith / 4), Math.floor(this.heightMin / 2), Math.floor(this.heightMax / 2), 0, 0, this.dropoff);
-        let right_foothill = new MountainAgent(this.x, this.y, this.width * 2, this.getNeg90DegreeOffset, Math.floor(this.wdith / 4), Math.floor(this.heightMin / 2), Math.floor(this.heightMax / 2), 0, 0, this.dropoff);
-        left_foothill.runFoothill(map);
-        right_foothill.runFoothill(map);
+        let foothills = new MountainAgent(1, this.width * 2, Math.floor(this.width / 2), Math.floor(this.heightMin / 2), Math.floor(this.heightMax / 2), 0, 0, this.dropoff, this.minElevation, this.noiseAmount / 2);
+        foothills.runFoothill(map, this.get90DegreeOffset(), this.x, this.y);
+        foothills.runFoothill(map, this.getNeg90DegreeOffset(), this.x, this.y);
     }
     get90DegreeOffset()
     {
@@ -438,4 +519,251 @@ class MountainAgent{
             return map.point(x, y);
         }
     }
+
+
+
+    newTestMountainAgent(map, startx, starty, direction, tokens)
+    {
+        this.direction = direction;
+        this.x = startx;
+        this.y = starty;
+        this.tokens = tokens;
+
+        let i;
+        let reachedEdge = NO;
+        for(i = 0; i < this.tokens; i++)
+        {
+            reachedEdge = this.newElevateWedge(map);
+            switch(reachedEdge)
+            {
+                case NO:
+                    break;
+                case HIT_RIGHT:
+                    this.newTurnLeft(false);
+                    break;
+                case HIT_LEFT:
+                    this.newTurnRight(false);
+                    break;
+                case MULTI_HIT_RIGHT:
+                    this.newTurnLeft(true);
+                    break;
+                case MULTI_HIT_LEFT:
+                    this.newTurnRight(true);
+                    break;
+                case HIT_FRONT_R:
+                    this.newTurnLeft(true);
+                    this.newTurnLeft(false);
+                    break;
+                case HIT_FRONT_L:
+                    this.newTurnRight(true);
+                    this.newTurnRight(false);
+                    break;
+                default:
+                    console.log("ERROR: reachedEdge has illegal value");
+                    break;
+            }
+            /*this.noiseWedge(map);
+            this.smoothWedge(map);
+            if(this.foothillPeriod > 0 && (i+1) % this.foothillPeriod === 0)
+            {
+                console.log('make foothill');
+                this.makeFoothills(map);
+            }*/
+            if(this.turnPeriod > 0 && (i+1) % this.turnPeriod === 0)
+            {
+                let turnAmount = this.newGetTurn();
+                this.newRotateAgent(turnAmount);
+                console.log(this.direction);
+            }/*
+            if(reachedEdge)
+            {
+                console.log('tokens finished before hitting edge: ' + i);
+                break;
+            }*/
+            this.newMoveAgent();
+        }
+    
+    }
+    
+    newElevateWedge(map)
+    {
+        let direction2 = (this.direction + 90) % 360;
+        let directionRad = Math.PI * this.direction / 180;
+        let direction2Rad = Math.PI * direction2 / 180;
+        let height = random(this.heightMin, this.heightMax);
+        let reachedEdge = NO;
+        this.newSetHeight(map, Math.floor(this.x), Math.floor(this.y), height);
+        this.newSetHeight(map, Math.ceil(this.x), Math.ceil(this.y), height);
+        
+
+        console.log(this.width);
+        let i;
+        for(i = 0; i <= this.width; i++)
+        {
+            let j;
+            for(j = 0; j <= this.width - i; j++)
+            {
+                
+                //front right
+                let pointX = this.x + i * Math.cos(directionRad) + j * Math.cos(direction2Rad);
+                let pointY = this.y + i * Math.sin(directionRad) + j * Math.sin(direction2Rad);
+                if(this.newSetHeight(map, floor(pointX), floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height)) ||
+                    this.newSetHeight(map, ceil(pointX), ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height)))
+                    {
+                        //hit on the right
+                        switch(reachedEdge)
+                        {
+                            case NO:
+                                reachedEdge = HIT_RIGHT;
+                                break;
+                            case HIT_RIGHT:
+                                reachedEdge = MULTI_HIT_RIGHT;
+                                break;
+                            case HIT_LEFT:
+                                reachedEdge = HIT_FRONT_L;
+                                break;
+                            case MULTI_HIT_LEFT:
+                                reachedEdge = HIT_FRONT_L;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                //front left
+                pointX = this.x + i * Math.cos(directionRad) - j * Math.cos(direction2Rad);
+                pointY = this.y + i * Math.sin(directionRad) - j * Math.sin(direction2Rad);
+                if(this.newSetHeight(map, floor(pointX), floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height)) ||
+                    this.newSetHeight(map, ceil(pointX), ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height)))
+                    {
+                        //hit on the left
+                        switch(reachedEdge)
+                        {
+                            case NO:
+                                reachedEdge = HIT_LEFT;
+                                break;
+                            case HIT_LEFT:
+                                reachedEdge = MULTI_HIT_LEFT;
+                                break;
+                            case HIT_RIGHT:
+                                reachedEdge = HIT_FRONT_R;
+                                break;
+                            case MULTI_HIT_RIGHT:
+                                reachedEdge = HIT_FRONT_R;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                //back left
+                pointX = this.x - i * Math.cos(directionRad) + j * Math.cos(direction2Rad);
+                pointY = this.y - i * Math.sin(directionRad) + j * Math.sin(direction2Rad);
+                this.newSetHeight(map, floor(pointX), floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
+                this.newSetHeight(map, ceil(pointX), ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
+                //back right
+                pointX = this.x - i * Math.cos(directionRad) - j * Math.cos(direction2Rad);
+                pointY = this.y - i * Math.sin(directionRad) - j * Math.sin(direction2Rad);
+                this.newSetHeight(map, floor(pointX), floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
+                this.newSetHeight(map, ceil(pointX), ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
+            }
+        }
+        return reachedEdge;
+    }
+    newHeightWithDropoff(centerX, centerY, x, y, height)
+    {
+        let distance = this.distance(centerX, centerY, x, y);
+        if(distance > this.width)
+        {
+            distance = this.width;
+        }
+        /*console.log("width: " + this.width);
+        console.log("distance: " + distance);
+        console.log("dropoff: " + this.dropoff);
+        console.log("height: " + height);
+        console.log((this.width - distance) * pow(this.dropoff, distance) * height / this.width);*/
+        return (this.width - distance) * pow(this.dropoff, distance) * height / this.width;
+    }
+    newSetHeight(map, x, y, height)
+    {
+        if(this.checkPoint(map, x, y) === null || map.point(x, y).getElevation() < this.minElevation)
+        {
+            console.log("point");
+            return true;
+        }
+        else
+        {
+            if(map.point(x, y).getElevation() < height)
+            {
+                map.point(x, y).setElevation(height);
+                map.point(x, y).setBiome("mountain");
+            }
+        }
+        return false;
+    }
+    newTurnLeft(hard)
+    {
+        let min;
+        if(hard)
+        {
+            min = (this.turnMin + this.turnMax) / 2;
+        }
+        else
+        {
+            min = this.turnMin;
+        }
+        let turn = random(min, this.turnMax);
+        this.newRotateAgent(turn * -1);
+    }
+    newTurnRight(hard)
+    {
+        let min;
+        if(hard)
+        {
+            min = (this.turnMin + this.turnMax) / 2;
+        }
+        else
+        {
+            min = this.turnMin;
+        }
+        let turn = random(min, this.turnMax);
+        this.newRotateAgent(turn);
+    }
+    newRotateAgent(amount)
+    {
+        console.log('make turn ' + amount);
+        this.direction = (this.direction + amount) % 360;
+    }
+    newGetTurn()
+    {
+        let turn = random(this.turnMin, this.turnMax);
+        if(random(0,1) > .5)
+        {
+            return turn;
+        }
+        else
+        {
+            return turn * -1;
+        }
+    }
+    newMoveAgent()
+    {
+        let direction2 = (this.direction + 90) % 360;
+        let directionRad = Math.PI * this.direction / 180;
+        let direction2Rad = Math.PI * direction2 / 180;
+        
+        let newX = this.x + Math.cos(directionRad);
+        let newY = this.y + Math.sin(directionRad);
+        this.x = newX;
+        this.y = newY;
+    }
+    newFindStart(map)
+    {
+        this.x = random(0, map.width - 1);
+        this.y = random(0, map.height - 1);
+    }
+    distance(x1, y1, x2, y2)
+    {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+
 }

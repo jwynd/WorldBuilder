@@ -22,21 +22,21 @@ const mWidth = 1280;
 const mHeight = 720;
 const tokens = 300000;
 const limit = 3000;
-const worldSeed = 0xa12413adff;
+const worldSeed = 0xa12413edff;
 
 // /////////////////
 // Mountain Params//
 // /////////////////
-const m1 = 8;
-const m2 = 10000;
-const m3 = 25;
-const m4 = 5;
-const m5 = 10;
-const m6 = 100;
-const m7 = 50;
-const m8 = 0.9;
-const m9 = 1;
-const m10 = 5;
+const numberOfMountains = 1;
+const mountainTokens = 400;
+const width = 50;
+const heightMin = .5;
+const heightMax = 1;
+const turnPeriod = 100;
+const foothillPeriod = 50;
+const dropoff = .9;
+const minElevation = 0;
+const noiseAmount = 5;
 
 function setup () { // ignore error, called by p5
   createCanvas(mWidth, mHeight);
@@ -46,11 +46,14 @@ function setup () { // ignore error, called by p5
   const sPointY = floor(mHeight / 2);
   const p = m.point(sPointX, sPointY);
   c = new CoastAgent(p, tokens, limit);
-  ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
-  const l = [c, ma];
-  for (let i = 0; i < l.length; i++) {
+  //ma = new MountainAgent(numberOfMountains, mountainTokens, width, heightMin, heightMax, turnPeriod, foothillPeriod, dropoff, minElevation, noiseAmount);
+  ma = new MountainAgent(100, 50);
+  ma.newTestMountainAgent(m, 600, 500, 500, 500);
+  c.generate(m);
+  /*const l = [c, ma];
+  for (let i = 1; i < l.length; i++) {
     l[i].generate(m);
-  }
+  }*/
   makeHeightmap(m);
 }
 
@@ -71,8 +74,10 @@ function makeHeightmap (m) {
         const col1 = color(0, 255, 0);
         const col2 = color(255, 0, 0);
         const elvLerp = map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
-        console.log('M_elevation ' + m.point(i, j).getElevation());
+        //console.log('M_elevation ' + m.point(i, j).getElevation());
         col = lerpColor(col1, col2, elvLerp);
+        col = floor(col / 10) * 10;
+        
       }
       heightmap.set(i, j, col);
     }
