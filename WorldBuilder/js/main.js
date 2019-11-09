@@ -76,7 +76,6 @@ function makeHeightmap (m) {
         const elvLerp = map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
         //console.log('M_elevation ' + m.point(i, j).getElevation());
         col = lerpColor(col1, col2, elvLerp);
-        col = floor(col / 10) * 10;
         
       }
       heightmap.set(i, j, col);
