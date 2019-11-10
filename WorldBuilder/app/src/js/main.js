@@ -8,6 +8,7 @@ import BiomeAgent from './biomeAgent.js';
 import MountainAgent from './mountainAgent.js';
 import RiverAgent from './riverAgent.js';
 import P5Wrapper from 'react-p5-wrapper';
+import Random from './random.js';
 
 export default function sketch (p) {
   let heightmap;
@@ -43,6 +44,7 @@ export default function sketch (p) {
     p.randomSeed(worldSeed);
     p.noiseSeed(worldSeed);
     p.frameRate(1);
+    const rand = new Random(worldSeed);
     const sPointX = p.floor(mWidth / 2);
     const sPointY = p.floor(mHeight / 2);
     const point = m.point(sPointX, sPointY);
@@ -54,7 +56,7 @@ export default function sketch (p) {
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
-    p.makeHeightmap(m);
+    p.testRandom(rand);
   };
 
   p.makeHeightmap = function () {
@@ -89,6 +91,17 @@ export default function sketch (p) {
       }
     }
     heightmap.updatePixels();
+  };
+
+  p.testRandom = function (r) {
+    heightmap = p.createImage(mWidth, mHeight);
+    heightmap.loadPixels();
+
+    for (let i = 0; i < mWidth * mHeight; ++i) {
+      const x = p.floor(r.random(0, mWidth - 1));
+      const y = p.floor(r.random(0, mHeight - 1));
+      heightmap.set(x, y, 255);
+    }
   };
 
   p.draw = function () {

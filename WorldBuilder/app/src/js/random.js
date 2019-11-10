@@ -2,7 +2,7 @@
 
 /* jshint esversion: 6 */
 
-class Rand {
+class Random {
   constructor (seed = 0xcafe00face) {
     this.seed = seed;
   }
@@ -15,7 +15,7 @@ class Rand {
     return this.seed;
   }
 
-  rand (min = null, max = null) {
+  random (min = null, max = null) {
     if (Array.isArray(min) && max === null) {
       const l = min;
       const len = l.length;
@@ -33,4 +33,4 @@ class Rand {
   }
 }
 
-export default Rand;
+export default Random;
