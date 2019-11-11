@@ -1,31 +1,32 @@
-/* global
-noise
-*/
 /* jshint esversion: 6 */
-class beachAgent {
-  constructor (seedPoint, tokens, limit, range, max, min, walk) {
-    this.location = seedPoint;
+import Point from './point.js';
+import Map from './map.js';
+
+class BeachAgent {
+  constructor (tokens, extremity) {
     this.tokens = tokens;
-    this.heightLimit = limit;
-    this.heightMax = max;
-    this.heightMin = min;
-    this.walkSize = walk;
+    this.beachList = null;
+    this.extremity = extremity;
   }
 
   generate (map) {
     while (this.tokens > 0) {
-      while (this.location.getElevation() >= this.limit) {
-        this.location = map.getRandomPointOfType('shore');
-      }
-      this.beachify(this.location);
-      this.location = map.getRandomPointOfType('shore');
+      this.beachList = map.getPointsOfType('beach');
+      this.beachify(this.beachList, map);
+      this.tokens--;
     }
   }
 
-  beachify (point) {
-    let newElevation = Math.ceil(this.heightMax * noise(point.getX(), point.getY()));
-    newElevation = Math.max(newElevation, this.heightMin);
-    point.setElevation(newElevation);
-    point.setBiome('beach');
+  beachify (beachList, map) {
+    while (beachList.length > 0) {
+      const beachPoint = beachList.pop();
+      if (this.tokens > 1) {
+        for (const n of map.getNeighborsOfType(beachPoint, 'coast')) {
+          n.setBiome('beach');
+        }
+      }
+      beachPoint.setElevation(beachPoint.getElevation() - this.extremity);
+    }
   }
 }
+export default BeachAgent;

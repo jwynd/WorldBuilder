@@ -8,7 +8,6 @@ class BiomeAgent {
     Assigns water to be ocean or lake as appropriate for a whole map.
     Also assigns coastpoints as land adjacent to ocean.
     */
-    this.defineBeach(map);
     this.approximateLakes(map);
     const unvisitedLakes = map.getPointsOfType('lake');
     const visitedLakes = [];
@@ -19,6 +18,7 @@ class BiomeAgent {
         this.assignOcean(lakePoint, map);
       }
     }
+    this.defineBeach(map);
   }
 
   defineBeach (map) {
@@ -30,13 +30,24 @@ class BiomeAgent {
     }
   }
 
+  defineShore (map) {
+    const c = map.getPointsOfType('coast');
+    const shoreList = [];
+    for (const p of c) {
+      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
+        shoreList.push(p);
+      }
+    }
+    return shoreList;
+  }
+
   approximateLakes (map) {
     /*
     Overestimates the number of lake points in the map
     */
-    const beachPoints = map.getPointsOfType('beach');
-    for (const b of beachPoints) {
-      const oceanPoints = map.getNeighborsOfType(b, 'ocean', true);
+    const shorePoints = this.defineShore(map);
+    for (const b of shorePoints) {
+      const oceanPoints = map.getNeighborsOfType(b, 'ocean');
       for (const o of oceanPoints) {
         const direction = b.dir(o);
         this._moveAlong(o, direction, map);
@@ -50,7 +61,7 @@ class BiomeAgent {
     */
     if (point === null) {
       return 'ocean';
-    } else if (point.getBiome() === 'coast') {
+    } else if (point.getBiome() !== 'ocean') {
       return 'lake';
     } else {
       const type = this._moveAlong(map.getNeighbor(point, direction), direction, map);
@@ -97,8 +108,6 @@ class BiomeAgent {
       if (parent === null) {
         console.log('biomeAgent error in findOcean: point is null');
         return null;
-      } else if (parent.getBiome() === 'coast') {
-        parent.setBiome('beach');
       } else if (parent.getBiome() === 'lake') {
         parent.setBiome('ocean');
         const successors = map.getNeighbors(parent);
@@ -112,5 +121,4 @@ class BiomeAgent {
     }
   }
 }
-
 export default BiomeAgent;

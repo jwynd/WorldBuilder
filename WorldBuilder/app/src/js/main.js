@@ -7,6 +7,7 @@ import CoastAgent from './coastAgent.js';
 import BiomeAgent from './biomeAgent.js';
 import MountainAgent from './mountainAgent.js';
 import RiverAgent from './riverAgent.js';
+import BeachAgent from './beachAgent.js';
 import P5Wrapper from 'react-p5-wrapper';
 import Random from './random.js';
 
@@ -17,6 +18,7 @@ export default function sketch (p) {
   let ma; // mountain agent
   let r; // river agent
   let b; // biome agent
+  let be; // beach agent
   const mWidth = 1280;
   const mHeight = 720;
   const tokens = 300000;
@@ -51,9 +53,10 @@ export default function sketch (p) {
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
+    be = new BeachAgent(1, 1);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
-    const l = [c, b, ma, r];
+    const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
@@ -73,6 +76,8 @@ export default function sketch (p) {
             col = p.color(0, 255, 0);
           } else if (raw === 'river') {
             col = p.color(0, 255, 255);
+          } else if (raw === 'beach') {
+            col = p.color(255, m.point(i, j).getElevation(), 0);
           } else {
             col = p.color(m.point(i, j).getElevation(), 0, 255);
           }
