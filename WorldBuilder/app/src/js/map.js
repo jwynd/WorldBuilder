@@ -7,7 +7,6 @@ class Map {
     this.width = x;
     this.height = y;
     this.rand = r;
-    console.log(this.rand.callRandom());
     this.map = [];
     let xpos;
     let ypos = -1;// will be incremented on first pass
@@ -67,6 +66,8 @@ class Map {
     if (dir === 'northeast' && (!onTop && !onRight)) return this.point(x + 1, y - 1);
     if (dir === 'southeast' && (!onRight && !onBottom)) return this.point(x + 1, y + 1);
     if (dir === 'southwest' && (!onBottom && !onLeft)) return this.point(x - 1, y + 1);
+    // console.log(point);
+    // console.log(dir);
     return null;
   }
 
@@ -104,7 +105,9 @@ class Map {
 
   randomDirection () {
     const dir = ['west', 'northwest', 'north', 'northeast', 'east', 'southeast', 'south', 'southwest'];
-    return this.rand.callRandom(dir);
+    const result = this.rand.callRandom(dir);
+    // console.log(result);
+    return result;
   }
 }
 export default Map; // export the map class

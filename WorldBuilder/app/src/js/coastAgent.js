@@ -73,13 +73,14 @@ class CoastAgent {
     Sets the direction of the agent to a new random direction.
     */
     this.direction = map.randomDirection();
+    // console.log('direction after randDirection: ' + this.direction);
   }
 
   generate (map) {
     /*
     Generates a new landmass centered around this agent on map.
     */
-    if (this.direction === null) this.direction = this.randDirection(map);
+    if (this.direction === null) this.randDirection(map);
     this.recurCoast(this, map);
   }
 
@@ -90,13 +91,16 @@ class CoastAgent {
     */
     if (agent.tokens > agent.limit) {
       const child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
+      child1.randDirection(map);
       const child2 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
+      child2.randDirection(map);
       this.recurCoast(child1, map);
       this.recurCoast(child2, map);
     } else {
       // this.raisePoint(agent.seed)
       while (agent.tokens > 0) {
         agent.seed = map.getRandomNeighbor(agent.seed);
+        if (agent.seed === null || agent.seed === undefined) console.log(agent.seed);
         this.moveAgent(agent, map);
         if (agent.seed === null) {
           break;
@@ -151,6 +155,7 @@ class CoastAgent {
     while (map.getNeighborsOfType(agent.seed, 'ocean').length === 0) {
       agent.seed = map.getNeighbor(agent.seed, agent.direction);
       if (agent.seed === null) {
+        // console.log('agent suicide');
         return;
       }
     }
