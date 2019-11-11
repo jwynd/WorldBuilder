@@ -53,10 +53,10 @@ export default function sketch (p) {
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
-    be = new BeachAgent(1, 1);
+    be = new BeachAgent(5, 1, 1);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
-    const l = [c, b, be, ma, r];
+    const l = [c, b, be, ma];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }

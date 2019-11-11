@@ -21,6 +21,7 @@ class CoastAgent {
     this.tokens = tokens;
     this.limit = limit;
     this.direction = null;
+    //this.numAgents = 2 ^ (Math.floor(Math.log2(tokens) - Math.floor(Math.log2(limit))));
   }
 
   getSeed () {
