@@ -1,36 +1,50 @@
 // create the random class for use in agents
 
 /* jshint esversion: 6 */
+// /* global randomSeed random */
 
-class Random {
+import p5 from 'p5';
+
+class Random extends p5 {
   constructor (seed = 0xcafe00face) {
+    super();
     this.seed = seed;
+    this.randomSeed(seed);
   }
 
   setSeed (seed) {
     this.seed = seed;
+    this.randomSeed(seed);
   }
 
   getSeed () {
     return this.seed;
   }
 
-  random (min = null, max = null) {
-    if (Array.isArray(min) && max === null) {
-      const l = min;
-      const len = l.length;
-      return l[this.rand(0, len - 1)];
-    } else if (min === null && max === null) {
-      return this.rand(0, 1);
-    } else if (min !== null && max !== null) {
-      this.setSeed((this.getSeed() * 9301 + 49297) % 233280); // common psuedorandom algorithm
-      const rnd = this.getSeed() / 233280;
-      return min + rnd * (max - min);
+  callRandom (min = null, max = null) {
+    if (min === null && max === null) {
+      return this.random();
+    } else if (min !== null && max === null) {
+      return this.random(min);
     } else {
-      console.error('Random number generator failed');
-      return null;
+      return this.random(min, max);
     }
   }
 }
 
 export default Random;
+
+// export default function randomGenerator (r) {
+
+//   r.setSeed = function (seed) {
+//     r.randomSeed(seed);
+//   };
+
+//   r.getSeed = function () {
+//     return this.seed;
+//   }
+
+//   r.nextRandom = function (min = null, max = null) {
+//     if Array.isArray(min)
+//   }
+// }

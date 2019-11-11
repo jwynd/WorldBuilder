@@ -25,7 +25,7 @@ class MountainAgent {
     for (mountainCount = 0; mountainCount < this.numberOfMountains; mountainCount++) {
       console.log('mountain: ' + mountainCount);
       this.pickRandomStart(map);
-      this.direction = Map.randomDirection();
+      this.direction = map.randomDirection();
       while (this.checkPoint(map, this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.minElevation) {
         // if our starting point is invalid pick a new one
         this.pickRandomStart(map);

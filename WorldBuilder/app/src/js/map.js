@@ -1,13 +1,13 @@
 
 /* jshint esversion: 6 */
-/* global random */
-import p5 from 'p5';
+
 import Point from './point.js';
-class Map extends p5 {
-  constructor (x, y) {
-    super();
+class Map {
+  constructor (x, y, r) {
     this.width = x;
     this.height = y;
+    this.rand = r;
+    console.log(this.rand.callRandom());
     this.map = [];
     let xpos;
     let ypos = -1;// will be incremented on first pass
@@ -72,7 +72,7 @@ class Map extends p5 {
 
   getRandomNeighbor (point, onlyOrthogonal = false) {
     const n = this.getNeighbors(point, onlyOrthogonal);
-    const result = random(n);
+    const result = this.rand.callRandom(n);
     return result;
   }
 
@@ -99,12 +99,12 @@ class Map extends p5 {
 
   getRandomPointOfType (biome) {
     const b = this.getPointsOfType(biome);
-    return random(b);
+    return this.rand.callRandom(b);
   }
 
-  static randomDirection () {
+  randomDirection () {
     const dir = ['west', 'northwest', 'north', 'northeast', 'east', 'southeast', 'south', 'southwest'];
-    return random(dir);
+    return this.rand.callRandom(dir);
   }
 }
 export default Map; // export the map class

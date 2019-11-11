@@ -20,7 +20,7 @@ class CoastAgent {
     this.seed = seedPoint;
     this.tokens = tokens;
     this.limit = limit;
-    this.direction = Map.randomDirection();
+    this.direction = null;
   }
 
   getSeed () {
@@ -68,17 +68,18 @@ class CoastAgent {
     this.direction = newDirection;
   }
 
-  randDirection () {
+  randDirection (map) {
     /*
     Sets the direction of the agent to a new random direction.
     */
-    this.direction = Map.randomDirection();
+    this.direction = map.randomDirection();
   }
 
   generate (map) {
     /*
     Generates a new landmass centered around this agent on map.
     */
+    if (this.direction === null) this.direction = this.randDirection(map);
     this.recurCoast(this, map);
   }
 
@@ -110,7 +111,7 @@ class CoastAgent {
             maxP = p;
           }
         }
-        agent.randDirection();
+        agent.randDirection(map);
         this.raisePoint(maxP);
         agent.tokens--;
       }
