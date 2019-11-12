@@ -97,6 +97,7 @@ export default function sketch (p) {
       }
     }
     heightmap.updatePixels();
+    heightmap.save('map', 'png');
   };
 
   p.testRandom = function (r) {
