@@ -26,7 +26,6 @@ class App extends React.Component {
                   <img src={download} className="App-download" alt="download" height="50"/>
                   <img src={menu} className="App-menu" alt="menu" height="50"/>
                   <Login />
-                  <P5Wrapper sketch={sketch} />
               </header>
           </div>
       )
