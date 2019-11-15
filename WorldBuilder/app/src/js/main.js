@@ -51,9 +51,10 @@ export default function sketch (p) {
     const sPointX = p.floor(mWidth / 2);
     const sPointY = p.floor(mHeight / 2);
     const point = m.point(sPointX, sPointY);
+    const beachNoiseMax = 0.5;
     c = new CoastAgent(point, tokens, limit);
-    b = new BiomeAgent();
-    be = new BeachAgent(5, 1);
+    b = new BiomeAgent(beachNoiseMax);
+    be = new BeachAgent(5, beachNoiseMax);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
     const l = [c, b, be, ma, r];

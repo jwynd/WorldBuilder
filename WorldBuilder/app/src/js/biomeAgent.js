@@ -1,8 +1,15 @@
+/* global
+  noise
+*/
 /* jshint esversion: 6 */
 import Point from './point.js';
 import Map from './map.js';
 
 class BiomeAgent {
+  constructor (beachNoiseMax) {
+    this.beachNoiseMax = beachNoiseMax;
+  }
+
   generate (map) {
     /*
     Assigns water to be ocean or lake as appropriate for a whole map.
@@ -24,7 +31,7 @@ class BiomeAgent {
   defineBeach (map) {
     const c = map.getPointsOfType('coast');
     for (const p of c) {
-      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
+      if (map.getNeighborsOfType(p, 'ocean').length > 0 && noise(p.getX(), p.getY()) < this.beachNoiseMax) {
         p.setBiome('beach');
       }
     }
