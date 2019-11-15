@@ -6,7 +6,7 @@ import Point from './point.js';
 import Map from './map.js';
 
 class BeachAgent {
-  constructor (tokens, extremity, uniformity) {
+  constructor (tokens, extremity) {
     this.tokens = tokens;
     this.beachList = null;
     this.extremity = extremity;

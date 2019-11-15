@@ -56,7 +56,7 @@ export default function sketch (p) {
     be = new BeachAgent(5, 1);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
-    const l = [c, b, be, ma];
+    const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
@@ -77,14 +77,16 @@ export default function sketch (p) {
           } else if (raw === 'river') {
             col = p.color(0, 255, 255);
           } else if (raw === 'beach') {
-            col = p.color(m.point(i, j).getElevation(), 0, 255);
+            col = p.color(255, m.point(i, j).getElevation(), 0);
           } else {
             col = p.color(m.point(i, j).getElevation(), 0, 255);
           }
         } else if (raw === 'ocean') {
           col = p.color(0, 0, 255);
-        } else if (raw === 'coast' || raw === 'beach') {
+        } else if (raw === 'coast') {
           col = p.color(0, 255, 0);
+        } else if (raw === 'beach') {
+          col = p.color(255, m.point(i, j).getElevation(), 0);
         } else if (raw === 'mountain') {
           const col1 = p.color(0, 255, 0);
           const col2 = p.color(255, 0, 0);
