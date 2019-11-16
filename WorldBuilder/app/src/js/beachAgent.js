@@ -2,6 +2,9 @@
   noise
 */
 /* jshint esversion: 6 */
+//Want a low octave for large beaches, high for small beaches
+//over ten octave looks good
+
 import Point from './point.js';
 import Map from './map.js';
 
@@ -30,7 +33,7 @@ class BeachAgent {
     while (beachList.length > 0) {
       const beachPoint = beachList.pop();
       const point = map.getRandomNeighborOfType(beachPoint, 'coast');
-      if (point !== undefined && this.tokens > 1 && noise(point.getX(), point.getY()) < this.beachNoiseMax) {
+      if (point !== undefined && this.tokens > 1 && noise(point.getX() / 10, point.getY() / 10) < this.beachNoiseMax) {
         point.setBiome('beach');
       }
       if (beachPoint.getElevation() > 1) {

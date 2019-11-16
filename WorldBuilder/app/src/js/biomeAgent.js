@@ -31,7 +31,7 @@ class BiomeAgent {
   defineBeach (map) {
     const c = map.getPointsOfType('coast');
     for (const p of c) {
-      if (map.getNeighborsOfType(p, 'ocean').length > 0 && noise(p.getX(), p.getY()) < this.beachNoiseMax) {
+      if (map.getNeighborsOfType(p, 'ocean').length > 0 && noise(p.getX() / 10, p.getY() / 10) < this.beachNoiseMax) {
         p.setBiome('beach');
       }
     }
