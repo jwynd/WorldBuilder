@@ -1,3 +1,6 @@
+/* global
+  noise
+*/
 /* jshint esversion: 6 */
 import Point from './point.js';
 import Map from './map.js';
@@ -16,16 +19,6 @@ class BiomeAgent {
       visitedLakes.push(lakePoint);
       if (this.findOcean(lakePoint, map, visitedLakes)) {
         this.assignOcean(lakePoint, map);
-      }
-    }
-    this.defineBeach(map);
-  }
-
-  defineBeach (map) {
-    const c = map.getPointsOfType('coast');
-    for (const p of c) {
-      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
-        p.setBiome('beach');
       }
     }
   }

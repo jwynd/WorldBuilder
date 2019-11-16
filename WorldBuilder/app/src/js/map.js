@@ -77,6 +77,21 @@ class Map {
     return result;
   }
 
+  getRandomNeighborOfType (point, biome, onlyOrthogonal = false) {
+    const n = this.getNeighborsOfType(point, biome, onlyOrthogonal);
+    return this.rand.callRandom(n);
+  }
+
+  hasNeighbors (point, onlyOrthogonal = false) {
+    const n = this.getNeighbors(point, onlyOrthogonal);
+    return n.length > 0;
+  }
+
+  hasNeighborsOfType (point, biome, onlyOrthogonal = false) {
+    const n = this.getNeighborsOfType(point, biome, onlyOrthogonal);
+    return n.length > 0;
+  }
+
   getNeighborsOfType (point, biome, onlyOrthogonal = false) {
     const n = this.getNeighbors(point, onlyOrthogonal);
     const result = [];
