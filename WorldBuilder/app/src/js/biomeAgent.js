@@ -6,10 +6,6 @@ import Point from './point.js';
 import Map from './map.js';
 
 class BiomeAgent {
-  constructor (beachNoiseMax) {
-    this.beachNoiseMax = beachNoiseMax;
-  }
-
   generate (map) {
     /*
     Assigns water to be ocean or lake as appropriate for a whole map.
@@ -23,16 +19,6 @@ class BiomeAgent {
       visitedLakes.push(lakePoint);
       if (this.findOcean(lakePoint, map, visitedLakes)) {
         this.assignOcean(lakePoint, map);
-      }
-    }
-    this.defineBeach(map);
-  }
-
-  defineBeach (map) {
-    const c = map.getPointsOfType('coast');
-    for (const p of c) {
-      if (map.getNeighborsOfType(p, 'ocean').length > 0 && noise(p.getX() / 10, p.getY() / 10) < this.beachNoiseMax) {
-        p.setBiome('beach');
       }
     }
   }
