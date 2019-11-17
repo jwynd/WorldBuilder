@@ -7,7 +7,18 @@ import Login from './Login.js';
 import P5Wrapper from 'react-p5-wrapper';
 import sketch from './js/main.js';
 
+
 class App extends React.Component {
+  componentWillMount () {
+  
+    let loading = document.getElementById('i-loading')
+    if (loading) {
+      loading.setAttribute('class', 'i-loading-out')
+      setTimeout(() => {
+        loading.style.display = 'none'
+      }, 1000)
+    }
+  }
   download=()=>{
     debugger
     let data =document.getElementById("downloadpic").children[0].children[0].toDataURL().replace("image/png", "image/octet-stream;")
