@@ -6,6 +6,7 @@ import closeIcon from './icons/close.svg';
 import { Modal, Button, Form } from 'react-bootstrap';
 import firebase from './Firebase.js';
 
+// these functions change the booleans of showLoginModal and showRegisterModal
 function loginClose() {
   this.setState( {showLoginModal: false} );
 }
@@ -28,8 +29,9 @@ class Login extends React.Component {
     this.state = {
       showLoginModal: false,
       showRegisterModal: false,
-      loggedIn: firebase.auth().currentUser ? true : false,
+      loggedIn: firebase.auth().onAuthStateChanged ? true : false,
       email: '',
+      password: '',
       passwordOne: '',
       passwordTwo: ''
     };
@@ -39,35 +41,68 @@ class Login extends React.Component {
     registerClose = registerClose.bind(this);
   }
 
-  toLogin(event){
+  toLogin(event){ // opens login window, closes registration windows
     registerClose();
     loginOpen();
   }
 
-  toRegister(event){
+  toRegister(event){ // opens registration window, closes login windows
     loginClose();
     registerOpen();
   }
 
   createAccount(event) {
     event.preventDefault();
-    const { username, email, passwordOne } = this.state; 
+    const { email, passwordOne } = this.state; 
 
     const password = passwordOne;
+    console.log(password);
 
+    // calls on Firebase to create user using email and password
     firebase
       .auth().createUserWithEmailAndPassword(email, password)
       .then(function() {
+        console.log(this.state.loggedIn);
         console.log("Successfully created new user");
-      })
-      .catch(function(error){
+      }.bind(this))
+      .catch(error => {
         console.log("Error creating user:", error);
       });
+  }
+  
+  logIn(event) {
+    event.preventDefault();
+    const { email, password } = this.state; 
+
+    // calls on Firebase to verify user using email and password
+    firebase
+      .auth().signInWithEmailAndPassword(email, password)
+      .then(function() {
+        loginClose();
+        console.log("Successfully logged in");
+      })
+      .catch(error => {
+        console.log("Error logging in:", error);
+      });
+    }
+
+    // signs user out
+    signOut(event) {
+      firebase
+        .auth().signOut()
+        .then(function(){
+          console.log("Signed out sucessfully");
+          console.log(this.state.loggedIn);
+        })
+        .catch(error => {
+          console.log("Error signing out:", error);
+        });
     }
 
   render() {
     const { email, passwordOne, passwordTwo } = this.state; 
 
+    // does not allow user to register without email and matching passwords
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
@@ -75,11 +110,14 @@ class Login extends React.Component {
 
     const loggedIn = this.state.loggedIn;
     let loginOrWelcome;
+    let signOut;
 
-    if(!loggedIn){
-      loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
-    } else {
+    if(loggedIn){ // welcomes user and gives them to option to sign out if logged in
       loginOrWelcome = <div className="welcome-text">Welcome, user!</div>;
+      signOut = <div className="sign-out" span style={{cursor:"pointer"}} onClick={(event) => this.signOut(event)}>Sign out</div>;
+    } else { //shows login/register and hides sign out button if not logged in
+      loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
+      signOut = '';
     }
     console.log(loggedIn);
     console.log(this.state.email);
@@ -89,6 +127,7 @@ class Login extends React.Component {
     return (
       <>
         {loginOrWelcome}  
+        {signOut}
 
         <Modal show={this.state.showLoginModal} onHide={loginClose}>
             <Modal.Header>
