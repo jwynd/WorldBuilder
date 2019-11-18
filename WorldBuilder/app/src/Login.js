@@ -87,17 +87,17 @@ class Login extends React.Component {
     }
 
     // signs user out
-    signOut(event) {
-      firebase
-        .auth().signOut()
-        .then(function(){
-          console.log("Signed out sucessfully");
-          console.log(this.state.loggedIn);
-        })
-        .catch(error => {
-          console.log("Error signing out:", error);
-        });
-    }
+  signOut(event) {
+    firebase
+      .auth().signOut()
+      .then(function(){
+        console.log("Signed out sucessfully");
+        console.log(this.state.loggedIn);
+      })
+      .catch(error => {
+        console.log("Error signing out:", error);
+      });
+  }
 
   render() {
     const { email, passwordOne, passwordTwo } = this.state; 
