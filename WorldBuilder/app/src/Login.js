@@ -23,15 +23,24 @@ function registerOpen() {
   this.setState( {showRegisterModal: true} );
 }
 
+function loggedIn() {
+  this.setState( {loggedIn: true} );
+}
+
+function notLoggedIn() {
+  this.setState( {loggedIn: false} );
+}
+
 class Login extends React.Component {
   constructor(){
     super();
     this.state = {
       showLoginModal: false,
       showRegisterModal: false,
-      loggedIn: firebase.auth().onAuthStateChanged ? true : false,
-      email: '',
-      password: '',
+      loggedIn: '',
+      loginEmail: '',
+      loginPassword: '',
+      registrationEmail: '',
       passwordOne: '',
       passwordTwo: ''
     };
@@ -39,32 +48,42 @@ class Login extends React.Component {
     loginClose = loginClose.bind(this);
     registerOpen = registerOpen.bind(this);
     registerClose = registerClose.bind(this);
+    loggedIn = loggedIn.bind(this);
+    notLoggedIn = notLoggedIn.bind(this);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        loggedIn();
+      } else {
+        notLoggedIn();
+      }
+    });
+    
   }
 
-  toLogin(event){ // opens login window, closes registration windows
+  toLogin(event) { // opens login window, closes registration windows
     registerClose();
     loginOpen();
   }
 
-  toRegister(event){ // opens registration window, closes login windows
+  toRegister(event) { // opens registration window, closes login windows
     loginClose();
     registerOpen();
   }
 
   createAccount(event) {
     event.preventDefault();
-    const { email, passwordOne } = this.state; 
+    const { registrationEmail, passwordOne } = this.state; 
 
-    const password = passwordOne;
-    console.log(password);
+    console.log(passwordOne);
 
     // calls on Firebase to create user using email and password
     firebase
-      .auth().createUserWithEmailAndPassword(email, password)
+      .auth().createUserWithEmailAndPassword(registrationEmail, passwordOne)
       .then(function() {
         console.log(this.state.loggedIn);
         console.log("Successfully created new user");
-      }.bind(this))
+      })
       .catch(error => {
         console.log("Error creating user:", error);
       });
@@ -72,14 +91,16 @@ class Login extends React.Component {
   
   logIn(event) {
     event.preventDefault();
-    const { email, password } = this.state; 
+    const { loginEmail, loginPassword, loggedIn } = this.state; 
 
     // calls on Firebase to verify user using email and password
     firebase
-      .auth().signInWithEmailAndPassword(email, password)
+      .auth().signInWithEmailAndPassword(loginEmail, loginPassword)
       .then(function() {
         loginClose();
         console.log("Successfully logged in");
+        console.log("logged in :" + loggedIn);
+        console.log("current user: " + firebase.auth().currentUser);
       })
       .catch(error => {
         console.log("Error logging in:", error);
@@ -92,7 +113,6 @@ class Login extends React.Component {
       .auth().signOut()
       .then(function(){
         console.log("Signed out sucessfully");
-        console.log(this.state.loggedIn);
       })
       .catch(error => {
         console.log("Error signing out:", error);
@@ -100,13 +120,13 @@ class Login extends React.Component {
   }
 
   render() {
-    const { email, passwordOne, passwordTwo } = this.state; 
+    const { loginEmail, registrationEmail, passwordOne, passwordTwo } = this.state; 
 
     // does not allow user to register without email and matching passwords
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
-      email === '';
+      registrationEmail === '';
 
     const loggedIn = this.state.loggedIn;
     let loginOrWelcome;
@@ -119,8 +139,11 @@ class Login extends React.Component {
       loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
       signOut = '';
     }
+
     console.log("logged in: " + loggedIn);
-    console.log("email: " + this.state.email);
+    console.log("login email: " + this.state.loginEmail);
+    console.log("login password: " + this.state.loginPassword)
+    console.log("registration email: " + this.state.registrationEmail)
     console.log("password: " + this.state.passwordOne);
     console.log("confirm password: " + this.state.passwordTwo);
 
@@ -139,12 +162,12 @@ class Login extends React.Component {
                 <Form>
                   <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Email" onChange={(event) => this.setState({email: event.target.value})}/>
+                    <Form.Control type="email" placeholder="Email" onChange={(event) => this.setState({loginEmail: event.target.value})}/>
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={(event) => this.setState({password: event.target.value})}/>
+                    <Form.Control type="password" placeholder="Password" onChange={(event) => this.setState({loginPassword: event.target.value})}/>
                   </Form.Group>
                 </Form>
             </Modal.Body>
@@ -165,7 +188,7 @@ class Login extends React.Component {
               <Form>
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Email" onChange={(event) => this.setState({email: event.target.value})}/>
+                  <Form.Control type="email" placeholder="Email" onChange={(event) => this.setState({registrationEmail: event.target.value})}/>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPasswordOne">
