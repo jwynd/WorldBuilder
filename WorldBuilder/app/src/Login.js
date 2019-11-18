@@ -119,10 +119,10 @@ class Login extends React.Component {
       loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
       signOut = '';
     }
-    console.log(loggedIn);
-    console.log(this.state.email);
-    console.log(this.state.passwordOne);
-    console.log(this.state.passwordTwo);
+    console.log("logged in: " + loggedIn);
+    console.log("email: " + this.state.email);
+    console.log("password: " + this.state.passwordOne);
+    console.log("confirm password: " + this.state.passwordTwo);
 
     return (
       <>
