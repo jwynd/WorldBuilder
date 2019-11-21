@@ -21,8 +21,17 @@ export default function sketch (p) {
   let be; // beach agent
   const mWidth = 1280;
   const mHeight = 720;
-  const tokens = 300000;
-  const limit = 3000;
+  // User parameter (abstraction for number of tokens)
+  // 0 <= size <= ceiling(lg(mWidth * mHeight))
+  const size = 18;
+  // User parameter (abstraction for number of agents)
+  // 0 <= smoothness < size
+  const smoothness = 2;
+
+  // 0 <= tokens <= mWidth * mHeight
+  const tokens = Math.pow(2, size);
+  // 1 <= limit <= tokens
+  const limit = tokens / Math.pow(2, smoothness);
   const worldSeed = 0xa12413adff;
   const debug = true;
 
@@ -56,7 +65,7 @@ export default function sketch (p) {
     be = new BeachAgent(5, 0.5, 10);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
-    const l = [c, b, be, ma, r];
+    const l = [c];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
