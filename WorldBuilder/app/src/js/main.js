@@ -55,13 +55,19 @@ export default function sketch (p) {
   // User parameter (Abstraction for beachNoiseMax)
   // Controls how high beaches can reach
   // 0 <= beachHeight <= 1
-  const beachHeight = 1;
+  const beachHeight = 0.5;
 
   // User parameter (abstraction for octave)
   // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
-  const coastUniformity = 2;
+  // 0 <= coastUniformity <= 3
+  const coastUniformity = 3;
 
+  // 1 <= octave <= 1000
   const octave = Math.pow(10, coastUniformity);
+
+  // RiverAgent parameters
+
+  
 
   const worldSeed = 0xa12413adff;
   const debug = true;
@@ -95,8 +101,8 @@ export default function sketch (p) {
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight, octave);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
-    r = new RiverAgent(10);
-    const l = [c, b, be];
+    r = new RiverAgent(50);
+    const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
