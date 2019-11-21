@@ -90,7 +90,6 @@ class CoastAgent {
     Recursively divides agents into child agents until all child agents are at or below the specified limit.
     Child agents then procedurally move around the map and raise points out of the ocean.
     */
-    console.log("agent created")
     if (agent.tokens > agent.limit) {
       const child1 = new CoastAgent(map.getRandomNeighbor(agent.seed), Math.floor(agent.tokens / 2), agent.limit);
       child1.randDirection(map);

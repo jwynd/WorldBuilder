@@ -21,17 +21,48 @@ export default function sketch (p) {
   let be; // beach agent
   const mWidth = 1280;
   const mHeight = 720;
+
+  // CoastAgent parameters
+
   // User parameter (abstraction for number of tokens)
   // 0 <= size <= ceiling(lg(mWidth * mHeight))
-  const size = 18;
+  // Below ceiling(lg(mWidth * mHeight))/2 is very small
+  // Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
+  // result in the same island with two agents) too closely leads to suicides and no growth if few enough agents
+  const size = 16;
+
   // User parameter (abstraction for number of agents)
   // 0 <= smoothness < size
-  const smoothness = 2;
+  // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
+  const smoothness = 4;
+
+  // 1 <= agents <= tokens
+  const agents = Math.pow(2, smoothness);
 
   // 0 <= tokens <= mWidth * mHeight
   const tokens = Math.pow(2, size);
+
   // 1 <= limit <= tokens
-  const limit = tokens / Math.pow(2, smoothness);
+  const limit = tokens / agents;
+
+  // BeachAgent parameters
+
+  // User parameter (abstraction for tokens)
+  // Controls how far inland the coastline will go
+  // 1 <= inland <= 3
+  const inland = 3;
+
+  // User parameter (Abstraction for beachNoiseMax)
+  // Controls how high beaches can reach
+  // 0 <= beachHeight <= 1
+  const beachHeight = 1;
+
+  // User parameter (abstraction for octave)
+  // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
+  const coastUniformity = 2;
+
+  const octave = Math.pow(10, coastUniformity);
+
   const worldSeed = 0xa12413adff;
   const debug = true;
 
@@ -62,10 +93,10 @@ export default function sketch (p) {
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
-    be = new BeachAgent(5, 0.5, 10);
+    be = new BeachAgent(inland, beachHeight, octave);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
     r = new RiverAgent(10);
-    const l = [c];
+    const l = [c, b, be];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
@@ -85,7 +116,7 @@ export default function sketch (p) {
             col = p.color(0, 255, 0);
           } else if (raw === 'river') {
             col = p.color(0, 255, 255);
-          } else if (raw === 'beach') {
+          } else if (raw === 'beach' || raw === 'shore') {
             col = p.color(255, m.point(i, j).getElevation(), 0);
           } else {
             col = p.color(m.point(i, j).getElevation(), 0, 255);
