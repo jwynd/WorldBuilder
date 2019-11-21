@@ -31,10 +31,12 @@ class RiverAgent {
     let p = b;
     let d = b.dist(m); // want to reduce the distance between b and m
     const altered = [];
+    const prevBiome = [];
     // let count = 0;
     while (p.getBiome() !== 'mountain') {
       // move towards a mountain
       // count++;
+      prevBiome.push(p.getBiome());
       p.setBiome('river');
       altered.push(p);
       const nRaw = map.getNeighbors(p);
@@ -54,8 +56,8 @@ class RiverAgent {
       if (n.length === 0) {
         console.error('failed river');
         // return altered;
-        for (const a of altered) {
-          a.setBiome('coast');
+        for (let a = 0; a < altered.length; ++a) {
+          altered[a].setBiome(prevBiome[a]);
         }
         return this.generateRiver(map);
       }
