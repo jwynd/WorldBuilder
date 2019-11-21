@@ -6,23 +6,16 @@ import Point from './point.js';
 import Map from './map.js';
 // let rcount = 0;
 class RiverAgent {
-  // O(8 * sqrt(mHeight^2 + mWidth^2) * # rivers)
+  // making weird lines in lakes, and there's a possibility of there not being shorelines
   constructor (maxRivers = 1, wanderSteps = 1000, wanderCut = 50) {
     this.maxRivers = maxRivers;
     this.wanderSteps = wanderSteps;
     this.wanderCut = wanderCut;
-    this.oceanNeighbors = [];
   }
 
   // will generate maxRivers
   generate (map) {
     const altered = [];
-    const c = map.getPointsOfType('coast');
-    for (const p of c) {
-      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
-        this.oceanNeighbors.push(p);
-      }
-    }
     for (let i = 0; i < this.maxRivers; ++i) {
       console.log('river ' + (i + 1));
       // rcount++;
@@ -33,7 +26,7 @@ class RiverAgent {
 
   // will generate 1 river
   generateRiver (map) {
-    const b = this.oceanNeighbors[Math.floor(Math.random() * this.oceanNeighbors.length)];
+    const b = map.getRandomPointOfType('shore');
     const m = map.getRandomPointOfType('mountain');
     console.log(b, m);
     let p = b;

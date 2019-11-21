@@ -18,10 +18,16 @@ class BeachAgent {
 
   generate (map) {
     this.defineShoreline(map);
+    this.beachList = map.getPointsOfType('shore');
+    for (const s of this.beachList) {
+      if (noise(s.getX(), s.getY()) >= 0.5) {
+        s.setBiome('coast');
+      }
+    }
     while (this.tokens > 0) {
-      const beachList = map.getPointsOfType('beach');
-      this.beachify(beachList, map);
+      this.beachify(this.beachList, map);
       this.tokens--;
+      this.beachList = this.beachList.concat(map.getPointsOfType('beach'));
     }
   }
 
@@ -42,7 +48,7 @@ class BeachAgent {
     const c = map.getPointsOfType('coast');
     for (const p of c) {
       if (map.getNeighborsOfType(p, 'ocean').length > 0 && noise(p.getX() / this.octave, p.getY() / this.octave) < this.beachNoiseMax) {
-        p.setBiome('beach');
+        p.setBiome('shore');
       }
     }
   }
