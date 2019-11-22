@@ -9,14 +9,6 @@ import sketch from './js/main.js';
 
 class App extends React.Component {
   render() {
-      /*
-      const logIn = isUserAuthorized ? (
-          <h2>Welcome!</h2>
-      ) : (
-          <button type="button">Register/Log In</button> 
-      );
-      */
-
       return (
           <div className ="App">
               <header className="App-header">
