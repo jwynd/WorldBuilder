@@ -23,9 +23,9 @@ export default function sketch (p) {
   const mHeight = 720;
   const tokens = 300000;
   const limit = 3000;
-  const worldSeed = 0xa12413adff;
+  /*const worldSeed = 0xa12413adff ;*/
+  let worldSeed=document.getElementById('worldseed').value.toString(16)||0xa12413adff
   const debug = true;
-
   // /////////////////
   // Mountain Params//
   // /////////////////
