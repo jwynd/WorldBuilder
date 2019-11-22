@@ -23,7 +23,7 @@ class MountainAgent {
   generate (map) {
     let mountainCount;
     for (mountainCount = 0; mountainCount < this.numberOfMountains; mountainCount++) {
-      console.log('mountain: ' + mountainCount);
+      //console.log('mountain: ' + mountainCount);
       this.pickRandomStart(map);
       this.direction = map.randomDirection();
       while (this.checkPoint(map, this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.minElevation) {
@@ -38,16 +38,16 @@ class MountainAgent {
         this.noiseWedge(map);
         this.smoothWedge(map);
         if (this.foothillPeriod > 0 && (i + 1) % this.foothillPeriod === 0) {
-          console.log('make foothill');
+          //console.log('make foothill');
           this.makeFoothills(map);
         }
         if (this.turnPeriod > 0 && (i + 1) % this.turnPeriod === 0) {
-          console.log('make turn ' + this.direction);
+          //console.log('make turn ' + this.direction);
           this.rotateAgent();
-          console.log(this.direction);
+          //console.log(this.direction);
         }
         if (reachedEdge) {
-          console.log('tokens finished before hitting edge: ' + i);
+          //console.log('tokens finished before hitting edge: ' + i);
           break;
         }
         this.moveAgent();
@@ -209,7 +209,7 @@ class MountainAgent {
         this.y--;
         break;
       default:
-        console.log('move agent error:' + this.direction);
+        //console.log('move agent error:' + this.direction);
     }
     // check if we hit the edge
   }
@@ -243,7 +243,7 @@ class MountainAgent {
             this.direction = 'west';
             break;
           default:
-            console.log('rotate agent error:' + this.direction);
+            //console.log('rotate agent error:' + this.direction);
         }
         break;
       case 1:
@@ -273,7 +273,7 @@ class MountainAgent {
             this.direction = 'south';
             break;
           default:
-            console.log('rotate agent error:' + this.direction);
+            //console.log('rotate agent error:' + this.direction);
         }
         break;
       default:
@@ -307,7 +307,7 @@ class MountainAgent {
       case 'southwest':
         return 'northwest';
       default:
-        console.log('90 degree offest error:' + this.direction);
+        //console.log('90 degree offest error:' + this.direction);
     }
   }
 
@@ -330,7 +330,7 @@ class MountainAgent {
       case 'southwest':
         return 'southeast';
       default:
-        console.log('-90 degree offest error:' + this.direction);
+        //console.log('-90 degree offest error:' + this.direction);
     }
   }
 

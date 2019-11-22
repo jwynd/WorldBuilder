@@ -17,7 +17,7 @@ class RiverAgent {
   generate (map) {
     const altered = [];
     for (let i = 0; i < this.maxRivers; ++i) {
-      console.log('river ' + (i + 1));
+      //console.log('river ' + (i + 1));
       // rcount++;
       Array.prototype.push.apply(altered, this.generateRiver(map)); // only way I found to concatinate arrays
     }
@@ -28,7 +28,7 @@ class RiverAgent {
   generateRiver (map) {
     const b = map.getRandomPointOfType('shore');
     const m = map.getRandomPointOfType('mountain');
-    console.log(b, m);
+    //console.log(b, m);
     let p = b;
     let d = b.dist(m); // want to reduce the distance between b and m
     const altered = [];
@@ -53,7 +53,7 @@ class RiverAgent {
         }
       }
       if (n.length === 0) {
-        console.error('failed river');
+        //console.error('failed river');
         // return altered;
         for (const a of altered) {
           a.setBiome('coast');
