@@ -7,10 +7,11 @@ import Map from './map.js';
 // let rcount = 0;
 class RiverAgent {
   // making weird lines in lakes, and there's a possibility of there not being shorelines
-  constructor (maxRivers = 1, wanderSteps = 1000, wanderCut = 50) {
+  constructor (rand, maxRivers = 1, wanderSteps = 1000, wanderCut = 50) {
     this.maxRivers = maxRivers;
     this.wanderSteps = wanderSteps;
     this.wanderCut = wanderCut;
+    this.rand = rand;
   }
 
   // will generate maxRivers
@@ -26,18 +27,21 @@ class RiverAgent {
 
   // will generate 1 river
   generateRiver (map) {
-    const b = map.getRandomPointOfType('shore');
+    const points = [map.getRandomPointOfType('shore'), map.getRandomPointOfType('tallShore')];
+    const b = points[Math.round(this.rand.callRandom(0, 1))];
     const m = map.getRandomPointOfType('mountain');
     //console.log(b, m);
     let p = b;
     let d = b.dist(m); // want to reduce the distance between b and m
-    const altered = [];
+    const alteredPoints = [];
+    const alteredBiomes = {};
     // let count = 0;
     while (p.getBiome() !== 'mountain') {
       // move towards a mountain
       // count++;
+      alteredBiomes[p.toString()] = p.getBiome();
+      alteredPoints.push(p);
       p.setBiome('river');
-      altered.push(p);
       const nRaw = map.getNeighbors(p);
 
       d = p.dist(m);
@@ -55,15 +59,15 @@ class RiverAgent {
       if (n.length === 0) {
         //console.error('failed river');
         // return altered;
-        for (const a of altered) {
-          a.setBiome('coast');
+        for (const point of alteredPoints) {
+          point.setBiome(alteredPoints[point.toString()]);
         }
         return this.generateRiver(map);
       }
       p = pickN(n, m);
       // console.log(p, count);
     }
-    return altered;
+    return alteredPoints;
   }
 
   // // pick a random point to wander to.

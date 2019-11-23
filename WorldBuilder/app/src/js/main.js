@@ -68,7 +68,7 @@ export default function sketch (p) {
   // RiverAgent parameters
 
   // User parameter (number of rivers)
-  // 0 <= numRivers <= map.getPointsOfType('shore');
+  // 0 <= numRivers <= map.getPointsOfType('shore') / 10;
   const numRivers = 100;
 
   const worldSeed = 0xa12413adff;
@@ -103,7 +103,7 @@ export default function sketch (p) {
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight, octave);
     ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
-    r = new RiverAgent(numRivers);
+    r = new RiverAgent(rand, numRivers);
     const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);

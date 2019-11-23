@@ -47,8 +47,12 @@ class BeachAgent {
   defineShoreline (map) {
     const c = map.getPointsOfType('coast');
     for (const p of c) {
-      if (map.getNeighborsOfType(p, 'ocean').length > 0 && noise(p.getX() / this.octave, p.getY() / this.octave) < this.beachNoiseMax) {
-        p.setBiome('shore');
+      if (map.getNeighborsOfType(p, 'ocean').length > 0) {
+        if (noise(p.getX() / this.octave, p.getY() / this.octave) < this.beachNoiseMax) {
+          p.setBiome('shore');
+        } else {
+          p.setBiome('tallShore');
+        }
       }
     }
   }

@@ -82,7 +82,6 @@ class CoastAgent {
     Generates a new landmass centered around this agent on map.
     */
     if (this.direction === null) this.randDirection(map);
-    console.log("begin recursion");
     this.recurCoast(this, map);
   }
 
@@ -99,11 +98,9 @@ class CoastAgent {
       this.recurCoast(child1, map);
       this.recurCoast(child2, map);
     } else {
-      console.log("Complete recursion");
       // this.raisePoint(agent.seed)
       while (agent.tokens > 0) {
         agent.seed = map.getRandomNeighbor(agent.seed);
-        if (agent.seed === null || agent.seed === undefined) console.log(agent.seed);
         this.moveAgent(agent, map);
         if (agent.seed === null) {
           break;
