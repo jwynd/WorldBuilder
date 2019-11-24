@@ -23,8 +23,8 @@ export default function sketch (p) {
   const mHeight = 720;
   const tokens = 300000;
   const limit = 3000;
-  /*const worldSeed = 0xa12413adff ;*/
-  let worldSeed=document.getElementById('worldseed').value.toString(16)||0xa12413adff
+  /* const worldSeed = 0xa12413adff ; */
+  let worldSeed = document.getElementById('worldseed').value.toString(16) || 0xa12413adff;
   const debug = true;
   // /////////////////
   // Mountain Params//
@@ -41,7 +41,7 @@ export default function sketch (p) {
   const m10 = 5;
 
   p.setup = function () {
-    p.createCanvas(mWidth, mHeight);
+    p.createCanvas(p.windowWidth, p.windowHeight);
     const rand = new Random(worldSeed);
     // console.log('Random number: ' + rand.callRandom());
     m = new Map(mWidth, mHeight, rand);
@@ -101,21 +101,18 @@ export default function sketch (p) {
     heightmap.updatePixels();
   };
 
-  p.testRandom = function (r) {
-    heightmap = p.createImage(mWidth, mHeight);
-    heightmap.loadPixels();
-
-    for (let i = 0; i < mWidth * mHeight; ++i) {
-      const x = p.floor(r.callRandom(0, mWidth - 1));
-      const y = p.floor(r.callRandom(0, mHeight - 1));
-      heightmap.set(x, y, 0);
-    }
-    heightmap.updatePixels();
+  p.windowResized = function () {
+    p.resizeCanvas(p.windowWidth, p.windowHeight);
   };
 
   p.draw = function () {
-    p.background(255);
-    p.image(heightmap, 0, 0);
+    p.background(0, 0, 255); // set this to the same color as the ocean.
+    p.imageMode(p.CENTER);
+    if (p.windowHeight > p.windowWidth * 0.5625) {
+      p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * 0.5625);
+    } else {
+      p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * 1.777777777778, p.windowHeight);
+    }
   };
 }
 // let heightmap;
