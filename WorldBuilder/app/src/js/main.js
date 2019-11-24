@@ -68,7 +68,7 @@ export default function sketch (p) {
   // RiverAgent parameters
 
   // User parameter (number of rivers)
-  // 0 <= numRivers <= map.getPointsOfType('shore') / 10;
+  // 0 <= numRivers <= .05(2 * pi * sqrt(tokens/pi))
   const numRivers = 50;
 
   const worldSeed = 0xa12413adff;
