@@ -69,7 +69,7 @@ export default function sketch (p) {
 
   // User parameter (number of rivers)
   // 0 <= numRivers <= map.getPointsOfType('shore') / 10;
-  const numRivers = 100;
+  const numRivers = 50;
 
   const worldSeed = 0xa12413adff;
   const debug = true;

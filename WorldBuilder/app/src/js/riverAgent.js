@@ -33,14 +33,13 @@ class RiverAgent {
     //console.log(b, m);
     let p = b;
     let d = b.dist(m); // want to reduce the distance between b and m
-    const alteredPoints = [];
-    const alteredBiomes = {};
+    const altered = [];
+    const prevBiome = [];
     // let count = 0;
     while (p.getBiome() !== 'mountain') {
       // move towards a mountain
       // count++;
-      alteredBiomes[p.toString()] = p.getBiome();
-      alteredPoints.push(p);
+      prevBiome.push(p.getBiome());
       p.setBiome('river');
       const nRaw = map.getNeighbors(p);
 
@@ -59,15 +58,15 @@ class RiverAgent {
       if (n.length === 0) {
         //console.error('failed river');
         // return altered;
-        for (const point of alteredPoints) {
-          point.setBiome(alteredPoints[point.toString()]);
+        for (let a = 0; a < altered.length; ++a) {
+          altered[a].setBiome(prevBiome[a]);
         }
         return this.generateRiver(map);
       }
       p = pickN(n, m);
       // console.log(p, count);
     }
-    return alteredPoints;
+    return altered;
   }
 
   // // pick a random point to wander to.
