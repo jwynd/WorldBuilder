@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.scss';
 import menu from './icons/menu.svg';
-import './scss/_modal.scss';
 import './scss/_buttons.scss';
 import { Modal, ListGroup } from 'react-bootstrap';
 
@@ -50,6 +49,7 @@ class Menu extends React.Component {
                 <ListGroup.Item><a onClick={this.newmap.bind(this)}>New Map</a></ListGroup.Item>
                 <ListGroup.Item><a>Load</a></ListGroup.Item>
                 <ListGroup.Item><a>Save</a></ListGroup.Item>
+                <ListGroup.Item><a>Setting</a></ListGroup.Item>
               </ListGroup>
             </Modal.Body>
         </Modal>
