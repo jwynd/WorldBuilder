@@ -77,16 +77,16 @@ export default function sketch (p) {
   // /////////////////
   // Mountain Params//
   // /////////////////
-  const m1 = 30;
-  const m2 = 1000;
+  const m1 = 5;
+  const m2 = 100;
   const m3 = 25;
-  const m4 = 5;
-  const m5 = 10;
+  const m4 = 100;
+  const m5 = 150;
   const m6 = 100;
   const m7 = 50;
   const m8 = 0.9;
   const m9 = 1;
-  const m10 = 5;
+  const m10 = 100;
 
   p.setup = function () {
     p.createCanvas(mWidth, mHeight);
@@ -102,12 +102,13 @@ export default function sketch (p) {
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight, octave);
-    ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
+    ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, 1, rand);
     r = new RiverAgent(rand, numRivers);
-    const l = [c, b, be, ma, r];
+    const l = [c, b, be, ma/*, r*/];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
+    console.log(m.getPointsOfType('mountain'));
     p.makeHeightmap();
   };
 
@@ -140,6 +141,7 @@ export default function sketch (p) {
           const col2 = p.color(255, 0, 0);
           const elvLerp = p.map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
           col = p.lerpColor(col1, col2, elvLerp);
+          col = p.color(255, 255, 255);
         } else if (raw === 'river') {
           col = p.color(0, 0, 0);
         }
