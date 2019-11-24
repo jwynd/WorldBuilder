@@ -27,8 +27,8 @@ class RiverAgent {
 
   // will generate 1 river
   generateRiver (map) {
-    const points = [map.getRandomPointOfType('shore'), map.getRandomPointOfType('tallShore')];
-    const b = points[Math.round(this.rand.callRandom(0, 1))];
+    const points = map.getPointsOfType('shore').concat(map.getPointsOfType('tallShore'));
+    const b = this.rand.callRandom(points);
     const m = map.getRandomPointOfType('mountain');
     //console.log(b, m);
     let p = b;
