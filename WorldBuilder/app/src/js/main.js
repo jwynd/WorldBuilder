@@ -72,21 +72,21 @@ export default function sketch (p) {
   const numRivers = 50;
 
   const worldSeed = 0xa12413adff;
-  const debug = true;
+  const debug = false;
 
   // /////////////////
   // Mountain Params//
   // /////////////////
-  const m1 = 5;
-  const m2 = 100;
-  const m3 = 25;
-  const m4 = 100;
-  const m5 = 150;
-  const m6 = 100;
-  const m7 = 50;
-  const m8 = 0.9;
-  const m9 = 1;
-  const m10 = 100;
+  const numberOfMountains = 5;
+  const mountainTokens = 100;
+  const width = 25;
+  const heightMin = 100;
+  const heightMax = 150;
+  const turnPeriodMin = 10;
+  const turnPeriodMax = 50;
+  const turnMin = 10;
+  const turnMax = 45;
+  const dropoff = 90;
 
   p.setup = function () {
     p.createCanvas(mWidth, mHeight);
@@ -102,7 +102,7 @@ export default function sketch (p) {
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight, octave);
-    ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, 1, rand);
+    ma = new MountainAgent(numberOfMountains, mountainTokens, width, heightMin, heightMax, turnPeriodMin, turnPeriodMax, turnMin, turnMax, dropoff, 1, rand);
     r = new RiverAgent(rand, numRivers);
     const l = [c, b, be, ma/*, r*/];
     for (let i = 0; i < l.length; i++) {
@@ -120,28 +120,23 @@ export default function sketch (p) {
       for (let j = 0; j < heightmap.height; ++j) {
         const raw = m.point(i, j).getBiome();
         let col = 0;
-        if (debug === true) {
-          if (raw === 'lake') {
-            col = p.color(0, 255, 0);
-          } else if (raw === 'river') {
-            col = p.color(0, 255, 255);
-          } else if (raw === 'beach' || raw === 'shore') {
-            col = p.color(255, m.point(i, j).getElevation(), 0);
-          } else {
-            col = p.color(m.point(i, j).getElevation(), 0, 255);
-          }
+        if (raw === 'lake') {
+          col = p.color(0, 255, 0);
+        } else if (raw === 'river') {
+          col = p.color(0, 255, 255);
+        } else if (raw === 'beach' || raw === 'shore') {
+          col = p.color(255, m.point(i, j).getElevation(), 0);
+        } else if (raw === 'coast') {
+          col = p.color(m.point(i, j).getElevation(), 100, 255);
         } else if (raw === 'ocean') {
           col = p.color(0, 0, 255);
-        } else if (raw === 'coast') {
-          col = p.color(0, 255, 0);
-        } else if (raw === 'beach') {
-          col = p.color(255, m.point(i, j).getElevation(), 0);
         } else if (raw === 'mountain') {
+          console.log("mountain?");
           const col1 = p.color(0, 255, 0);
           const col2 = p.color(255, 0, 0);
           const elvLerp = p.map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
           col = p.lerpColor(col1, col2, elvLerp);
-          col = p.color(255, 255, 255);
+          //col = p.color(255, 255, 255);
         } else if (raw === 'river') {
           col = p.color(0, 0, 0);
         }

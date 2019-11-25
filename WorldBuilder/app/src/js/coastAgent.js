@@ -127,9 +127,9 @@ class CoastAgent {
     Raises a point out of the ocean and sets its biome to coast.
     */
     let newElevation = 0;
-    newElevation += Math.ceil(80 * noise(point.getX(), point.getY()));
-    newElevation += Math.ceil(80 * noise(point.getX() / 10, point.getY() / 10));
-    newElevation += Math.ceil(80 * noise(point.getX() / 100, point.getY() / 100));
+    newElevation += Math.ceil(30 * noise(point.getX(), point.getY()));
+    newElevation += Math.ceil(30 * noise(point.getX() / 10, point.getY() / 10));
+    newElevation += Math.ceil(30 * noise(point.getX() / 100, point.getY() / 100));
     point.setElevation(newElevation);
     point.setBiome('coast');
     return point;

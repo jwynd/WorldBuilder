@@ -189,7 +189,7 @@ class MountainAgent {
     if (this.checkPoint(map, x, y) === null || map.point(x, y).getElevation() < this.minElevation) {
       return true;
     }
-    if (map.point(x, y).getElevation() < height || map.point(x, y).getBiome() !== 'mountain') {
+    if (map.point(x, y).getElevation() < height) {
       map.point(x, y).setElevation(height);
       map.point(x, y).setBiome('mountain');
     }
