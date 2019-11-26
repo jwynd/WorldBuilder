@@ -103,7 +103,7 @@ export default function sketch (p) {
 
   const islandArea = tokens;
 
-  const islandCircumference = 2 * 3.141592 * Math.sqrt(islandArea / 3.141592);
+  const islandCircumference = 2 * 3.141592 * Math.sqrt(islandArea / Math.PI);
 
   // MountainAgent parameters
 
@@ -196,9 +196,9 @@ export default function sketch (p) {
     p.background(0, 0, 255); // set this to the same color as the ocean.
     p.imageMode(p.CENTER);
     if (p.windowHeight > p.windowWidth * 0.5625) {
-      p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * 0.5625);
+      p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * (mHeight / mWidth));
     } else {
-      p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * 1.777777777778, p.windowHeight);
+      p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
     }
   };
 }
