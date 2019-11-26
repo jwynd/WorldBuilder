@@ -11,66 +11,6 @@ import BeachAgent from './beachAgent.js';
 import P5Wrapper from 'react-p5-wrapper';
 import Random from './random.js';
 
-// GLOBAL VALUES //
-
-// CoastAgent parameters
-
-// User parameter (abstraction for number of tokens)
-// 0 <= size <= ceiling(lg(mWidth * mHeight))
-// Below ceiling(lg(mWidth * mHeight))/2 is very small
-// Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
-// results in the same island with two agents) too closely leads to suicides and no growth if few enough agents
-let size = 16;
-
-// User parameter (abstraction for number of agents)
-// 0 <= smoothness < size
-// 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
-let coastSmoothness = 4;
-
-// BeachAgent parameters
-
-// User parameter (abstraction for tokens)
-// Controls how far inland the coastline will go
-// 1 <= inland <= 3
-let inland = 3;
-
-// User parameter (Abstraction for beachNoiseMax)
-// Controls how high beaches can reach
-// 0 <= beachHeight <= 1
-let beachHeight = 0.5;
-
-// User parameter (abstraction for octave)
-// Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
-// 0 <= coastUniformity <= 3
-let coastUniformity = 3;
-
-// RiverAgent parameters
-
-// User parameter (number of rivers)
-// 0 <= numRivers <= .05(2 * pi * sqrt(tokens/pi))
-let numRivers = 50;
-
-// MountainAgent parameters
-
-// User parameter
-// Set number of mountain ranges
-// 0 <= numMountainRanges <= 6
-let numMountainRanges = 30;
-
-// User parameter
-// islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
-let widthMountainRange = 10;
-
-// User Parameter
-// 0 <= squiggliness <= 90
-// Equal to minturnangle, maxturnangle = 2*squiggliness
-let squiggliness = 50;
-
-// User parameter
-// Controls how quickly mountains drop to the ground
-// 0 <= smoothness <= 100
-let mountainSmoothness = 50;
-
 export default function sketch (p) {
   let heightmap;
   let m;
@@ -81,52 +21,27 @@ export default function sketch (p) {
   let be; // beach agent
   const mWidth = 1280;
   const mHeight = 720;
-
-  // CoastAgent parameters
-
-  // 1 <= agents <= tokens
-  const agents = Math.pow(2, coastSmoothness);
-
-  // 0 <= tokens <= mWidth * mHeight
-  const tokens = Math.pow(2, size);
-
-  // 1 <= limit <= tokens
-  const limit = tokens / agents;
-
-  // BeachAgent parameters
-
-  // 1 <= octave <= 1000
-  const octave = Math.pow(10, coastUniformity);
-
-  // Multiagent parameters
-
-  const islandArea = tokens;
-
-  const islandCircumference = 2 * 3.141592 * Math.sqrt(islandArea / 3.141592);
-
-  // MountainAgent parameters
-
-  // Controls the length of a mountain range
-  const mountainTokens = (islandArea / widthMountainRange) * 0.5;
-
-  // Controls height of mountain peaks
-  const maxPeak = 10;
-  const minPeak = maxPeak * 0.7;
-
-  // Controls how long an agent walks before turning
-  const maxWalkTime = (1 - squiggliness / 100) * tokens;
-  const minWalkTime = maxWalkTime * 0.5;
-
-  // Turn angle in degrees
-  const minTurnAngle = squiggliness;
-  const maxTurnAngle = squiggliness * 2;
-
-  // Misc fields
-  const worldSeed = 0xa12413adff;
+  const tokens = 300000;
+  const limit = 3000;
+  /*const worldSeed = 0xa12413adff ;*/
+  let worldSeed=document.getElementById('worldseed').value.toString(16)||0xa12413adff
   const debug = true;
+  // /////////////////
+  // Mountain Params//
+  // /////////////////
+  const m1 = 30;
+  const m2 = 1000;
+  const m3 = 25;
+  const m4 = 5;
+  const m5 = 10;
+  const m6 = 100;
+  const m7 = 50;
+  const m8 = 0.9;
+  const m9 = 1;
+  const m10 = 5;
 
   p.setup = function () {
-    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.createCanvas(mWidth, mHeight);
     const rand = new Random(worldSeed);
     // console.log('Random number: ' + rand.callRandom());
     m = new Map(mWidth, mHeight, rand);
@@ -138,10 +53,9 @@ export default function sketch (p) {
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
-    be = new BeachAgent(inland, beachHeight, octave);
-    ma = new MountainAgent(numMountainRanges, tokens, widthMountainRange, minPeak, maxPeak,
-      minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
-    r = new RiverAgent(rand, numRivers);
+    be = new BeachAgent(1, 1);
+    ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
+    r = new RiverAgent(10);
     const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
@@ -162,17 +76,15 @@ export default function sketch (p) {
             col = p.color(0, 255, 0);
           } else if (raw === 'river') {
             col = p.color(0, 255, 255);
-          } else if (raw === 'beach' || raw === 'shore') {
+          } else if (raw === 'beach') {
             col = p.color(255, m.point(i, j).getElevation(), 0);
           } else {
             col = p.color(m.point(i, j).getElevation(), 0, 255);
           }
         } else if (raw === 'ocean') {
           col = p.color(0, 0, 255);
-        } else if (raw === 'coast') {
+        } else if (raw === 'coast' || raw === 'beach') {
           col = p.color(0, 255, 0);
-        } else if (raw === 'beach') {
-          col = p.color(255, m.point(i, j).getElevation(), 0);
         } else if (raw === 'mountain') {
           const col1 = p.color(0, 255, 0);
           const col2 = p.color(255, 0, 0);
@@ -187,18 +99,21 @@ export default function sketch (p) {
     heightmap.updatePixels();
   };
 
-  p.windowResized = function () {
-    p.resizeCanvas(p.windowWidth, p.windowHeight);
+  p.testRandom = function (r) {
+    heightmap = p.createImage(mWidth, mHeight);
+    heightmap.loadPixels();
+
+    for (let i = 0; i < mWidth * mHeight; ++i) {
+      const x = p.floor(r.callRandom(0, mWidth - 1));
+      const y = p.floor(r.callRandom(0, mHeight - 1));
+      heightmap.set(x, y, 0);
+    }
+    heightmap.updatePixels();
   };
 
   p.draw = function () {
-    p.background(0, 0, 255); // set this to the same color as the ocean.
-    p.imageMode(p.CENTER);
-    if (p.windowHeight > p.windowWidth * 0.5625) {
-      p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * 0.5625);
-    } else {
-      p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * 1.777777777778, p.windowHeight);
-    }
+    p.background(255);
+    p.image(heightmap, 0, 0);
   };
 }
 // let heightmap;
