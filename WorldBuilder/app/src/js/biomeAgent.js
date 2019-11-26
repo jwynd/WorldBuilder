@@ -17,8 +17,8 @@ class BiomeAgent {
     while (unvisitedLakes.length > 0) {
       const lakePoint = unvisitedLakes.pop();
       visitedLakes.push(lakePoint);
-      if (this.findOcean(lakePoint, map, visitedLakes)) {
-        this.assignOcean(lakePoint, map);
+      if (this.findOcean(lakePoint, map, unvisitedLakes, visitedLakes)) {
+        this.assignOcean(lakePoint, map, unvisitedLakes, visitedLakes);
       }
     }
   }
@@ -63,7 +63,7 @@ class BiomeAgent {
     }
   }
 
-  findOcean (point, map, visitedLakes) {
+  findOcean (point, map, unvisitedLakes, visitedLakes) {
     /*
     Returns true if the point is connected to an ocean point, otherwise false.
     */
@@ -79,9 +79,10 @@ class BiomeAgent {
       } else if (parent.getBiome() === 'lake') {
         const successors = map.getNeighbors(parent);
         for (const s of successors) {
-          if (!visitedLakes.includes(s)) {
+          const successorIndex = unvisitedLakes.indexOf(s);
+          if (successorIndex > -1) {
             fringe.push(s);
-            visitedLakes.push(s);
+            visitedLakes.push(unvisitedLakes.splice(successorIndex, 1)[0]);
           }
         }
       }
@@ -89,7 +90,7 @@ class BiomeAgent {
     return false;
   }
 
-  assignOcean (point, map) {
+  assignOcean (point, map, unvisitedLakes, visitedLakes) {
     /*
     Discovers and sets the biomes of all reachable lake points from point ocean.
     */
@@ -105,6 +106,10 @@ class BiomeAgent {
         parent.setBiome('ocean');
         const successors = map.getNeighbors(parent);
         for (const s of successors) {
+          const successorIndex = unvisitedLakes.indexOf(s);
+          if (successorIndex > -1) {
+            visitedLakes.push(unvisitedLakes.splice(successorIndex, 1)[0]);
+          }
           if (!visitedNodes.includes(s)) {
             fringe.push(s);
             visitedNodes.push(s);
