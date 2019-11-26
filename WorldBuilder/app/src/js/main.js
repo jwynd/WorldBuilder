@@ -11,6 +11,66 @@ import BeachAgent from './beachAgent.js';
 import P5Wrapper from 'react-p5-wrapper';
 import Random from './random.js';
 
+// GLOBAL VALUES //
+
+// CoastAgent parameters
+
+// User parameter (abstraction for number of tokens)
+// 0 <= size <= ceiling(lg(mWidth * mHeight))
+// Below ceiling(lg(mWidth * mHeight))/2 is very small
+// Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
+// results in the same island with two agents) too closely leads to suicides and no growth if few enough agents
+let size = 16;
+
+// User parameter (abstraction for number of agents)
+// 0 <= smoothness < size
+// 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
+let coastSmoothness = 4;
+
+// BeachAgent parameters
+
+// User parameter (abstraction for tokens)
+// Controls how far inland the coastline will go
+// 1 <= inland <= 3
+let inland = 3;
+
+// User parameter (Abstraction for beachNoiseMax)
+// Controls how high beaches can reach
+// 0 <= beachHeight <= 1
+let beachHeight = 0.5;
+
+// User parameter (abstraction for octave)
+// Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
+// 0 <= coastUniformity <= 3
+let coastUniformity = 3;
+
+// RiverAgent parameters
+
+// User parameter (number of rivers)
+// 0 <= numRivers <= .05(2 * pi * sqrt(tokens/pi))
+let numRivers = 50;
+
+// MountainAgent parameters
+
+// User parameter
+// Set number of mountain ranges
+// 0 <= numMountainRanges <= 6
+let numMountainRanges = 30;
+
+// User parameter
+// islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
+let widthMountainRange = 10;
+
+// User Parameter
+// 0 <= squiggliness <= 90
+// Equal to minturnangle, maxturnangle = 2*squiggliness
+let squiggliness = 50;
+
+// User parameter
+// Controls how quickly mountains drop to the ground
+// 0 <= smoothness <= 100
+let mountainSmoothness = 50;
+
 export default function sketch (p) {
   let heightmap;
   let m;
@@ -24,20 +84,8 @@ export default function sketch (p) {
 
   // CoastAgent parameters
 
-  // User parameter (abstraction for number of tokens)
-  // 0 <= size <= ceiling(lg(mWidth * mHeight))
-  // Below ceiling(lg(mWidth * mHeight))/2 is very small
-  // Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
-  // result in the same island with two agents) too closely leads to suicides and no growth if few enough agents
-  const size = 16;
-
-  // User parameter (abstraction for number of agents)
-  // 0 <= smoothness < size
-  // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
-  const smoothness = 4;
-
   // 1 <= agents <= tokens
-  const agents = Math.pow(2, smoothness);
+  const agents = Math.pow(2, coastSmoothness);
 
   // 0 <= tokens <= mWidth * mHeight
   const tokens = Math.pow(2, size);
@@ -47,46 +95,35 @@ export default function sketch (p) {
 
   // BeachAgent parameters
 
-  // User parameter (abstraction for tokens)
-  // Controls how far inland the coastline will go
-  // 1 <= inland <= 3
-  const inland = 3;
-
-  // User parameter (Abstraction for beachNoiseMax)
-  // Controls how high beaches can reach
-  // 0 <= beachHeight <= 1
-  const beachHeight = 0.5;
-
-  // User parameter (abstraction for octave)
-  // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
-  // 0 <= coastUniformity <= 3
-  const coastUniformity = 3;
-
   // 1 <= octave <= 1000
   const octave = Math.pow(10, coastUniformity);
 
-  // RiverAgent parameters
+  // Multiagent parameters
 
-  // User parameter (number of rivers)
-  // 0 <= numRivers <= .05(2 * pi * sqrt(tokens/pi))
-  const numRivers = 50;
+  const islandArea = tokens;
 
+  const islandCircumference = 2 * 3.141592 * Math.sqrt(islandArea / 3.141592);
+
+  // MountainAgent parameters
+
+  // Controls the length of a mountain range
+  const mountainTokens = (islandArea / widthMountainRange) * 0.5;
+
+  // Controls height of mountain peaks
+  const maxPeak = 10;
+  const minPeak = maxPeak * 0.7;
+
+  // Controls how long an agent walks before turning
+  const maxWalkTime = (1 - squiggliness / 100) * tokens;
+  const minWalkTime = maxWalkTime * 0.5;
+
+  // Turn angle in degrees
+  const minTurnAngle = squiggliness;
+  const maxTurnAngle = squiggliness * 2;
+
+  // Misc fields
   const worldSeed = 0xa12413adff;
   const debug = true;
-
-  // /////////////////
-  // Mountain Params//
-  // /////////////////
-  const m1 = 30;
-  const m2 = 1000;
-  const m3 = 25;
-  const m4 = 5;
-  const m5 = 10;
-  const m6 = 100;
-  const m7 = 50;
-  const m8 = 0.9;
-  const m9 = 1;
-  const m10 = 5;
 
   p.setup = function () {
     p.createCanvas(mWidth, mHeight);
@@ -102,7 +139,8 @@ export default function sketch (p) {
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight, octave);
-    ma = new MountainAgent(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10);
+    ma = new MountainAgent(numMountainRanges, tokens, widthMountainRange, minPeak, maxPeak,
+      minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
     r = new RiverAgent(rand, numRivers);
     const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
