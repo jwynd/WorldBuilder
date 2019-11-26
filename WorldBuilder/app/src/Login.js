@@ -44,6 +44,7 @@ class Login extends React.Component {
       passwordOne: '',
       passwordTwo: ''
     };
+
     loginOpen = loginOpen.bind(this);
     loginClose = loginClose.bind(this);
     registerOpen = registerOpen.bind(this);
@@ -75,17 +76,12 @@ class Login extends React.Component {
     event.preventDefault();
     const { registrationEmail, passwordOne } = this.state; 
 
-    console.log(passwordOne);
-
     // calls on Firebase to create user using email and password
     firebase
       .auth().createUserWithEmailAndPassword(registrationEmail, passwordOne)
       .then(function() {
-        console.log(this.state.loggedIn);
-        console.log("Successfully created new user");
       })
       .catch(error => {
-        console.log("Error creating user:", error);
       });
   }
   
@@ -98,12 +94,8 @@ class Login extends React.Component {
       .auth().signInWithEmailAndPassword(loginEmail, loginPassword)
       .then(function() {
         loginClose();
-        console.log("Successfully logged in");
-        console.log("logged in :" + loggedIn);
-        console.log("current user: " + firebase.auth().currentUser);
       })
       .catch(error => {
-        console.log("Error logging in:", error);
       });
     }
 
@@ -112,15 +104,13 @@ class Login extends React.Component {
     firebase
       .auth().signOut()
       .then(function(){
-        console.log("Signed out sucessfully");
       })
       .catch(error => {
-        console.log("Error signing out:", error);
       });
   }
 
   render() {
-    const { loginEmail, registrationEmail, passwordOne, passwordTwo } = this.state; 
+    const { registrationEmail, passwordOne, passwordTwo } = this.state; 
 
     // does not allow user to register without email and matching passwords
     const isInvalid =
@@ -139,13 +129,6 @@ class Login extends React.Component {
       loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
       signOut = '';
     }
-
-    console.log("logged in: " + loggedIn);
-    console.log("login email: " + this.state.loginEmail);
-    console.log("login password: " + this.state.loginPassword)
-    console.log("registration email: " + this.state.registrationEmail)
-    console.log("password: " + this.state.passwordOne);
-    console.log("confirm password: " + this.state.passwordTwo);
 
     return (
       <>
@@ -207,7 +190,6 @@ class Login extends React.Component {
               <div className="register-text">Already have an account? <div className="register-link" span style={{cursor:"pointer"}} onClick={(event) => this.toLogin(event)}>Log in</div></div>
           </Modal.Footer>
           </Modal>
-          
       </>
     );
   }

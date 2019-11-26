@@ -66,3 +66,13 @@ body {
   top: 30px;
   left: 25px;
 }
+
+.sidebar {
+  width: 350px;
+  height: 100%;
+  position: fixed;
+  background-color: $color3;
+  .menuItemList {
+    list-style-type: none;
+  }
+}
