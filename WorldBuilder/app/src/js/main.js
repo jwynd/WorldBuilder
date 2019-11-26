@@ -48,6 +48,7 @@ let coastUniformity = 3;
 
 // User parameter (number of rivers)
 // 0 <= numRivers <= .05(2 * pi * sqrt(tokens/pi))
+// Not an option if there's no mountains
 let numRivers = 50;
 
 // MountainAgent parameters
@@ -64,12 +65,12 @@ let widthMountainRange = 10;
 // User Parameter
 // 0 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-let squiggliness = 50;
+let squiggliness = 0.9;
 
 // User parameter
 // Controls how quickly mountains drop to the ground
 // 0 <= smoothness <= 100
-let mountainSmoothness = 50;
+let mountainSmoothness = 5;
 
 export default function sketch (p) {
   let heightmap;
@@ -114,7 +115,7 @@ export default function sketch (p) {
   const minPeak = maxPeak * 0.7;
 
   // Controls how long an agent walks before turning
-  const maxWalkTime = (1 - squiggliness / 100) * tokens;
+  const maxWalkTime = (1 - squiggliness / 100) * mountainTokens;
   const minWalkTime = maxWalkTime * 0.5;
 
   // Turn angle in degrees
@@ -139,7 +140,7 @@ export default function sketch (p) {
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight, octave);
-    ma = new MountainAgent(numMountainRanges, tokens, widthMountainRange, minPeak, maxPeak,
+    ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
     r = new RiverAgent(rand, numRivers);
     const l = [c, b, be, ma, r];
