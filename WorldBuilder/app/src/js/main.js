@@ -13,6 +13,21 @@ import Random from './random.js';
 
 // GLOBAL VALUES //
 
+// Setup parameters
+
+// User parameters
+// 0 <= mWidth <= 2000
+// 0 <= mHeight <= 2000
+let mWidth = 1280;
+let mHeight = 720;
+
+// User parameter
+// Must be alphanumeric and between 1 and 30 characters
+let mapName = '';
+
+// Initially empty variable used to access heightmap once map is generated
+let heightmap;
+
 // CoastAgent parameters
 
 // User parameter (abstraction for number of tokens)
@@ -26,6 +41,12 @@ let size = 16;
 // 0 <= smoothness < size
 // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
 let coastSmoothness = 4;
+
+// Constraint Parameters
+// Used to set the limits for some of the following variables
+const islandArea = Math.pow(2, size);
+
+const islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
 
 // BeachAgent parameters
 
@@ -47,7 +68,7 @@ let coastUniformity = 3;
 // RiverAgent parameters
 
 // User parameter (number of rivers)
-// 0 <= numRivers <= .05(2 * pi * sqrt(tokens/pi))
+// 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
 // Not an option if there's no mountains
 let numRivers = 50;
 
@@ -80,8 +101,6 @@ export default function sketch (p) {
   let r; // river agent
   let b; // biome agent
   let be; // beach agent
-  const mWidth = 1280;
-  const mHeight = 720;
 
   // CoastAgent parameters
 
@@ -89,7 +108,7 @@ export default function sketch (p) {
   const agents = Math.pow(2, coastSmoothness);
 
   // 0 <= tokens <= mWidth * mHeight
-  const tokens = Math.pow(2, size);
+  const tokens = islandArea;
 
   // 1 <= limit <= tokens
   const limit = tokens / agents;
@@ -98,12 +117,6 @@ export default function sketch (p) {
 
   // 1 <= octave <= 1000
   const octave = Math.pow(10, coastUniformity);
-
-  // Multiagent parameters
-
-  const islandArea = tokens;
-
-  const islandCircumference = 2 * 3.141592 * Math.sqrt(islandArea / 3.141592);
 
   // MountainAgent parameters
 
@@ -196,9 +209,9 @@ export default function sketch (p) {
     p.background(0, 0, 255); // set this to the same color as the ocean.
     p.imageMode(p.CENTER);
     if (p.windowHeight > p.windowWidth * 0.5625) {
-      p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * 0.5625);
+      p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * (mHeight / mWidth));
     } else {
-      p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * 1.777777777778, p.windowHeight);
+      p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
     }
   };
 }
