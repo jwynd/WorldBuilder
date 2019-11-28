@@ -176,26 +176,7 @@ export default function sketch (p) {
       for (let j = 0; j < heightmap.height; ++j) {
         const raw = m.point(i, j).getBiome();
         let col = 0;
-        if (raw === 'lake') {
-          col = p.color(0, 255, 0);
-        } else if (raw === 'river') {
-          col = p.color(0, 255, 255);
-        } else if (raw === 'beach' || raw === 'shore') {
-          col = p.color(255, m.point(i, j).getElevation(), 0);
-        } else if (raw === 'coast') {
-          col = p.color(m.point(i, j).getElevation(), 100, 255);
-        } else if (raw === 'ocean') {
-          col = p.color(0, 0, 255);
-        } else if (raw === 'mountain') {
-          console.log("mountain?");
-          const col1 = p.color(0, 255, 0);
-          const col2 = p.color(255, 0, 0);
-          const elvLerp = p.map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
-          col = p.lerpColor(col1, col2, elvLerp);
-          //col = p.color(255, 255, 255);
-        } else if (raw === 'river') {
-          col = p.color(0, 0, 0);
-        }
+        col = determineColor(raw, col, i, j);
         heightmap.set(i, j, col);
       }
     }
@@ -215,6 +196,37 @@ export default function sketch (p) {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
     }
   };
+
+  function determineColor(raw, col, i, j) {
+    switch(raw) {
+      case 'ocean':
+        col = p.color(182,228,251);
+        break;
+      case 'lake':
+        col = p.color(182,228,251);
+        break;
+      case 'river':
+        col = p.color(148,235,242);
+        break;
+      case 'beach':
+        col = p.color(255,255,192);
+        break;
+      case 'shore':
+        col = p.color(255,255,192);
+        break;
+      case 'tallShore':
+        col = p.color(133, 190, 139);
+      case 'coast':
+        col = p.color(163,198,104);
+        break;
+      case 'mountain':
+        col = p.color(205,142,99);
+        break;
+      default:
+        console.log(raw);       
+    }
+    return col;
+  }
 }
 // let heightmap;
 // let m;
