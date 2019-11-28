@@ -141,23 +141,7 @@ export default function sketch (p) {
   const worldSeed = 0xa12413adff;
   const debug = false;
 
-<<<<<<< HEAD
-=======
-  // /////////////////
-  // Mountain Params//
-  // /////////////////
-  const numberOfMountains = 5;
-  const mountainTokens = 100;
-  const width = 25;
-  const heightMin = 100;
-  const heightMax = 150;
-  const turnPeriodMin = 10;
-  const turnPeriodMax = 50;
-  const turnMin = 10;
-  const turnMax = 45;
-  const dropoff = 90;
 
->>>>>>> integrateMountain
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
     const rand = new Random(worldSeed);
@@ -171,14 +155,10 @@ export default function sketch (p) {
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
-<<<<<<< HEAD
     be = new BeachAgent(inland, beachHeight / 10, octave);
     ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
-      minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
-=======
-    be = new BeachAgent(inland, beachHeight, octave);
-    ma = new MountainAgent(numberOfMountains, mountainTokens, width, heightMin, heightMax, turnPeriodMin, turnPeriodMax, turnMin, turnMax, dropoff, 1, rand);
->>>>>>> integrateMountain
+      minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness, 1, rand);
+
     r = new RiverAgent(rand, numRivers);
     const l = [c, b, be, ma/*, r*/];
     for (let i = 0; i < l.length; i++) {
