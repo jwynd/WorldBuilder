@@ -21,6 +21,8 @@ import Random from './random.js';
 let mWidth = 1280;
 let mHeight = 720;
 
+
+
 // User parameter
 // Must be alphanumeric and between 1 and 30 characters
 let mapName = '';
@@ -137,8 +139,25 @@ export default function sketch (p) {
 
   // Misc fields
   const worldSeed = 0xa12413adff;
-  const debug = true;
+  const debug = false;
 
+<<<<<<< HEAD
+=======
+  // /////////////////
+  // Mountain Params//
+  // /////////////////
+  const numberOfMountains = 5;
+  const mountainTokens = 100;
+  const width = 25;
+  const heightMin = 100;
+  const heightMax = 150;
+  const turnPeriodMin = 10;
+  const turnPeriodMax = 50;
+  const turnMin = 10;
+  const turnMax = 45;
+  const dropoff = 90;
+
+>>>>>>> integrateMountain
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
     const rand = new Random(worldSeed);
@@ -152,14 +171,20 @@ export default function sketch (p) {
     const point = m.point(sPointX, sPointY);
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
+<<<<<<< HEAD
     be = new BeachAgent(inland, beachHeight / 10, octave);
     ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
+=======
+    be = new BeachAgent(inland, beachHeight, octave);
+    ma = new MountainAgent(numberOfMountains, mountainTokens, width, heightMin, heightMax, turnPeriodMin, turnPeriodMax, turnMin, turnMax, dropoff, 1, rand);
+>>>>>>> integrateMountain
     r = new RiverAgent(rand, numRivers);
-    const l = [c, b, be, ma, r];
+    const l = [c, b, be, ma/*, r*/];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
+    console.log(m.getPointsOfType('mountain'));
     p.makeHeightmap();
   };
 
@@ -171,27 +196,23 @@ export default function sketch (p) {
       for (let j = 0; j < heightmap.height; ++j) {
         const raw = m.point(i, j).getBiome();
         let col = 0;
-        if (debug === true) {
-          if (raw === 'lake') {
-            col = p.color(0, 255, 0);
-          } else if (raw === 'river') {
-            col = p.color(0, 255, 255);
-          } else if (raw === 'beach' || raw === 'shore') {
-            col = p.color(255, m.point(i, j).getElevation(), 0);
-          } else {
-            col = p.color(m.point(i, j).getElevation(), 0, 255);
-          }
+        if (raw === 'lake') {
+          col = p.color(0, 255, 0);
+        } else if (raw === 'river') {
+          col = p.color(0, 255, 255);
+        } else if (raw === 'beach' || raw === 'shore') {
+          col = p.color(255, m.point(i, j).getElevation(), 0);
+        } else if (raw === 'coast') {
+          col = p.color(m.point(i, j).getElevation(), 100, 255);
         } else if (raw === 'ocean') {
           col = p.color(0, 0, 255);
-        } else if (raw === 'coast') {
-          col = p.color(0, 255, 0);
-        } else if (raw === 'beach') {
-          col = p.color(255, m.point(i, j).getElevation(), 0);
         } else if (raw === 'mountain') {
+          console.log("mountain?");
           const col1 = p.color(0, 255, 0);
           const col2 = p.color(255, 0, 0);
           const elvLerp = p.map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
           col = p.lerpColor(col1, col2, elvLerp);
+          //col = p.color(255, 255, 255);
         } else if (raw === 'river') {
           col = p.color(0, 0, 0);
         }
