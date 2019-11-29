@@ -42,7 +42,7 @@ let size = 16;
 // User parameter (abstraction for number of agents)
 // 0 <= smoothness < size
 // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
-let coastSmoothness = 4;
+let coastSmoothness = 6;
 
 // Constraint Parameters
 // Used to set the limits for some of the following variables
@@ -65,7 +65,7 @@ let beachHeight = 5;
 // User parameter (abstraction for octave)
 // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
 // 0 <= coastUniformity <= 3
-let coastUniformity = 3;
+let coastUniformity = 1;
 
 // RiverAgent parameters
 
@@ -79,21 +79,21 @@ let numRivers = 0;
 // User parameter
 // Set number of mountain ranges
 // 0 <= numMountainRanges <= 0.05 * islandArea
-let numMountainRanges = 4;
+let numMountainRanges = 3;
 
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
-let widthMountainRange = 20;
+let widthMountainRange = 15;
 
 // User Parameter
 // 0 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-let squiggliness = 30;
+let squiggliness = 45;
 
 // User parameter
 // Controls how quickly mountains drop to the ground
 // 0 <= smoothness <= 100
-let mountainSmoothness = 50;
+let mountainSmoothness = 70;
 
 //testing
 let minCoast = 255;
@@ -183,6 +183,14 @@ export default function sketch (p) {
     heightmap = p.createImage(mWidth, mHeight);
     heightmap.loadPixels();
 
+    for (let i = 0; i < heightmap.width; ++i) {
+      for (let j = 0; j < heightmap.height; ++j) {
+        const raw = m.point(i, j).getBiome();
+        if(raw !== 'ocean' && raw !== 'mountain') {
+          smoothPoint(m, i, j);
+        }
+      }
+    }
     
     for (let i = 0; i < heightmap.width; ++i) {
       for (let j = 0; j < heightmap.height; ++j) {
@@ -270,7 +278,8 @@ export default function sketch (p) {
       case 'tallShore':
         col = p.color(133, 190, 139);
       case 'coast':
-        let bCoast = 60 + (scorePoint(map, i, j) - minScoreCoast) / maxScoreCoast * 30;
+        //let bCoast = 60 + (scorePoint(map, i, j) - minScoreCoast) / maxScoreCoast * 30;
+        let bCoast = 60 + ((scorePoint(map, i, j) + 6) * 30 / 12);
         col = p.color('hsb(82, 47%, ' + bCoast + '%)');
         break;
       case 'mountain':
@@ -288,7 +297,7 @@ export default function sketch (p) {
         }*/
         col = p.color(205,142,99);
         //let bMount = 50 + (scorePoint(map, i, j) - minScoreMount) / (maxScoreMount - minScoreMount) * 40;
-        let bMount = 50 + (scorePoint(map, i, j) * 40 / 6);
+        let bMount = 50 + ((scorePoint(map, i, j) + 6) * 40 / 12);
         col = p.color('hsb(19, 55%, ' + bMount + '%)');
         break;
       default: 
@@ -300,25 +309,45 @@ export default function sketch (p) {
     function scorePoint(map, i, j) {
       let score = 0;
       let elevation = map.point(i, j).getElevation();
+      let diff = .75;
+      //console.log(map.point(i+1, j).getElevation() - elevation);
 
-      if(elevation < map.point(i+1, j).getElevation()) {
+      if(elevation < map.point(i+1, j).getElevation() && map.point(i+1, j).getElevation() - elevation > diff) {
         score++;
       }
-      if(elevation < map.point(i+1, j+1).getElevation()) {
+      else if(elevation - map.point(i+1, j).getElevation() > diff) {
+        score--;
+      }
+      if(elevation < map.point(i+1, j+1).getElevation() && map.point(i+1, j+1).getElevation() - elevation > diff) {
         score++;
       }
-      if(elevation < map.point(i, j+1).getElevation()) {
+      else if(elevation - map.point(i+1, j+1).getElevation() > diff) {
+        score--;
+      }
+      if(elevation < map.point(i, j+1).getElevation() && map.point(i, j+1).getElevation() - elevation > diff) {
         score++;
+      }
+      else if(elevation - map.point(i, j+1).getElevation() > diff) {
+        score--;
       }
 
-      if(elevation > map.point(i, j-1).getElevation()) {
+      if(elevation > map.point(i, j-1).getElevation() && elevation - map.point(i, j-1).getElevation() > diff) {
         score++;
       }
-      if(elevation > map.point(i-1, j-1).getElevation()) {
+      else if(map.point(i, j-1).getElevation() - elevation > diff) {
+        score--;
+      }
+      if(elevation > map.point(i-1, j-1).getElevation() && elevation - map.point(i-1, j-1).getElevation() > diff) {
         score++;
       }
-      if(elevation > map.point(i-1, j).getElevation()) {
+      else if(map.point(i-1, j-1).getElevation() - elevation > diff) {
+        score--;
+      }
+      if(elevation > map.point(i-1, j).getElevation() && elevation - map.point(i-1, j).getElevation() > diff) {
         score++;
+      }
+      else if(map.point(i-1, j).getElevation() - elevation > diff) {
+        score--;
       }
       
       return score;

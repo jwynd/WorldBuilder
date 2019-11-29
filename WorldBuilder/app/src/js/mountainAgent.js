@@ -43,6 +43,19 @@ class MountainAgent {
     }
   }
 
+  // true -> bad start, pick new one
+  checkStart(map) {
+    for (let i = -this.width; i < this.width + 1; i++) {
+      for (let j = -this.width; j < this.width + 1; j++) {
+        if(this.distance(this.x + i, this.y + j, this.x, this.y) < this.width && this.checkPoint(map, this.x + i, this.y + j) !== null 
+            && map.point(this.x + i, this.y + j).getElevation() < this.minElevation) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   resetTurnTimer () {
     this.turnTime = this.rand.callRandom(this.turnPeriodMin, this.turnPeriodMax);
   }
@@ -52,7 +65,7 @@ class MountainAgent {
     for (mountainCount = 0; mountainCount < this.numberOfMountains; mountainCount++) {
       this.pickRandomStart(map);
       this.direction = this.rand.callRandom(0, 360);
-      while (this.checkPoint(map, this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.minElevation) {
+      while (this.checkPoint(map, this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.minElevation || this.checkStart(map)) {
         // if our starting point is invalid pick a new one
         this.pickRandomStart(map);
       }
@@ -62,7 +75,7 @@ class MountainAgent {
       this.resetTurnTimer();
       let timeSinceTurn = 0;
       for (i = 0; i < this.tokens; i++) {
-        reachedEdge = this.newElevateWedge(map);
+        reachedEdge = this.elevateCircle(map);
         switch (reachedEdge) {
           case NO:
             break;
@@ -103,6 +116,26 @@ class MountainAgent {
     }
   }
 
+  elevateCircle(map) {
+    const height = this.rand.callRandom(this.heightMin, this.heightMax);
+    let reachedEdge = NO;
+    const width = this.width + this.rand.callRandom(-this.width / 5, this.width / 5);
+    for (let i = -width; i < width + 1; i++) {
+      for (let j = -width; j < width + 1; j++) {
+        if(this.distance(this.x + i, this.y + j, this.x, this.y) < width) {
+          if(reachedEdge === NO) {
+            if(this.newSetHeight(map, Math.floor(this.x + i), Math.floor(this.y + j), this.newHeightWithDropoff(this.x, this.y, this.x + i, this.y + j, height))) {
+              reachedEdge = HIT_FRONT_L;
+            }
+          }
+          else {
+            this.newSetHeight(map, Math.floor(this.x + i), Math.floor(this.y + j), this.newHeightWithDropoff(this.x, this.y, this.x + i, this.y + j, height));
+          }
+        }
+      }
+    }
+    return reachedEdge;
+  }
   newElevateWedge (map) {
     const direction2 = (this.direction + 90) % 360;
     const directionRad = Math.PI * this.direction / 180;
@@ -112,10 +145,8 @@ class MountainAgent {
     this.newSetHeight(map, Math.floor(this.x), Math.floor(this.y), height);
     this.newSetHeight(map, Math.ceil(this.x), Math.ceil(this.y), height);
 
-    let i;
-    for (i = 0; i <= this.width; i++) {
-      let j;
-      for (j = 0; j <= this.width - i; j++) {
+    for (let i = 0; i <= this.width; i++) {
+      for (let j = 0; j <= this.width - i; j++) {
         // front right
         let pointX = this.x + i * Math.cos(directionRad) + j * Math.cos(direction2Rad);
         let pointY = this.y + i * Math.sin(directionRad) + j * Math.sin(direction2Rad);
