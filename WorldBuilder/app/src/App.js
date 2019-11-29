@@ -60,7 +60,8 @@ class App extends React.Component {
                   <img src={download} className="App-download" alt="download" onClick={this.download.bind(this)} height="50"/>
                   <Menu  setParentState={this.setSelfState}/>
                   <Login />
-                  <div id="downloadpic">
+             
+                  <div id="d                        ownloadpic">
                     <div id="i-loading">
                       <div className="loading-center">
                         <i></i>
