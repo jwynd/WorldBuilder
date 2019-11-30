@@ -4,6 +4,7 @@ import menu from './icons/menu.svg';
 import './scss/_modal.scss';
 import './scss/_buttons.scss';
 import { Modal, ListGroup } from 'react-bootstrap';
+import setupMenu from './setupMenu.js';
 
 function close() {
   this.setState( {showModalMenu: false} );
@@ -19,6 +20,7 @@ class Menu extends React.Component {
     this.state = { showModalMenu: false }
     open = open.bind(this);
     close = close.bind(this);
+    this.setup = new setupMenu();
   }
   newmap=()=>{
     document.querySelector("div[role=dialog]").style.display='none'
@@ -47,7 +49,7 @@ class Menu extends React.Component {
         <Modal show={this.state.showModalMenu} onHide={close} id="menu-left" animation={false}>
             <Modal.Body>
               <ListGroup>
-                <ListGroup.Item><a onClick={this.newmap.bind(this)}>New Map</a></ListGroup.Item>
+                <ListGroup.Item><a onClick={this.setup.render()}>New Map</a></ListGroup.Item>
                 <ListGroup.Item><a>Load</a></ListGroup.Item>
                 <ListGroup.Item><a>Save</a></ListGroup.Item>
               </ListGroup>

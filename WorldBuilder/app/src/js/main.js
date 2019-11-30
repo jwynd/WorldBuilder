@@ -18,15 +18,15 @@ import Random from './random.js';
 // User parameters
 // 0 <= mWidth <= 2000
 // 0 <= mHeight <= 2000
-let mWidth = 1280;
-let mHeight = 720;
+export let mWidth = 1280;
+export let mHeight = 720;
 
 // User parameter
 // Must be alphanumeric and between 1 and 30 characters
-let mapName = '';
+export let mapName = '';
 
 // Initially empty variable used to access heightmap once map is generated
-let heightmap;
+export let heightmap;
 
 // CoastAgent parameters
 
@@ -35,12 +35,12 @@ let heightmap;
 // Below ceiling(lg(mWidth * mHeight))/2 is very small
 // Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
 // results in the same island with two agents) too closely leads to suicides and no growth if few enough agents
-let size = 16;
+export let size = 16;
 
 // User parameter (abstraction for number of agents)
 // 0 <= smoothness < size
 // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
-let coastSmoothness = 4;
+export let coastSmoothness = 4;
 
 // Constraint Parameters
 // Used to set the limits for some of the following variables
@@ -53,45 +53,45 @@ const islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
 // User parameter (abstraction for tokens)
 // Controls how far inland the coastline will go
 // 1 <= inland <= 3
-let inland = 3;
+export let inland = 3;
 
 // User parameter (Abstraction for beachNoiseMax)
 // Controls how high beaches can reach
 // 0 <= beachHeight <= 10
-let beachHeight = 5;
+export let beachHeight = 5;
 
 // User parameter (abstraction for octave)
 // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
 // 0 <= coastUniformity <= 3
-let coastUniformity = 3;
+export let coastUniformity = 3;
 
 // RiverAgent parameters
 
 // User parameter (number of rivers)
 // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
 // Not an option if there's no mountains
-let numRivers = 0;
+export let numRivers = 0;
 
 // MountainAgent parameters
 
 // User parameter
 // Set number of mountain ranges
 // 0 <= numMountainRanges <= 0.05 * islandArea
-let numMountainRanges = 30;
+export let numMountainRanges = 30;
 
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
-let widthMountainRange = 10;
+export let widthMountainRange = 10;
 
 // User Parameter
 // 0 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-let squiggliness = 1;
+export let squiggliness = 1;
 
 // User parameter
 // Controls how quickly mountains drop to the ground
 // 0 <= smoothness <= 100
-let mountainSmoothness = 5;
+export let mountainSmoothness = 5;
 
 export default function sketch (p) {
   let heightmap;
@@ -156,7 +156,7 @@ export default function sketch (p) {
     ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
     r = new RiverAgent(rand, numRivers);
-    const l = [c, b, be, ma, r];
+    const l = [];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
