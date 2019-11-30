@@ -143,7 +143,7 @@ export default function sketch (p) {
     ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness);
     r = new RiverAgent(rand, numRivers);
-    const l = [c, b, be, ma, r];
+    const l = [c, b, be];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
