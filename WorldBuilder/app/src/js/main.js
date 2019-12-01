@@ -23,7 +23,7 @@ let mHeight = 720;
 
 // User parameter
 // Must be alphanumeric and between 1 and 30 characters
-let mapName = '';
+let mapName = 'New Map';
 
 // Initially empty variable used to access heightmap once map is generated
 let heightmap;
@@ -147,7 +147,7 @@ export default function sketch (p) {
 
   // Misc fields
   const worldSeed = 0xa127a3a25f;
-
+  const debug = true;
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
     p.background(182, 228, 251); // set this to the same color as the ocean.
@@ -244,6 +244,20 @@ export default function sketch (p) {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * (mHeight / mWidth));
     } else {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
+    }
+    if (debug) {
+      p.textSize(24);
+      p.text('Name: ' + mapName, 0, 30);
+      p.text('Size: ' + size, 0, 60);
+      p.text('Coast Smoothness: ' + coastSmoothness, 0, 90);
+      p.text('Inland: ' + inland, 0, 120);
+      p.text('Beach Height: ' + beachHeight, 0, 150);
+      p.text('Coast Uniformity: ' + coastUniformity, 0, 180);
+      p.text('Rivers: ' + numRivers, 0, 210);
+      p.text('Mountain Ranges: ' + numMountainRanges, 0, 240);
+      p.text('Mountain Range Width: ' + widthMountainRange, 0, 270);
+      p.text('Squiggliness: ' + squiggliness, 0, 300);
+      p.text('Mountain Smoothness: ' + mountainSmoothness, 0, 330);
     }
   };
 
