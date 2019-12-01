@@ -1,3 +1,6 @@
+/* global
+  noise
+*/
 /* jshint esversion: 6 */
 import Point from './point.js';
 import Map from './map.js';
@@ -70,11 +73,10 @@ class MountainAgent {
         this.pickRandomStart(map);
       }
 
-      let i;
       let reachedEdge = NO;
       this.resetTurnTimer();
       let timeSinceTurn = 0;
-      for (i = 0; i < this.tokens; i++) {
+      for (let i = 0; i < this.tokens; i++) {
         reachedEdge = this.elevateCircle(map);
         switch (reachedEdge) {
           case NO:
@@ -104,7 +106,11 @@ class MountainAgent {
             break;
         }
         // console.log(this.turnTime + ' ' + timeSinceTurn);
+        /*if (this.turnTime > 0 && timeSinceTurn > this.turnTime / 2 && timeSinceTurn < (this.turnTime / 2) + 1) {
+          this.makeFoothills(map);
+        }*/
         if (this.turnTime > 0 && timeSinceTurn > this.turnTime) {
+          this.makeFoothills(map);
           const turnAmount = this.newGetTurn();
           this.newRotateAgent(turnAmount);
           this.resetTurnTimer();
@@ -123,8 +129,10 @@ class MountainAgent {
     for (let i = -width; i < width + 1; i++) {
       for (let j = -width; j < width + 1; j++) {
         if(this.distance(this.x + i, this.y + j, this.x, this.y) < width) {
+          
           if(reachedEdge === NO) {
-            if(this.newSetHeight(map, Math.floor(this.x + i), Math.floor(this.y + j), this.newHeightWithDropoff(this.x, this.y, this.x + i, this.y + j, height))) {
+            if(this.newSetHeight(map, Math.floor(this.x + i), Math.floor(this.y + j), this.newHeightWithDropoff(this.x, this.y, this.x + i, this.y + j, height/*(height + 
+                Math.ceil(30 * noise((this.x + i)) / 10, (this.y + j) / 10) + Math.ceil(30 * noise((this.x + i)) / 100,(this.y + j) / 100))*/))) {
               reachedEdge = HIT_FRONT_L;
             }
           }
@@ -134,79 +142,31 @@ class MountainAgent {
         }
       }
     }
+    map.point(Math.round(this.x), Math.round(this.y)).setBiome('ridge');
     return reachedEdge;
   }
-  newElevateWedge (map) {
-    const direction2 = (this.direction + 90) % 360;
-    const directionRad = Math.PI * this.direction / 180;
-    const direction2Rad = Math.PI * direction2 / 180;
-    const height = this.rand.callRandom(this.heightMin, this.heightMax);
-    let reachedEdge = NO;
-    this.newSetHeight(map, Math.floor(this.x), Math.floor(this.y), height);
-    this.newSetHeight(map, Math.ceil(this.x), Math.ceil(this.y), height);
 
-    for (let i = 0; i <= this.width; i++) {
-      for (let j = 0; j <= this.width - i; j++) {
-        // front right
-        let pointX = this.x + i * Math.cos(directionRad) + j * Math.cos(direction2Rad);
-        let pointY = this.y + i * Math.sin(directionRad) + j * Math.sin(direction2Rad);
-        if (this.newSetHeight(map, Math.floor(pointX), Math.floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height)) ||
-          this.newSetHeight(map, Math.ceil(pointX), Math.ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height))) {
-          // hit on the right
-          switch (reachedEdge) {
-            case NO:
-              reachedEdge = HIT_RIGHT;
-              break;
-            case HIT_RIGHT:
-              reachedEdge = MULTI_HIT_RIGHT;
-              break;
-            case HIT_LEFT:
+  elevateFoothillCircle(map, x, y, height, width) {
+    let reachedEdge = NO;
+    for (let i = x - width; i < x + width + 1; i++) {
+      for (let j = y - width; j < y + width + 1; j++) {
+        if(this.distance(i, j, x, y) < width) {
+          if(reachedEdge === NO) {
+            if(this.newSetHeight(map, Math.floor(i), Math.floor(j), this.newHeightWithDropoff(x, y, i, j, height))) {
               reachedEdge = HIT_FRONT_L;
-              break;
-            case MULTI_HIT_LEFT:
-              reachedEdge = HIT_FRONT_L;
-              break;
-            default:
-              break;
+            }
+          }
+          else {
+            this.newSetHeight(map, Math.floor(i), Math.floor(j), this.newHeightWithDropoff(x, y, i, j, height));
           }
         }
-        // front left
-        pointX = this.x + i * Math.cos(directionRad) - j * Math.cos(direction2Rad);
-        pointY = this.y + i * Math.sin(directionRad) - j * Math.sin(direction2Rad);
-        if (this.newSetHeight(map, Math.floor(pointX), Math.floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height)) ||
-          this.newSetHeight(map, Math.ceil(pointX), Math.ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height))) {
-          // hit on the left
-          switch (reachedEdge) {
-            case NO:
-              reachedEdge = HIT_LEFT;
-              break;
-            case HIT_LEFT:
-              reachedEdge = MULTI_HIT_LEFT;
-              break;
-            case HIT_RIGHT:
-              reachedEdge = HIT_FRONT_R;
-              break;
-            case MULTI_HIT_RIGHT:
-              reachedEdge = HIT_FRONT_R;
-              break;
-            default:
-              break;
-          }
-        }
-        // back left
-        pointX = this.x - i * Math.cos(directionRad) + j * Math.cos(direction2Rad);
-        pointY = this.y - i * Math.sin(directionRad) + j * Math.sin(direction2Rad);
-        this.newSetHeight(map, Math.floor(pointX), Math.floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
-        this.newSetHeight(map, Math.ceil(pointX), Math.ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
-        // back right
-        pointX = this.x - i * Math.cos(directionRad) - j * Math.cos(direction2Rad);
-        pointY = this.y - i * Math.sin(directionRad) - j * Math.sin(direction2Rad);
-        this.newSetHeight(map, Math.floor(pointX), Math.floor(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
-        this.newSetHeight(map, Math.ceil(pointX), Math.ceil(pointY), this.newHeightWithDropoff(this.x, this.y, pointX, pointY, height));
       }
     }
+    map.point(Math.round(x), Math.round(y)).setBiome('ridge');
     return reachedEdge;
   }
+
+
 
   newHeightWithDropoff (centerX, centerY, x, y, height) {
     let distance = this.distance(centerX, centerY, x, y);
@@ -222,10 +182,72 @@ class MountainAgent {
     }
     if (map.point(x, y).getElevation() < height) {
       map.point(x, y).setElevation(height);
-      map.point(x, y).setBiome('mountain');
+      if(map.point(x, y).getBiome() !== 'ridge') {
+        map.point(x, y).setBiome('mountain');
+      }
     }
     return false;
   }
+
+  makeFoothills(map) {
+    let direction = (this.direction + 90) % 360;
+    let direction2 = (this.direction - 90) % 360;
+    this.runFoothillAgent(map, map.point(Math.round(this.x), Math.round(this.y)).getElevation(), direction, this.width * 2);
+    this.runFoothillAgent(map, map.point(Math.round(this.x), Math.round(this.y)).getElevation(), direction2, this.width * 2);
+  }
+
+  runFoothillAgent(map, height, dir, length) {
+    let direction = dir;
+    let x = this.x;
+    let y = this.y;
+    let currentHeight = height;
+
+    let reachedEdge = NO;
+    let turn = true;
+    for (let i = 0; i < length; i++) {
+      
+      reachedEdge = this.elevateFoothillCircle(map, x, y, currentHeight, this.width / 3);
+      if (reachedEdge !== NO) {
+        break;
+      }
+      if (i % Math.round(length / 5) === 0) {
+        direction = this.turnFoothill(map, direction, x, y, turn);
+        turn = !turn;
+      }
+      currentHeight -= height / length
+      //move foothill agent
+      const directionRad = Math.PI * direction / 180;
+      x = x + Math.cos(directionRad);
+      y = y + Math.sin(directionRad);
+    }
+  }
+
+  turnFoothill(map, direction, x, y, turn) {
+    /*
+    const directionRad = Math.PI * (direction + 90) / 180;
+    const direction2Rad = Math.PI * (direction - 90) / 180;
+
+    let leftElevation = map.point(Math.round(x + Math.cos(directionRad)), Math.round(y + Math.sin(directionRad))).getElevation();
+    let rightElevation = map.point(Math.round(x + Math.cos(direction2Rad)), Math.round(y + Math.sin(direction2Rad))).getElevation();
+    
+    let turnAmount = this.rand.callRandom(10, 35);
+    if(leftElevation < rightElevation) {
+      //turn left - downhill
+      return (direction - turnAmount) % 360;
+    }
+    else {
+      return (direction + turnAmount) % 360;
+    }*/
+    let turnAmount = this.rand.callRandom(30, 60);
+    if(turn) {
+      //turn left - downhill
+      return (direction - turnAmount) % 360;
+    }
+    else {
+      return (direction + turnAmount) % 360;
+    }
+  }
+  
 
   newTurnLeft (hard) {
     let min;
@@ -263,9 +285,7 @@ class MountainAgent {
   }
 
   newMoveAgent () {
-    // const direction2 = (this.direction + 90) % 360;
     const directionRad = Math.PI * this.direction / 180;
-    // const direction2Rad = Math.PI * direction2 / 180; // George did you intend to use this?
 
     const newX = this.x + Math.cos(directionRad);
     const newY = this.y + Math.sin(directionRad);

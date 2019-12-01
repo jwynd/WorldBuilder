@@ -72,28 +72,28 @@ let coastUniformity = 1;
 // User parameter (number of rivers)
 // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
 // Not an option if there's no mountains
-let numRivers = 0;
+let numRivers = 10;
 
 // MountainAgent parameters
 
 // User parameter
 // Set number of mountain ranges
 // 0 <= numMountainRanges <= 0.05 * islandArea
-let numMountainRanges = 3;
+let numMountainRanges = 5;
 
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
-let widthMountainRange = 15;
+let widthMountainRange = 10;
 
 // User Parameter
 // 0 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-let squiggliness = 45;
+let squiggliness = 70;
 
 // User parameter
 // Controls how quickly mountains drop to the ground
 // 0 <= smoothness <= 100
-let mountainSmoothness = 70;
+let mountainSmoothness = 50;
 
 //testing
 let minCoast = 255;
@@ -133,22 +133,22 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = (islandArea / widthMountainRange) * 0.1;
+  const mountainTokens = 150/*(islandArea / widthMountainRange) * 0.1*/;
 
   // Controls height of mountain peaks
-  const maxPeak = 230;
+  const maxPeak = 220;
   const minPeak = maxPeak * 0.5;
 
   // Controls how long an agent walks before turning
-  const maxWalkTime = (1 - (squiggliness / 100)) * mountainTokens;
-  const minWalkTime = maxWalkTime * 0.5;
+  const maxWalkTime = 20/*(1 - (squiggliness / 100)) * mountainTokens*/;
+  const minWalkTime = 5/*maxWalkTime * 0.5*/;
 
   // Turn angle in degrees
-  const minTurnAngle = squiggliness;
-  const maxTurnAngle = squiggliness * 2;
+  const minTurnAngle = 10/*squiggliness*/;
+  const maxTurnAngle = 70/*squiggliness * 2*/;
 
   // Misc fields
-  const worldSeed = 0xa124a3a23f;
+  const worldSeed = 0xa127a3a25f;
   const debug = false;
 
 
@@ -171,7 +171,7 @@ export default function sketch (p) {
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness, 1, rand);
 
     r = new RiverAgent(rand, numRivers);
-    const l = [c, b, be, ma/*, r*/];
+    const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
@@ -230,8 +230,6 @@ export default function sketch (p) {
         }
       }
     }
-    console.log(minScoreCoast + ' ' + maxScoreCoast);
-    console.log(minScoreMount + ' ' + maxScoreMount);
 
     for (let i = 0; i < heightmap.width; ++i) {
       for (let j = 0; j < heightmap.height; ++j) {
@@ -249,7 +247,7 @@ export default function sketch (p) {
   };
 
   p.draw = function () {
-    p.background(0, 0, 255); // set this to the same color as the ocean.
+    p.background(182, 228, 251); // set this to the same color as the ocean.
     p.imageMode(p.CENTER);
     if (p.windowHeight > p.windowWidth * 0.5625) {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * (mHeight / mWidth));
@@ -277,31 +275,46 @@ export default function sketch (p) {
         break;
       case 'tallShore':
         col = p.color(133, 190, 139);
+        break;/*
       case 'coast':
-        //let bCoast = 60 + (scorePoint(map, i, j) - minScoreCoast) / maxScoreCoast * 30;
         let bCoast = 60 + ((scorePoint(map, i, j) + 6) * 30 / 12);
         col = p.color('hsb(82, 47%, ' + bCoast + '%)');
         break;
       case 'mountain':
-        /*if(map.point(i, j).getElevation() < 100) {
-          col = p.color('hsb(19, 55%, 50%)');
-        }
-        else if(map.point(i, j).getElevation() < 150) {
-          col = p.color('hsb(19, 55%, 70%)');
-        }
-        else if(map.point(i, j).getElevation() < 200) {
-          col = p.color('hsb(19, 55%, 80%)');
-        }
-        else {
-          col = p.color('hsb(19, 55%, 90%)');
-        }*/
         col = p.color(205,142,99);
-        //let bMount = 50 + (scorePoint(map, i, j) - minScoreMount) / (maxScoreMount - minScoreMount) * 40;
         let bMount = 50 + ((scorePoint(map, i, j) + 6) * 40 / 12);
         col = p.color('hsb(19, 55%, ' + bMount + '%)');
-        break;
+        break;*//*
+      case 'ridge':
+        col = p.color(0, 0, 0);
+        console.log('ridge found');
+        break;*/
       default: 
-        console.log(raw);       
+        let elevation = map.point(i, j).getElevation();
+        if (elevation < 25) {
+          let bCoast = 60 + ((scorePoint(map, i, j) + 6) * 30 / 12);
+          col = p.color('hsb(82, 47%, ' + bCoast + '%)');
+        }
+        else if (elevation < 35) {
+          let bMount = 80 + ((scorePoint(map, i, j) + 6) * 15 / 12);
+          col = p.color('hsb(45, 33%, ' + bMount + '%)');
+        }
+        else if (elevation < 100) {
+          let bMount = 70 + ((scorePoint(map, i, j) + 6) * 20 / 12);
+          col = p.color('hsb(39, 42%, ' + bMount + '%)');
+        }
+        else if (elevation < 130) {
+          let bMount = 70 + ((scorePoint(map, i, j) + 6) * 20 / 12);
+          col = p.color('hsb(31, 43%, ' + bMount + '%)');
+        }
+        else if (elevation < 200) {
+          let bMount = 50 + ((scorePoint(map, i, j) + 6) * 40 / 12);
+          col = p.color('hsb(19, 55%, ' + bMount + '%)');
+        }
+        else{
+          let bMount = 50 + ((scorePoint(map, i, j) + 6) * 50 / 12);
+          col = p.color('hsb(19, 0%, ' + bMount + '%)');
+        }
       }
       return col;
     }
@@ -366,6 +379,7 @@ export default function sketch (p) {
       total /= 11;
       map.point(i, j).setElevation(total);
     }
+
   
 }
 
