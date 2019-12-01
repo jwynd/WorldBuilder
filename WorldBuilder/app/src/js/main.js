@@ -42,7 +42,7 @@ let size = 16;
 // User parameter (abstraction for number of agents)
 // 0 <= smoothness < size
 // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
-let coastSmoothness = 4;
+let coastSmoothness = 6;
 
 // Constraint Parameters
 // Used to set the limits for some of the following variables
@@ -65,21 +65,21 @@ let beachHeight = 5;
 // User parameter (abstraction for octave)
 // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
 // 0 <= coastUniformity <= 3
-let coastUniformity = 3;
+let coastUniformity = 1;
 
 // RiverAgent parameters
 
 // User parameter (number of rivers)
 // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
 // Not an option if there's no mountains
-let numRivers = 0;
+let numRivers = 10;
 
 // MountainAgent parameters
 
 // User parameter
 // Set number of mountain ranges
 // 0 <= numMountainRanges <= 0.05 * islandArea
-let numMountainRanges = 30;
+let numMountainRanges = 5;
 
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
@@ -88,12 +88,22 @@ let widthMountainRange = 10;
 // User Parameter
 // 0 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-let squiggliness = 1;
+let squiggliness = 70;
 
 // User parameter
 // Controls how quickly mountains drop to the ground
 // 0 <= smoothness <= 100
-let mountainSmoothness = 5;
+let mountainSmoothness = 50;
+
+//testing
+let minCoast = 255;
+let maxCoast = 0;
+let minMount = 255;
+let maxMount = 0;
+let minScoreCoast = 10000;
+let maxScoreCoast = -10000;
+let minScoreMount = 10000;
+let maxScoreMount = -10000;
 
 export default function sketch (p) {
   let heightmap;
@@ -123,23 +133,24 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = (islandArea / widthMountainRange) * 0.5;
+  const mountainTokens = 150/*(islandArea / widthMountainRange) * 0.1*/;
 
   // Controls height of mountain peaks
-  const maxPeak = 10;
-  const minPeak = maxPeak * 0.7;
+  const maxPeak = 220;
+  const minPeak = maxPeak * 0.5;
 
   // Controls how long an agent walks before turning
-  const maxWalkTime = (1 - (squiggliness / 100)) * mountainTokens;
-  const minWalkTime = maxWalkTime * 0.5;
+  const maxWalkTime = 20/*(1 - (squiggliness / 100)) * mountainTokens*/;
+  const minWalkTime = 5/*maxWalkTime * 0.5*/;
 
   // Turn angle in degrees
-  const minTurnAngle = squiggliness;
-  const maxTurnAngle = squiggliness * 2;
+  const minTurnAngle = 10/*squiggliness*/;
+  const maxTurnAngle = 70/*squiggliness * 2*/;
 
   // Misc fields
-  const worldSeed = 0xa12413adff;
+  const worldSeed = 0xa127a3a25f;
   const debug = false;
+
 
 
   p.setup = function () {
@@ -160,7 +171,7 @@ export default function sketch (p) {
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness, 1, rand);
 
     r = new RiverAgent(rand, numRivers);
-    const l = [c, b, be, ma/*, r*/];
+    const l = [c, b, be, ma, r];
     for (let i = 0; i < l.length; i++) {
       l[i].generate(m);
     }
@@ -175,27 +186,56 @@ export default function sketch (p) {
     for (let i = 0; i < heightmap.width; ++i) {
       for (let j = 0; j < heightmap.height; ++j) {
         const raw = m.point(i, j).getBiome();
-        let col = 0;
-        if (raw === 'lake') {
-          col = p.color(0, 255, 0);
-        } else if (raw === 'river') {
-          col = p.color(0, 255, 255);
-        } else if (raw === 'beach' || raw === 'shore') {
-          col = p.color(255, m.point(i, j).getElevation(), 0);
-        } else if (raw === 'coast') {
-          col = p.color(m.point(i, j).getElevation(), 100, 255);
-        } else if (raw === 'ocean') {
-          col = p.color(0, 0, 255);
-        } else if (raw === 'mountain') {
-          console.log("mountain?");
-          const col1 = p.color(0, 255, 0);
-          const col2 = p.color(255, 0, 0);
-          const elvLerp = p.map(m.point(i, j).getElevation(), 0, 255, 0, 1, true);
-          col = p.lerpColor(col1, col2, elvLerp);
-          //col = p.color(255, 255, 255);
-        } else if (raw === 'river') {
-          col = p.color(0, 0, 0);
+        if(raw !== 'ocean' && raw !== 'mountain') {
+          smoothPoint(m, i, j);
         }
+      }
+    }
+    
+    for (let i = 0; i < heightmap.width; ++i) {
+      for (let j = 0; j < heightmap.height; ++j) {
+        const raw = m.point(i, j).getBiome();
+        if(raw !== 'ocean') {
+          smoothPoint(m, i, j);
+        }
+        if(raw === 'coast') {
+          let score = scorePoint(m, i, j);
+          if(score < minScoreCoast) {
+            minScoreCoast = score;
+          }
+          else if(score > maxScoreCoast) {
+            maxScoreCoast = score;
+          }
+          if(m.point(i, j).getElevation() < minCoast) {
+            minCoast = m.point(i, j).getElevation();
+          }
+          else if(m.point(i, j).getElevation() > maxCoast) {
+            maxCoast = m.point(i, j).getElevation();
+          }
+        }
+        else if(raw === 'mountain') {
+          let score = scorePoint(m, i, j);
+          if(score < minScoreMount) {
+            minScoreMount = score;
+          }
+          else if(score > maxScoreMount) {
+            maxScoreMount = score;
+          }
+          if(m.point(i, j).getElevation() < minMount) {
+            minMount = m.point(i, j).getElevation();
+          }
+          else if(m.point(i, j).getElevation() > maxMount) {
+            maxMount = m.point(i, j).getElevation();
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < heightmap.width; ++i) {
+      for (let j = 0; j < heightmap.height; ++j) {
+        const raw = m.point(i, j).getBiome();
+        let col = 0;
+        col = determineColor(m, raw, col, i, j);
         heightmap.set(i, j, col);
       }
     }
@@ -207,7 +247,7 @@ export default function sketch (p) {
   };
 
   p.draw = function () {
-    p.background(0, 0, 255); // set this to the same color as the ocean.
+    p.background(182, 228, 251); // set this to the same color as the ocean.
     p.imageMode(p.CENTER);
     if (p.windowHeight > p.windowWidth * 0.5625) {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowWidth, p.windowWidth * (mHeight / mWidth));
@@ -215,7 +255,135 @@ export default function sketch (p) {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
     }
   };
+
+  function determineColor(map, raw, col, i, j) {
+    switch(raw) {
+      case 'ocean':
+        col = p.color(182,228,251);
+        break;
+      case 'lake':
+        col = p.color(182,228,251);
+        break;
+      case 'river':
+        col = p.color(148,235,242);
+        break;
+      case 'beach':
+        col = p.color(255,255,192);
+        break;
+      case 'shore':
+        col = p.color(255,255,192);
+        break;
+      case 'tallShore':
+        col = p.color(133, 190, 139);
+        break;/*
+      case 'coast':
+        let bCoast = 60 + ((scorePoint(map, i, j) + 6) * 30 / 12);
+        col = p.color('hsb(82, 47%, ' + bCoast + '%)');
+        break;
+      case 'mountain':
+        col = p.color(205,142,99);
+        let bMount = 50 + ((scorePoint(map, i, j) + 6) * 40 / 12);
+        col = p.color('hsb(19, 55%, ' + bMount + '%)');
+        break;*//*
+      case 'ridge':
+        col = p.color(0, 0, 0);
+        console.log('ridge found');
+        break;*/
+      default: 
+        let elevation = map.point(i, j).getElevation();
+        if (elevation < 25) {
+          let bCoast = 60 + ((scorePoint(map, i, j) + 6) * 30 / 12);
+          col = p.color('hsb(82, 47%, ' + bCoast + '%)');
+        }
+        else if (elevation < 35) {
+          let bMount = 80 + ((scorePoint(map, i, j) + 6) * 15 / 12);
+          col = p.color('hsb(45, 33%, ' + bMount + '%)');
+        }
+        else if (elevation < 100) {
+          let bMount = 70 + ((scorePoint(map, i, j) + 6) * 20 / 12);
+          col = p.color('hsb(39, 42%, ' + bMount + '%)');
+        }
+        else if (elevation < 130) {
+          let bMount = 70 + ((scorePoint(map, i, j) + 6) * 20 / 12);
+          col = p.color('hsb(31, 43%, ' + bMount + '%)');
+        }
+        else if (elevation < 200) {
+          let bMount = 50 + ((scorePoint(map, i, j) + 6) * 40 / 12);
+          col = p.color('hsb(19, 55%, ' + bMount + '%)');
+        }
+        else{
+          let bMount = 50 + ((scorePoint(map, i, j) + 6) * 50 / 12);
+          col = p.color('hsb(19, 0%, ' + bMount + '%)');
+        }
+      }
+      return col;
+    }
+
+    function scorePoint(map, i, j) {
+      let score = 0;
+      let elevation = map.point(i, j).getElevation();
+      let diff = .75;
+      //console.log(map.point(i+1, j).getElevation() - elevation);
+
+      if(elevation < map.point(i+1, j).getElevation() && map.point(i+1, j).getElevation() - elevation > diff) {
+        score++;
+      }
+      else if(elevation - map.point(i+1, j).getElevation() > diff) {
+        score--;
+      }
+      if(elevation < map.point(i+1, j+1).getElevation() && map.point(i+1, j+1).getElevation() - elevation > diff) {
+        score++;
+      }
+      else if(elevation - map.point(i+1, j+1).getElevation() > diff) {
+        score--;
+      }
+      if(elevation < map.point(i, j+1).getElevation() && map.point(i, j+1).getElevation() - elevation > diff) {
+        score++;
+      }
+      else if(elevation - map.point(i, j+1).getElevation() > diff) {
+        score--;
+      }
+
+      if(elevation > map.point(i, j-1).getElevation() && elevation - map.point(i, j-1).getElevation() > diff) {
+        score++;
+      }
+      else if(map.point(i, j-1).getElevation() - elevation > diff) {
+        score--;
+      }
+      if(elevation > map.point(i-1, j-1).getElevation() && elevation - map.point(i-1, j-1).getElevation() > diff) {
+        score++;
+      }
+      else if(map.point(i-1, j-1).getElevation() - elevation > diff) {
+        score--;
+      }
+      if(elevation > map.point(i-1, j).getElevation() && elevation - map.point(i-1, j).getElevation() > diff) {
+        score++;
+      }
+      else if(map.point(i-1, j).getElevation() - elevation > diff) {
+        score--;
+      }
+      
+      return score;
+    }
+
+    function smoothPoint(map, i, j) {
+      let total = map.point(i, j).getElevation() * 3;
+      total += map.point(i-1, j).getElevation();
+      total += map.point(i-2, j).getElevation();
+      total += map.point(i, j-1).getElevation();
+      total += map.point(i, j-2).getElevation();
+      total += map.point(i+1, j).getElevation();
+      total += map.point(i+2, j).getElevation();
+      total += map.point(i, j+1).getElevation();
+      total += map.point(i, j+2).getElevation();
+      total /= 11;
+      map.point(i, j).setElevation(total);
+    }
+
+  
 }
+
+
 // let heightmap;
 // let m;
 // let c;
