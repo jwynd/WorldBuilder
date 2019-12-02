@@ -10,6 +10,8 @@ import RiverAgent from './riverAgent.js';
 import BeachAgent from './beachAgent.js';
 import P5Wrapper from 'react-p5-wrapper';
 import Random from './random.js';
+import dbWrite from './dbWrite.js';
+import dbRead from './dbRead.js';
 
 // GLOBAL VALUES //
 
@@ -245,7 +247,8 @@ export default function sketch (p) {
     } else {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
     }
-    if (debug) {
+    if (debug) { // Get debug information and test database
+      mapName = 'Map 1';
       p.textSize(24);
       p.text('Name: ' + mapName, 0, 30);
       p.text('Size: ' + size, 0, 60);
@@ -258,6 +261,20 @@ export default function sketch (p) {
       p.text('Mountain Range Width: ' + widthMountainRange, 0, 270);
       p.text('Squiggliness: ' + squiggliness, 0, 300);
       p.text('Mountain Smoothness: ' + mountainSmoothness, 0, 330);
+      if (mapName === 'Map 1' && p.mouseIsPressed) {
+        dbWrite();
+        mapName = 'Map 2';
+        size = 20;
+        coastSmoothness = 4;
+        inland = 6;
+        beachHeight = 1;
+        coastUniformity = 2;
+        numRivers = 30;
+        numMountainRanges = 10;
+        widthMountainRange = 2;
+        squiggliness = 10;
+        mountainSmoothness = 30;
+      }
     }
   };
 
