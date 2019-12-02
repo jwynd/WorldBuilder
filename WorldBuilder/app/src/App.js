@@ -5,7 +5,7 @@ import download from './icons/download.svg';
 import Menu from './menu.js';
 import Login from './Login.js';
 import Map from './Map.js';
-
+import Setting from './Setting.js';
 class App extends React.Component {
   constructor(props){
     super(props)
@@ -60,6 +60,7 @@ class App extends React.Component {
                   <img src={download} className="App-download" alt="download" onClick={this.download.bind(this)} height="50"/>
                   <Menu  setParentState={this.setSelfState}/>
                   <Login />
+             
              
                   <div id="d                        ownloadpic">
                     <div id="i-loading">

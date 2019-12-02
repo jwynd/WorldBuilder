@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.scss';
-import './Setting.js';
 import menu from './icons/menu.svg';
+import ControlledPopup from './Popup.js'
 import './scss/_modal.scss';
 import './scss/_buttons.scss';
 import { Modal, ListGroup } from 'react-bootstrap';
@@ -21,6 +21,7 @@ class Menu extends React.Component {
     this.state = { showModalMenu: false }
     open = open.bind(this);
     close = close.bind(this);
+    this.ControlledPopupElement = React.createRef();
   }
   newmap=()=>{
     document.querySelector("div[role=dialog]").style.display='none'
@@ -41,6 +42,10 @@ class Menu extends React.Component {
     return result.toLowerCase()
   }
 
+  handleSettingClick=()=>{
+    this.setState( {showModalMenu: false} );
+    this.ControlledPopupElement.current.openModal()
+  }
 
   render() {
 
@@ -54,11 +59,15 @@ class Menu extends React.Component {
                 <ListGroup.Item><a onClick={this.newmap.bind(this)}>New Map</a></ListGroup.Item>
                 <ListGroup.Item><a>Load</a></ListGroup.Item>
                 <ListGroup.Item><a>Save</a></ListGroup.Item>
-                <ListGroup.Item><a>onClick={newset.bind(this)}>Setting</a></ListGroup.Item>
-             
+                {/* <ListGroup.Item><a onClick={ControlledPopup.pop.bind(this)}>Setting</a></ListGroup.Item> */}
+                <ListGroup.Item><a onClick={this.handleSettingClick}>Setting</a></ListGroup.Item>
+
               </ListGroup>
             </Modal.Body>
         </Modal>
+        <ControlledPopup ref={this.ControlledPopupElement} />
+        
+        
       </>
     );
   }
