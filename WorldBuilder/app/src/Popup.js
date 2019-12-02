@@ -1,4 +1,4 @@
-"use strict";
+
 import React from 'react';
 import Setting from './Setting.js';
 import Popup from 'reactjs-popup';
@@ -17,9 +17,7 @@ class ControlledPopup extends React.Component {
   closeModal() {
     this.setState({ open: false });
   }
-  // pop=()=>{
-  //    this.setState( {open: true} );
-  // }
+  
   setSelfState = () => {
     this.setState({
       open: false

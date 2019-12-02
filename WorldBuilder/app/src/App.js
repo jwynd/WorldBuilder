@@ -61,8 +61,9 @@ class App extends React.Component {
       return (
           <div className ="App">
               <header className="App-header">
+
                 <input type="text" hidden id="size"/>
-                <input type="text" hidden id="conastSmoothness"/>
+                <input type="text" hidden id="ConastSmoothness"/>
                 <input type="text" hidden id="inland"/>
                 <input type="text" hidden id="beachHeight"/>
                 <input type="text" hidden id="coastUniformity"/>

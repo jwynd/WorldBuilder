@@ -47,7 +47,7 @@ let coastSmoothness = 4;
 // Used to set the limits for some of the following variables
 let islandArea = Math.pow(2, size);
 
-const islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
+let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
 
 // BeachAgent parameters
 
@@ -108,8 +108,12 @@ export default function sketch (p) {
   if(document.getElementById('size').value){
     islandArea = Math.pow(2, parseInt(document.getElementById('size').value))
   }
+  
   // 1 <= agents <= tokens
-  const agents = Math.pow(2, coastSmoothness);
+  let agents = Math.pow(2, coastSmoothness);
+ // if(document.getElementById('coastSmoothness').value){
+ //   islandArea = Math.pow(2, parseInt(document.getElementById('coastSmoothness').value))
+ // }
 
   // 0 <= tokens <= mWidth * mHeight
   const tokens = islandArea;
@@ -117,10 +121,9 @@ export default function sketch (p) {
   // 1 <= limit <= tokens
   const limit = tokens / agents;
 
-  // BeachAgent parameters
-
   // 1 <= octave <= 1000
   const octave = Math.pow(10, coastUniformity);
+
 
   // MountainAgent parameters
 

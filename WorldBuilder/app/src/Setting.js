@@ -30,6 +30,9 @@ class Setting extends React.Component {
         let height =  document.getElementById("mHeight").value
         let temp = this.state.Size/100* Math.ceil((width * height))
         document.getElementById("size").value = this.state.Size
+       // document.getElementById("inland").value = this.state.Inland
+      //  document.getElementById("coastSmoothness").value = this.state.ConastSmoothness
+      //  document.getElementById("coastUniformity").value = this.state.CoastUniformity
        /* let islandArea = Math.pow(2, temp)
         let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
         document.getElementById("conastSmoothness").value = this.ConastSmoothness()/100*temp  
@@ -65,7 +68,7 @@ class Setting extends React.Component {
 
      <p> Smoothness of Coast </p>
          <InputRange
-          maxValue={100}
+          maxValue={8}
           minValue={0}
           value={this.state.ConastSmoothness}
           onChange={value => this.setState({ ConastSmoothness: value })}
