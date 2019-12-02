@@ -20,7 +20,12 @@ class ControlledPopup extends React.Component {
   // pop=()=>{
   //    this.setState( {open: true} );
   // }
-
+  setSelfState = () => {
+    this.setState({
+      open: false
+    })
+    this.props.setParentState()
+  }
   render() {
     return (
       <div classname = 'popup'> 
@@ -37,7 +42,7 @@ class ControlledPopup extends React.Component {
             </a>
   
           </div>
-          <Setting />
+          <Setting setParentState={this.setSelfState}/>
         </Popup>
       </div>
     );

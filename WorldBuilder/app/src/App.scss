@@ -92,7 +92,7 @@ body {
 }
 .form {
   margin: 0 auto;
-  padding: 0px 10px 0;
+  padding: 100px 30px 10;
 
   @media (min-width: 800px) {
     max-width: 60%;
@@ -101,6 +101,8 @@ body {
 
 .input-range {
   margin-bottom: 60px;
+  width: 90% !important;
+  left: 10px;
 }
 
 .popup {  
@@ -114,3 +116,20 @@ body {
   margin: auto;  
   background-color: rgba(0,0,0, 0.5);  
 }  
+.popup\_inner {  
+  position: absolute;  
+  left: 25%;  
+  right: 25%;  
+  top: 25%;  
+  bottom: 25%;  
+  margin: auto;  
+  border-radius: 10px;  
+  background: white;  
+}
+.bnt-finish{
+  border: 1px solid #b1b1b1;
+  border-radius: 4px;
+  line-height: 16px;
+  padding: 10px;
+  cursor: pointer;
+}

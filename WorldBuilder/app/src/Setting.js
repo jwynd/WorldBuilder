@@ -25,11 +25,12 @@ class Setting extends React.Component {
   }
     newset=()=>{
       // need change to long
-        let width =  document.getElementById("mWidth")
-        let height =  document.getElementById("mHeight")
-        let temp = this.Size()/100* Math.ceil((width * height))
-        document.getElementById("size").value = temp
-        let islandArea = Math.pow(2, temp)
+      debugger
+        let width =  document.getElementById("mWidth").value
+        let height =  document.getElementById("mHeight").value
+        let temp = this.state.Size/100* Math.ceil((width * height))
+        document.getElementById("size").value = this.state.Size
+       /* let islandArea = Math.pow(2, temp)
         let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
         document.getElementById("conastSmoothness").value = this.ConastSmoothness()/100*temp  
         document.getElementById("inland").value = this.Inland() 
@@ -39,13 +40,8 @@ class Setting extends React.Component {
         document.getElementById("numMountainRanges").value = this.NumMountainRanges()/100* 0.05 * islandArea
         document.getElementById("widthMountainRange").value = this.WidthMountainRange()/100* islandCircumference / 3
         document.getElementById("squiggliness").value = this.Squiggliness()
-        document.getElementById("mountainSmoothness").value = this.MountainSmoothness()
-        let loading = document.getElementById('i-loading')
-        loading.setAttribute('class', 'i-loading')
-        loading.style.display = 'block'
-        setTimeout(() => {
-         this.props.setParentState()
-        }, 1000)
+        document.getElementById("mountainSmoothness").value = this.MountainSmoothness()*/
+      this.props.setParentState()
     } 
     
 
@@ -53,8 +49,10 @@ class Setting extends React.Component {
     return (
      
       <form className="form">
+        <input type="text" hidden id="mWidth" value={1280}/>
+        <input type="text" hidden id="mHeight" value={720}/>
         <Scrollbars
-                style={{width: 500, height: 400 }}>
+                style={{width: 450, height: '95vh' }}>
             
         <p> Set Map Size </p>
         <InputRange
@@ -138,7 +136,7 @@ class Setting extends React.Component {
           value={this.state.MountainSmoothness}
           onChange={value => this.setState({MountainSmoothness: value })}
           onChangeComplete={value => console.log(value)} />
-        <button>Finish</button>
+        <a className="bnt-finish" onClick={this.newset.bind(this)}>Finish</a>
         </Scrollbars>
       </form>
 

@@ -35,6 +35,7 @@ let heightmap;
 // Below ceiling(lg(mWidth * mHeight))/2 is very small
 // Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
 // results in the same island with two agents) too closely leads to suicides and no growth if few enough agents
+
 let size = 16;
 
 // User parameter (abstraction for number of agents)
@@ -44,7 +45,7 @@ let coastSmoothness = 4;
 
 // Constraint Parameters
 // Used to set the limits for some of the following variables
-const islandArea = Math.pow(2, size);
+let islandArea = Math.pow(2, size);
 
 const islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
 
@@ -103,7 +104,10 @@ export default function sketch (p) {
   let be; // beach agent
 
   // CoastAgent parameters
-
+  debugger
+  if(document.getElementById('size').value){
+    islandArea = Math.pow(2, parseInt(document.getElementById('size').value))
+  }
   // 1 <= agents <= tokens
   const agents = Math.pow(2, coastSmoothness);
 
@@ -136,7 +140,7 @@ export default function sketch (p) {
   const maxTurnAngle = squiggliness * 2;
 
   // Misc fields
-  const worldSeed = 0xa12413adff;
+  const worldSeed = document.getElementById('worldseed').value||0xa12413adff;
   const debug = true;
 
   p.setup = function () {

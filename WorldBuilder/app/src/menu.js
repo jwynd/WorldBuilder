@@ -34,6 +34,15 @@ class Menu extends React.Component {
       this.props.setParentState()
     }, 1000)
   }
+  setSelfState = () => {
+    document.getElementById('worldseed1').value=this.getRamNumber()
+    let loading = document.getElementById('i-loading')
+    loading.setAttribute('class', 'i-loading')
+    loading.style.display = 'block'
+    setTimeout(() => {
+      this.props.setParentState1()
+    }, 1000)
+  }
   getRamNumber=()=>{
     var result=''
     for(let i=0;i<16;i++){
@@ -53,6 +62,7 @@ class Menu extends React.Component {
       <>
         <img src={menu} className="App-menu" alt="menu" height="50" onClick={open}/>
         <input type="text" hidden id="worldseed" />
+        <input type="text" hidden id="worldseed1" />
         <Modal show={this.state.showModalMenu} onHide={close} id="menu-left" animation={true}>
             <Modal.Body>
               <ListGroup>
@@ -65,7 +75,7 @@ class Menu extends React.Component {
               </ListGroup>
             </Modal.Body>
         </Modal>
-        <ControlledPopup ref={this.ControlledPopupElement} />
+        <ControlledPopup setParentState={this.setSelfState} ref={this.ControlledPopupElement} />
         
         
       </>

@@ -17,6 +17,7 @@ class App extends React.Component {
 
   }
   download=()=>{
+    debugger
     let data =document.getElementById("downloadpic").children[1].children[0].toDataURL().replace("image/png", "image/octet-stream;")
     let filename="download.png"
     let save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
@@ -29,6 +30,12 @@ class App extends React.Component {
   setSelfState = () => {
     this.setState({
       seed: document.getElementById('worldseed').value
+    })
+    this.forceUpdate()
+  }
+  setSelfState1 = () => {
+    this.setState({
+      seed: document.getElementById('worldseed1').value
     })
     this.forceUpdate()
   }
@@ -54,15 +61,25 @@ class App extends React.Component {
       return (
           <div className ="App">
               <header className="App-header">
+                <input type="text" hidden id="size"/>
+                <input type="text" hidden id="conastSmoothness"/>
+                <input type="text" hidden id="inland"/>
+                <input type="text" hidden id="beachHeight"/>
+                <input type="text" hidden id="coastUniformity"/>
+                <input type="text" hidden id="numRivers"/>
+                <input type="text" hidden id="numMountainRanges"/>
+                <input type="text" hidden id="widthMountainRange"/>
+                <input type="text" hidden id="squiggliness"/>
+                <input type="text" hidden id="mountainSmoothness"/>
+                <input type="text" hidden id="islandArea"/>
+        
                   <div className="fill"></div>
                   <h1 className="App-title">WorldBuilder</h1>
                   <img src={logo} className="App-logo" alt="logo" height="100"/>
                   <img src={download} className="App-download" alt="download" onClick={this.download.bind(this)} height="50"/>
-                  <Menu  setParentState={this.setSelfState}/>
+                  <Menu  setParentState={this.setSelfState} setParentState1={this.setSelfState1}/>
                   <Login />
-             
-             
-                  <div id="d                        ownloadpic">
+                  <div id="downloadpic">
                     <div id="i-loading">
                       <div className="loading-center">
                         <i></i>
