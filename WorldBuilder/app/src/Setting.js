@@ -4,7 +4,10 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import InputRange from 'react-input-range';
 import './App.scss';
 import 'react-rangeslider/lib/index.css'; 
-import 'react-input-range/lib/css/index.css'
+import 'react-input-range/lib/css/index.css';
+export { mWidth, mHeight, mapName, heightmap, size, coastSmoothness, islandArea, islandCircumference,
+         inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
+         squiggliness, mountainSmoothness} from './js/main.js';
 
 class Setting extends React.Component {
   constructor(props) {
