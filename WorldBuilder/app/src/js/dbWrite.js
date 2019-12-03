@@ -3,8 +3,11 @@
 import Firebase from '../Firebase.js';
 
 function dbWrite () {
+  var user = Firebase.auth().currentUser;
+  if (user === null) return null;
   var db = Firebase.firestore();
   const data = {
+    mapName: mapName,
     size: size,
     coastSmoothness: coastSmoothness,
     inland: inland,
@@ -17,6 +20,6 @@ function dbWrite () {
     mountainSmoothness: mountainSmoothness,
     img: img
   };
-  db.collection('maps').doc(mapName).set(data);
+  db.collection(user.uid).doc(mapName).set(data);
 }
 export default dbWrite;

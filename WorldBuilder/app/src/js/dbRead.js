@@ -3,26 +3,16 @@
 import Firebase from '../Firebase.js';
 
 function dbRead (mapName) {
+  var user = Firebase.auth().currentUser;
+  if (user === null) return null;
   var db = Firebase.firestore();
-  const mapRef = db.collection('maps').doc(mapName);
+  const mapRef = db.collection(user.uid).doc(mapName);
   const getDoc = mapRef.get()
     .then(doc => {
       if (!doc.exists) {
         console.error('No such document');
       } else {
-        const docData = doc.data();
-        size = docData.size;
-        coastSmoothness = docData.coastSmoothness;
-        inland = docData.inland;
-        beachHeight = docData.beachHeight;
-        coastUniformity = docData.coastUniformity;
-        numRivers = docData.numRivers;
-        numMountainRanges = docData.numMountainRanges;
-        widthMountainRange = docData.widthMountainRange;
-        squiggliness = docData.squiggliness;
-        mountainSmoothness = docData.mountainSmoothness;
-        img = docData.img;
-        mapName = docData.mapName;
+        return doc.data();
       }
     })
     .catch(err => {
