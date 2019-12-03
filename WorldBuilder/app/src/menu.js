@@ -53,7 +53,8 @@ class Menu extends React.Component {
 
   handleSettingClick=()=>{
     this.setState( {showModalMenu: false} );
-    this.ControlledPopupElement.current.openModal()
+    this.ControlledPopupElement.current.openModal();
+    this.newmap.bind(this);
   }
 
   render() {

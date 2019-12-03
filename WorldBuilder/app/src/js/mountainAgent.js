@@ -47,11 +47,12 @@ class MountainAgent {
   }
 
   // true -> bad start, pick new one
-  checkStart(map) {
+  checkStart (map) {
     for (let i = -this.width; i < this.width + 1; i++) {
       for (let j = -this.width; j < this.width + 1; j++) {
-        if(this.distance(this.x + i, this.y + j, this.x, this.y) < this.width && this.checkPoint(map, this.x + i, this.y + j) !== null 
-            && map.point(this.x + i, this.y + j).getElevation() < this.minElevation) {
+        console.log(j);
+        if(this.distance(Math.round(this.x + i), Math.round(this.y + j), Math.round(this.x), Math.round(this.y)) < this.width && this.checkPoint(map, Math.round(this.x + i), Math.round(this.y + j)) !== null 
+            && map.point(Math.round(this.x + i), Math.round(this.y + j)).getElevation() < this.minElevation) {
           return true;
         }
       }

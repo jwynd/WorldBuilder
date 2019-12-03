@@ -27,16 +27,15 @@ class Setting extends React.Component {
       worldSeed: worldSeed,
       width: mWidth,
       height: mHeight,
-      sizePercent: size * 100 / Math.ceil(Math.log2(mWidth * mHeight)),
-      coastSmoothnessPercent: coastSmoothness * 100 / size,
-      numRiverPercentage: numRivers * 100 / .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)),
+      sizePercent: size / Math.ceil(Math.log2(mWidth * mHeight)),
+      coastSmoothnessPercent: coastSmoothness / size,
+      numRiverPercentage: numRivers / .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)),
       numMountainRanges: numMountainRanges,
-      widthMountainRangesPercentage: widthMountainRange * 100 / (islandCircumference / 3),
+      widthMountainRangesPercentage: widthMountainRange / (islandCircumference / 3),
     }
     
   }
   newset () {
-    console.log(mWidth);
     setWidth(this.state.width);
     setHeight(this.state.height);
     setName(this.state.mapName);
@@ -49,13 +48,18 @@ class Setting extends React.Component {
     setCoastUniformity(this.state.coastUniformity);
     setNumRivers(this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)));
     setNumMountainRanges(this.state.numMountainRanges);
-    setWidthMountainRange(this.state.numMountainRanges * (islandCircumference / 3));
+    setWidthMountainRange(this.state.widthMountainRangesPercentage * (islandCircumference / 3));
     setWidthMountainRange(Math.max(islandCircumference / 10, widthMountainRange));
     setSquiggliness(this.state.squiggliness);
     setMountainSmoothness(this.state.mountainSmoothness);
+    console.log(size);
+    console.log(numMountainRanges);
+    console.log(squiggliness);
+    console.log(mountainSmoothness);
+
     //worldSeed = this.state.worldSeed;
 
-    this.props.setParentState();
+    //this.props.setParentState();
   }
 
     setName = (e) => {
@@ -68,8 +72,6 @@ class Setting extends React.Component {
     return (
      
       <form className="form">
-        <input type="text" hidden id="mWidth" value={1280}/>
-        <input type="text" hidden id="mHeight" value={720}/>
         <Scrollbars
                 style={{width: 450, height: '95vh' }}>
 
