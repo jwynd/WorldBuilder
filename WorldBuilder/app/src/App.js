@@ -28,15 +28,6 @@ class App extends React.Component {
     save_link.dispatchEvent(event)
   }
   setSelfState = () => {
-    this.setState({
-      seed: document.getElementById('worldseed').value
-    })
-    this.forceUpdate()
-  }
-  setSelfState1 = () => {
-    this.setState({
-      seed: document.getElementById('worldseed1').value
-    })
     this.forceUpdate()
   }
   componentDidMount(){

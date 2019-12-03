@@ -5,51 +5,41 @@ import InputRange from 'react-input-range';
 import './App.scss';
 import 'react-rangeslider/lib/index.css'; 
 import 'react-input-range/lib/css/index.css';
-export { mWidth, mHeight, mapName, heightmap, size, coastSmoothness, islandArea, islandCircumference,
+import { mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCircumference,
          inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
-         squiggliness, mountainSmoothness} from './js/main.js';
+         squiggliness, mountainSmoothness, worldSeed} from './js/main.js';
 
 class Setting extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-        Size: 5,
-        ConastSmoothness: 2,
-        Inland: 3,
-        BeachHeight: 5,
-        CoastUniformity: 3,
-        NumRivers: 0,
-        NumMountainRanges: 30,
-        WidthMountainRange: 10,
-        Squiggliness: 1,
-        MountainSmoothness: 5,
-    };
+      mapName: mapName,
+      islandArea: islandArea,
+      islandCircumference: islandCircumference,
+      inland: inland,
+      beachHeight: beachHeight,
+      coastUniformity: coastUniformity,
+      squiggliness: squiggliness,
+      mountainSmoothness: mountainSmoothness,
+      worldSeed: worldSeed,
+      widthPercent: mWidth * 100 / 2000,
+      heightPercent: mHeight * 100 / 1500,
+      sizePercent: size * 100 / Math.ceil(Math.log2(mWidth * mHeight)),
+      coastSmoothnessPercent: coastSmoothness * 100 / size,
+      numRiverPercentage: numRivers * 100 / .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)),
+      numMountainRanges: numMountainRanges,
+      widthMountainRangesPercentage: widthMountainRange * 100 / (islandCircumference / 3),
+    }
+
+    console.log('islandArea is ' + this.state.islandArea);
+    console.log('numMountainRange is ' + numMountainRanges)
+    console.log('numMountainRange percentage is ' + this.state.numMountainRangesPercentage)
+    
   }
     newset=()=>{
-      // need change to long
-      debugger
-        let width =  document.getElementById("mWidth").value
-        let height =  document.getElementById("mHeight").value
-        let temp = this.state.Size/100* Math.ceil((width * height))
-        document.getElementById("size").value = this.state.Size
-       // document.getElementById("inland").value = this.state.Inland
-      //  document.getElementById("coastSmoothness").value = this.state.ConastSmoothness
-      //  document.getElementById("coastUniformity").value = this.state.CoastUniformity
-       /* let islandArea = Math.pow(2, temp)
-        let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
-        document.getElementById("conastSmoothness").value = this.ConastSmoothness()/100*temp  
-        document.getElementById("inland").value = this.Inland() 
-        document.getElementById("beachHeight").value = this.BeachHeight()
-        document.getElementById("coastUniformity").value = this.CoastUniformity()
-        document.getElementById("numRivers").value = this.NumRivers()/100*.05(2 * Math.pi * Math.sqrt(islandArea/ Math.pi))
-        document.getElementById("numMountainRanges").value = this.NumMountainRanges()/100* 0.05 * islandArea
-        document.getElementById("widthMountainRange").value = this.WidthMountainRange()/100* islandCircumference / 3
-        document.getElementById("squiggliness").value = this.Squiggliness()
-        document.getElementById("mountainSmoothness").value = this.MountainSmoothness()*/
+      
       this.props.setParentState()
-    } 
-    
+    }
 
   render() {
     return (
@@ -59,89 +49,121 @@ class Setting extends React.Component {
         <input type="text" hidden id="mHeight" value={720}/>
         <Scrollbars
                 style={{width: 450, height: '95vh' }}>
-            
-        <p> Set Map Size </p>
+
+      <p> Set Map Name </p>
+
+      <p> Set Map Seed </p>
+
+
+      <p> Set Map Width </p>
         <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.Size}
-          
-          onChange={value => this.setState({ Size: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.widthPercent} //Default value
+          onChange={value => this.setState({ widthPercent: value })} //Stores user input
+          //onChangeComplete={value => console.log(value)}
+        />
+
+      <p> Set Map Height </p>
+        <InputRange
+          maxValue={100}
+          minValue={0}
+          value={this.state.heightPercent} //Default value
+          onChange={value => this.setState({ heightPercent: value })} //Stores user input
+          //onChangeComplete={value => console.log(value)}
+        />
+
+      <p> Set Map Size </p>
+        <InputRange
+          maxValue={100}
+          minValue={0}
+          value={this.state.sizePercent} //Default value
+          onChange={value => this.setState({ sizePercent: value })} //Stores user input
+          //onChangeComplete={value => console.log(value)}
+        />
 
      <p> Smoothness of Coast </p>
          <InputRange
-          maxValue={8}
+          maxValue={100}
           minValue={0}
-          value={this.state.ConastSmoothness}
-          onChange={value => this.setState({ ConastSmoothness: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.coastSmoothnessPercent}
+          onChange={value => this.setState({ coastSmoothnessPercent: value })}
+          //onChangeComplete={value => console.log(value)}
+        />
 
     <p> Set inland Number </p>
           <InputRange
           maxValue={3}
           minValue={1}
-          value={this.state.Inland}
-          onChange={value => this.setState({ Inland: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.inland}
+          onChange={value => this.setState({inland: value})}
+          //onChangeComplete={value => console.log(value)}
+        />
 
 
      <p> Set Beach Height </p>
          <InputRange
           maxValue={10}
           minValue={0}
-          value={this.state.BeachHeight}
-          onChange={value => this.setState({ BeachHeight: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.beachHeight}
+          onChange={value => this.setState({beachHeight: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
      
     <p> Set Coast Uniformity</p>
           <InputRange
-          maxValue={30}
+          maxValue={3}
           minValue={0}
-          value={this.state.CoastUniformity}
-          onChange={value => this.setState({ CoastUniformity: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.coastUniformity}
+          onChange={value => this.setState({coastUniformity: value})}
+          //onChangeComplete={value => console.log(value), this.forceUpdate()}
+          />
 
-    <p> Set Number of Rivers </p>
+    <p> Set Density of Rivers </p>
          <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.NumRivers}
-          onChange={value => this.setState({ NumRivers: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.numRiverPercentage}
+          onChange={value => this.setState({numRiverPercentage: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
 
-    <p> Set Number of Mountain Ranges </p>
+    <p> Set Density of Mountain Ranges </p>
          <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.NumMountainRanges}
-          onChange={value => this.setState({ NumMountainRanges: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.numMountainRanges}
+          onChange={value => this.setState({numMountainRanges: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
 
-   <p> Set Mountain Width Range </p>
+   <p> Set Mountain Range Width </p>
          <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.WidthMountainRange}
-          onChange={value => this.setState({ WidthMountainRange: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.widthMountainRangesPercentage}
+          onChange={value => this.setState({widthMountainRangesPercentage: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
 
 
     <p> Set Squiggliness </p>
         <InputRange
           maxValue={90}
           minValue={0}
-          value={this.state.Squiggliness}
-          onChange={value => this.setState({ Squiggliness: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.squiggliness}
+          onChange={value => this.setState({squiggliness: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
 
     <p> Set Mountain Smoothness </p>
         <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.MountainSmoothness}
-          onChange={value => this.setState({MountainSmoothness: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.mountainSmoothness}
+          onChange={value => this.setState({mountainSmoothness: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
         <a className="bnt-finish" onClick={this.newset.bind(this)}>Finish</a>
         </Scrollbars>
       </form>

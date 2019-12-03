@@ -20,10 +20,11 @@ import Random from './random.js';
 // 0 <= mHeight <= 2000
 export let mWidth = 1280;
 export let mHeight = 720;
+export let worldSeed = 0xa127a3a25f;
 
 // User parameter
 // Must be alphanumeric and between 1 and 30 characters
-export let mapName = '';
+export let mapName = 'newMap';
 
 // Initially empty variable used to access heightmap once map is generated
 export let heightmap;
@@ -77,12 +78,12 @@ export let numRivers = 0;
 
 // User parameter
 // Set number of mountain ranges
-// 0 <= numMountainRanges <= 0.05 * islandArea
-export let numMountainRanges = 30;
+// 0 <= numMountainRanges <= 10
+export let numMountainRanges = 10;
 
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
-export let widthMountainRange = 10;
+export let widthMountainRange = 40;
 
 // User Parameter
 // 0 <= squiggliness <= 90
@@ -104,16 +105,9 @@ export default function sketch (p) {
   let be; // beach agent
 
   // CoastAgent parameters
-  debugger
-  if(document.getElementById('size').value){
-    islandArea = Math.pow(2, parseInt(document.getElementById('size').value))
-  }
-  
+
   // 1 <= agents <= tokens
-  let agents = Math.pow(2, coastSmoothness);
- // if(document.getElementById('coastSmoothness').value){
- //   islandArea = Math.pow(2, parseInt(document.getElementById('coastSmoothness').value))
- // }
+  const agents = Math.pow(2, coastSmoothness);
 
   // 0 <= tokens <= mWidth * mHeight
   const tokens = islandArea;
@@ -143,7 +137,6 @@ export default function sketch (p) {
   const maxTurnAngle = squiggliness * 2;
 
   // Misc fields
-  const worldSeed = document.getElementById('worldseed').value||0xa12413adff;
   const debug = true;
 
   p.setup = function () {
