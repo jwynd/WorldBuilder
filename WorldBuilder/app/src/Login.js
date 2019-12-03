@@ -31,6 +31,10 @@ function notLoggedIn() {
   this.setState( {loggedIn: false} );
 }
 
+function changeEmail() {
+  this.setState( {userEmail: firebase.auth().currentUser.email} );
+}
+
 class Login extends React.Component {
   constructor () {
     super();
@@ -42,18 +46,22 @@ class Login extends React.Component {
       loginPassword: '',
       registrationEmail: '',
       passwordOne: '',
-      passwordTwo: ''
+      passwordTwo: '',
+      userEmail: ''
     };
+
     loginOpen = loginOpen.bind(this);
     loginClose = loginClose.bind(this);
     registerOpen = registerOpen.bind(this);
     registerClose = registerClose.bind(this);
     loggedIn = loggedIn.bind(this);
     notLoggedIn = notLoggedIn.bind(this);
+    changeEmail = changeEmail.bind(this);
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         loggedIn();
+        changeEmail();
       } else {
         notLoggedIn();
       }
@@ -75,17 +83,12 @@ class Login extends React.Component {
     event.preventDefault();
     const { registrationEmail, passwordOne } = this.state; 
 
-    console.log(passwordOne);
-
     // calls on Firebase to create user using email and password
     firebase
       .auth().createUserWithEmailAndPassword(registrationEmail, passwordOne)
       .then(function() {
-        console.log(this.state.loggedIn);
-        console.log("Successfully created new user");
       })
       .catch(error => {
-        console.log("Error creating user:", error);
       });
     registerClose();
   }
@@ -99,12 +102,8 @@ class Login extends React.Component {
       .auth().signInWithEmailAndPassword(loginEmail, loginPassword)
       .then(function() {
         loginClose();
-        console.log("Successfully logged in");
-        console.log("logged in :" + loggedIn);
-        console.log("current user: " + firebase.auth().currentUser);
       })
       .catch(error => {
-        console.log("Error logging in:", error);
       });
     }
 
@@ -113,15 +112,14 @@ class Login extends React.Component {
     firebase
       .auth().signOut()
       .then(function(){
-        console.log("Signed out sucessfully");
+        this.setState ( {userEmail: ''} );
       })
       .catch(error => {
-        console.log("Error signing out:", error);
       });
   }
 
   render() {
-    const { loginEmail, registrationEmail, passwordOne, passwordTwo } = this.state; 
+    const { registrationEmail, passwordOne, passwordTwo } = this.state; 
 
     // does not allow user to register without email and matching passwords
     const isInvalid =
@@ -130,12 +128,13 @@ class Login extends React.Component {
       registrationEmail === '';
 
     const loggedIn = this.state.loggedIn;
+    const userEmail = this.state.userEmail;
     let loginOrWelcome;
     let signOut;
 
     if(loggedIn){ // welcomes user and gives them to option to sign out if logged in
-      loginOrWelcome = <div className="welcome-text">Welcome, user!</div>;
-      signOut = <div className="sign-out" span style={{cursor:"pointer"}} onClick={(event) => this.signOut(event)}>Sign out</div>;
+      loginOrWelcome = <div className="welcome-text">{ userEmail }</div>;
+      signOut = <div className="sign-out-button" span style={{cursor:"pointer"}} onClick={(event) => this.signOut(event)}><div className="sign-out-buttonText">Sign out</div></div>;
     } else { //shows login/register and hides sign out button if not logged in
       loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
       signOut = '';
@@ -201,7 +200,6 @@ class Login extends React.Component {
               <div className="register-text">Already have an account? <div className="register-link" span style={{cursor:"pointer"}} onClick={(event) => this.toLogin(event)}>Log in</div></div>
           </Modal.Footer>
           </Modal>
-          
       </>
     );
   }
