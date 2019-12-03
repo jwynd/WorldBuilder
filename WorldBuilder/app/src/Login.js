@@ -32,7 +32,7 @@ function notLoggedIn() {
 }
 
 class Login extends React.Component {
-  constructor(){
+  constructor () {
     super();
     this.state = {
       showLoginModal: false,
@@ -87,8 +87,9 @@ class Login extends React.Component {
       .catch(error => {
         console.log("Error creating user:", error);
       });
+    registerClose();
   }
-  
+
   logIn(event) {
     event.preventDefault();
     const { loginEmail, loginPassword, loggedIn } = this.state; 
@@ -139,13 +140,6 @@ class Login extends React.Component {
       loginOrWelcome = <div className="login-button" span style={{cursor:"pointer"}} onClick={loginOpen}><div className="login-buttonText">Register/Log In</div></div>;
       signOut = '';
     }
-
-    console.log("logged in: " + loggedIn);
-    console.log("login email: " + this.state.loginEmail);
-    console.log("login password: " + this.state.loginPassword)
-    console.log("registration email: " + this.state.registrationEmail)
-    console.log("password: " + this.state.passwordOne);
-    console.log("confirm password: " + this.state.passwordTwo);
 
     return (
       <>
