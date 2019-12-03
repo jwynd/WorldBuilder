@@ -12,6 +12,7 @@ import P5Wrapper from 'react-p5-wrapper';
 import Random from './random.js';
 import dbWrite from './dbWrite.js';
 import dbRead from './dbRead.js';
+import Firebase from '../Firebase.js';
 
 // GLOBAL VALUES //
 
@@ -23,6 +24,10 @@ import dbRead from './dbRead.js';
 let mWidth = 1280;
 let mHeight = 720;
 
+var currentUser = null;
+Firebase.auth().onAuthStateChanged(function (user) {
+  currentUser = user;
+});
 // User parameter
 // Must be alphanumeric and between 1 and 30 characters
 let mapName = 'New Map';
@@ -261,7 +266,7 @@ export default function sketch (p) {
       p.text('Mountain Range Width: ' + widthMountainRange, 0, 270);
       p.text('Squiggliness: ' + squiggliness, 0, 300);
       p.text('Mountain Smoothness: ' + mountainSmoothness, 0, 330);
-      if (mapName === 'Map 1' && p.mouseIsPressed) {
+      if (mapName === 'Map 1' && p.mouseIsPressed && currentUser) {
         dbWrite();
         mapName = 'Map 2';
         size = 20;
@@ -274,7 +279,7 @@ export default function sketch (p) {
         widthMountainRange = 2;
         squiggliness = 10;
         mountainSmoothness = 30;
-      } else if (mapName === 'Map 2' && p.mouseIsPressed) {
+      } else if (mapName === 'Map 2' && p.mouseIsPressed && currentUser) {
         const map1 = dbRead();
         mapName = map1.mapName;
         size = map1.size;
