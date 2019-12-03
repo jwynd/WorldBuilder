@@ -50,7 +50,6 @@ class MountainAgent {
   checkStart (map) {
     for (let i = -this.width; i < this.width + 1; i++) {
       for (let j = -this.width; j < this.width + 1; j++) {
-        console.log(j);
         if(this.distance(Math.round(this.x + i), Math.round(this.y + j), Math.round(this.x), Math.round(this.y)) < this.width && this.checkPoint(map, Math.round(this.x + i), Math.round(this.y + j)) !== null 
             && map.point(Math.round(this.x + i), Math.round(this.y + j)).getElevation() < this.minElevation) {
           return true;

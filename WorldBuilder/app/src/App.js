@@ -70,6 +70,7 @@ class App extends React.Component {
                 <input type="text" hidden id="numRivers"/>
                 <input type="text" hidden id="numMountainRanges"/>
                 <input type="text" hidden id="widthMountainRange"/>
+                <input type="text" hidden id="maxHeightMountainRange"/>
                 <input type="text" hidden id="squiggliness"/>
                 <input type="text" hidden id="mountainSmoothness"/>
                 <input type="text" hidden id="islandArea"/>

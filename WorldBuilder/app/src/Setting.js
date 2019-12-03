@@ -7,10 +7,10 @@ import 'react-rangeslider/lib/index.css';
 import 'react-input-range/lib/css/index.css';
 import { mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCircumference,
          inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
-         squiggliness, mountainSmoothness, worldSeed, setWidth, setHeight, setName, setSize,
+         maxHeightMountainRange, squiggliness, mountainSmoothness, worldSeed, setWidth, setHeight, setName, setSize,
          setCoastSmoothness, setIslandArea, setIslandCircumference, setInland, setBeachHeight,
          setCoastUniformity, setNumRivers, setNumMountainRanges, setWidthMountainRange,
-         setSquiggliness, setMountainSmoothness} from './js/main.js';
+         setSquiggliness, setMountainSmoothness, setMaxHeightMountainRange } from './js/main.js';
 
 class Setting extends React.Component {
   constructor(props) {
@@ -32,6 +32,7 @@ class Setting extends React.Component {
       numRiverPercentage: numRivers / .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)),
       numMountainRanges: numMountainRanges,
       widthMountainRangesPercentage: widthMountainRange / (islandCircumference / 3),
+      maxHeightMountainRangePercentage: maxHeightMountainRange / 255,
     }
     
   }
@@ -46,16 +47,14 @@ class Setting extends React.Component {
     setInland(this.state.inland);
     setBeachHeight(this.state.beachHeight);
     setCoastUniformity(this.state.coastUniformity);
-    setNumRivers(this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)));
+    setNumRivers(Math.ceil(this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI))));
     setNumMountainRanges(this.state.numMountainRanges);
-    setWidthMountainRange(this.state.widthMountainRangesPercentage * (islandCircumference / 3));
+    const widthMountainRange = Math.ceil(this.state.widthMountainRangesPercentage * (islandCircumference / 3));
     setWidthMountainRange(Math.max(islandCircumference / 10, widthMountainRange));
+    const maxHeightMountainRange = Math.ceil(this.state.maxHeightMountainRangePercentage * 255);
+    setMaxHeightMountainRange(Math.max(maxHeightMountainRange, 150));
     setSquiggliness(this.state.squiggliness);
     setMountainSmoothness(this.state.mountainSmoothness);
-    console.log(size);
-    console.log(numMountainRanges);
-    console.log(squiggliness);
-    console.log(mountainSmoothness);
 
     //worldSeed = this.state.worldSeed;
 
@@ -168,6 +167,15 @@ class Setting extends React.Component {
           minValue={0}
           value={this.state.widthMountainRangesPercentage}
           onChange={value => this.setState({widthMountainRangesPercentage: value})}
+          //onChangeComplete={value => console.log(value)}
+          />
+
+   <p> Set Maximum Mountain Height </p>
+         <InputRange
+          maxValue={100}
+          minValue={0}
+          value={this.state.maxHeightMountainRangePercentage}
+          onChange={value => this.setState({maxHeightMountainRangePercentage: value})}
           //onChangeComplete={value => console.log(value)}
           />
 

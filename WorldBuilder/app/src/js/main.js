@@ -137,10 +137,18 @@ export function setWidthMountainRange (value) {
   widthMountainRange = value;
 }
 
+// User parameter
+// 150 <= maxHeightMountainRange <= 250
+export var maxHeightMountainRange = 200;
+
+export function setMaxHeightMountainRange (value) {
+  maxHeightMountainRange = value;
+}
+
 // User Parameter
-// 0 <= squiggliness <= 90
+// 1 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-export var squiggliness = 1;
+export var squiggliness = 50;
 
 export function setSquiggliness (value) {
   squiggliness = value;
@@ -181,21 +189,30 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = 150;
+  const mountainTokens = Math.ceil((islandArea / widthMountainRange) * 0.5);
 
   // Controls height of mountain peaks
-  const maxPeak = 220;
-  const minPeak = maxPeak * 0.5;
+  const maxPeak = maxHeightMountainRange;
+  const minPeak = maxPeak * 0.7;
 
   // Controls how long an agent walks before turning
-  const maxWalkTime = (1 - (squiggliness / 100)) * mountainTokens;
-  const minWalkTime = maxWalkTime * 0.5;
+  const maxWalkTime = Math.ceil((1 - (squiggliness / 100)) * mountainTokens * 0.05);
+  const minWalkTime = Math.ceil(maxWalkTime * 0.5);
 
   // Turn angle in degrees
-  const minTurnAngle = 10;
-  const maxTurnAngle = 70;
+  const minTurnAngle = squiggliness;
+  const maxTurnAngle = squiggliness * 2;
 
   p.setup = function () {
+    console.log(mountainTokens);
+    console.log(maxHeightMountainRange);
+    console.log(maxPeak);
+    console.log(minPeak);
+    console.log(maxWalkTime);
+    console.log(minWalkTime);
+    console.log(minTurnAngle);
+    console.log(maxTurnAngle);
+
     p.createCanvas(p.windowWidth, p.windowHeight);
     const rand = new Random(worldSeed);
     // console.log('Random number: ' + rand.callRandom());
