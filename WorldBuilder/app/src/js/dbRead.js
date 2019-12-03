@@ -1,5 +1,4 @@
 // dbWrite
-/* global size coastSmoothness inland beachHeight coastUniformity numRivers numMountainRanges widthMountainRange squiggliness mountainSmoothness img mapName */
 import Firebase from '../Firebase.js';
 
 function dbRead (mapName) {
@@ -16,7 +15,8 @@ function dbRead (mapName) {
       }
     })
     .catch(err => {
-      console.err('Error getting document', err);
+      console.error('Error getting document', err);
     });
+  return getDoc;
 }
 export default dbRead;

@@ -21,9 +21,9 @@ import Firebase from '../Firebase.js';
 // User parameters
 // 0 <= mWidth <= 2000
 // 0 <= mHeight <= 2000
-var currentUser = null;
+var currentUser = false;
 Firebase.auth().onAuthStateChanged(function (user) {
-  currentUser = user;
+  currentUser = user !== null;
 });
 const debug = true;
 // User parameter
@@ -153,7 +153,7 @@ export default function sketch (p) {
     m = new Map(mWidth, mHeight, rand);
     p.randomSeed(worldSeed);
     p.noiseSeed(worldSeed);
-    p.frameRate(1);
+    // p.frameRate(1);
     const sPointX = p.floor(mWidth / 2);
     const sPointY = p.floor(mHeight / 2);
     const point = m.point(sPointX, sPointY);
@@ -209,7 +209,7 @@ export default function sketch (p) {
       p.image(heightmap, p.width / 2, p.height / 2, p.windowHeight * (mWidth / mHeight), p.windowHeight);
     }
     if (debug) { // Get debug information and test database
-      mapName = 'Map 1';
+      mapName = (mapName === 'New Map') ? 'Map 1' : mapName;
       p.textSize(24);
       p.text('Name: ' + mapName, 0, 30);
       p.text('Size: ' + size, 0, 60);
@@ -236,7 +236,8 @@ export default function sketch (p) {
         squiggliness = 10;
         mountainSmoothness = 30;
       } else if (mapName === 'Map 2' && p.mouseIsPressed && currentUser) {
-        const map1 = dbRead();
+        const map1 = dbRead('Map 1');
+        console.log(map1);
         mapName = map1.mapName;
         size = map1.size;
         coastSmoothness = map1.coastSmoothness;

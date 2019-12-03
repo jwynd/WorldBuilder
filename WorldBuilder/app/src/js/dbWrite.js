@@ -1,11 +1,18 @@
 // dbWrite
-/* global size coastSmoothness inland beachHeight coastUniformity numRivers numMountainRanges widthMountainRange squiggliness mountainSmoothness img mapName */
 import Firebase from '../Firebase.js';
+import {
+  mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCircumference,
+  inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
+  squiggliness, mountainSmoothness, worldSeed
+} from './main.js';
 
 function dbWrite () {
   var user = Firebase.auth().currentUser;
   if (user === null) return null;
   var db = Firebase.firestore();
+  if (mapName === undefined) {
+    console.error('imported variable mapName in dbWrite undefined');
+  }
   const data = {
     mapName: mapName,
     size: size,
@@ -18,7 +25,11 @@ function dbWrite () {
     widthMountainRanges: widthMountainRange,
     squiggliness: squiggliness,
     mountainSmoothness: mountainSmoothness,
-    img: img
+    mWidth: mWidth,
+    mHeight: mHeight,
+    islandArea: islandArea,
+    islandCircumference: islandCircumference,
+    worldSeed: worldSeed
   };
   db.collection(user.uid).doc(mapName).set(data);
 }
