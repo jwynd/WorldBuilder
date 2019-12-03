@@ -53,10 +53,7 @@ class Menu extends React.Component {
 
   handleSettingClick=()=>{
     this.setState( {showModalMenu: false} );
-    this.ControlledPopupElement.current.openModal();
-    console.log('Clicked');
-    this.newmap.bind(this);
-    this.forceUpdate();
+    this.ControlledPopupElement.current.openModal()
   }
 
   render() {
@@ -69,10 +66,12 @@ class Menu extends React.Component {
         <Modal show={this.state.showModalMenu} onHide={close} id="menu-left" animation={true}>
             <Modal.Body>
               <ListGroup>
-                <ListGroup.Item><a onClick={this.handleSettingClick}>New Map</a></ListGroup.Item>
+                <ListGroup.Item><a onClick={this.newmap.bind(this)}>New Map</a></ListGroup.Item>
                 <ListGroup.Item><a>Load</a></ListGroup.Item>
                 <ListGroup.Item><a>Save</a></ListGroup.Item>
                 {/* <ListGroup.Item><a onClick={ControlledPopup.pop.bind(this)}>Setting</a></ListGroup.Item> */}
+                <ListGroup.Item><a onClick={this.handleSettingClick}>Setting</a></ListGroup.Item>
+
               </ListGroup>
             </Modal.Body>
         </Modal>

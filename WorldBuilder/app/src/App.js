@@ -6,12 +6,15 @@ import Menu from './menu.js';
 import Login from './Login.js';
 import Map from './Map.js';
 import Setting from './Setting.js';
+import { setWorldSeed } from './js/main.js';
+import Random from './js/random.js';
 class App extends React.Component {
   constructor(props){
     super(props)
     this.state={
       seed: ''
     }
+    this.rand = new Random();
   }
   componentWillMount () {
 
@@ -31,12 +34,14 @@ class App extends React.Component {
     this.setState({
       seed: document.getElementById('worldseed').value
     })
+    setWorldSeed()
     this.forceUpdate()
   }
   setSelfState1 = () => {
     this.setState({
       seed: document.getElementById('worldseed1').value
     })
+    setWorldSeed()
     this.forceUpdate()
   }
   componentDidMount(){
@@ -70,7 +75,6 @@ class App extends React.Component {
                 <input type="text" hidden id="numRivers"/>
                 <input type="text" hidden id="numMountainRanges"/>
                 <input type="text" hidden id="widthMountainRange"/>
-                <input type="text" hidden id="maxHeightMountainRange"/>
                 <input type="text" hidden id="squiggliness"/>
                 <input type="text" hidden id="mountainSmoothness"/>
                 <input type="text" hidden id="islandArea"/>

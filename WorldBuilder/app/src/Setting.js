@@ -207,7 +207,7 @@ class Setting extends React.Component {
           onChange={value => this.setState({mountainSmoothness: value})}
           //onChangeComplete={value => console.log(value)}
           />
-        <a className="bnt-finish" onClick={this.newset()}>Finish</a>
+        <a className="bnt-finish" onClick={this.newset.bind(this)}>Finish</a>
         </Scrollbars>
       </form>
 

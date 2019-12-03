@@ -22,6 +22,12 @@ export var mWidth = 1280;
 export var mHeight = 720;
 export var worldSeed = 0xa127a3a25f;
 
+const rand = new Random(worldSeed);
+
+export function setWorldSeed (value) {
+  worldSeed = Math.ceil(rand.callRandom(1, 1000000));
+}
+
 export function setWidth (value) {
   mWidth = value;
 }
@@ -214,7 +220,6 @@ export default function sketch (p) {
     console.log(maxTurnAngle);
 
     p.createCanvas(p.windowWidth, p.windowHeight);
-    const rand = new Random(worldSeed);
     // console.log('Random number: ' + rand.callRandom());
     m = new Map(mWidth, mHeight, rand);
     p.randomSeed(worldSeed);
@@ -232,7 +237,7 @@ export default function sketch (p) {
 
     r = new RiverAgent(rand, numRivers);
     console.log(r);
-    const l = [c, b, be, ma];
+    const l = [c, b, be];
     console.log('before generation');
     for (let i = 0; i < l.length; i++) {
       console.log(i);
