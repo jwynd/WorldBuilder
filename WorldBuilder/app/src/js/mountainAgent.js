@@ -48,14 +48,17 @@ class MountainAgent {
 
   // true -> bad start, pick new one
   checkStart (map) {
+    // console.log('enter checkstart');
     for (let i = -this.width; i < this.width + 1; i++) {
       for (let j = -this.width; j < this.width + 1; j++) {
         if(this.distance(Math.round(this.x + i), Math.round(this.y + j), Math.round(this.x), Math.round(this.y)) < this.width && this.checkPoint(map, Math.round(this.x + i), Math.round(this.y + j)) !== null 
             && map.point(Math.round(this.x + i), Math.round(this.y + j)).getElevation() < this.minElevation) {
+          /// console.log('return checkstart true');
           return true;
         }
       }
     }
+    // console.log('return checkstart false');
     return false;
   }
 
@@ -64,15 +67,23 @@ class MountainAgent {
   }
 
   generate (map) {
+    // console.log('reached generate');
     let mountainCount;
     for (mountainCount = 0; mountainCount < this.numberOfMountains; mountainCount++) {
       this.pickRandomStart(map);
       this.direction = this.rand.callRandom(0, 360);
+      let count = 0;
       while (this.checkPoint(map, this.x, this.y) === null || map.point(this.x, this.y).getElevation() < this.minElevation || this.checkStart(map)) {
         // if our starting point is invalid pick a new one
         this.pickRandomStart(map);
+        ++count;
+        // console.log(count);
+        if (count > 1000) {
+          console.error('max mountain attempts reached, aborting range');
+          return;
+        }
       }
-
+      // console.log('exited first while loop');
       let reachedEdge = NO;
       this.resetTurnTimer();
       let timeSinceTurn = 0;

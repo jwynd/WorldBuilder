@@ -12,9 +12,20 @@ import { mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCirc
          setCoastUniformity, setNumRivers, setNumMountainRanges, setWidthMountainRange,
          setSquiggliness, setMountainSmoothness, setMaxHeightMountainRange } from './js/main.js';
 
+function clamp (val, min, max){
+  let result = val;
+  if(val < min) result = min;
+  if(val > max) result = max;
+  return Math.round(result);
+}
+
 class Setting extends React.Component {
   constructor(props) {
     super(props);
+    // const sp = clamp(size / Math.ceil(Math.log2(mWidth * mHeight)), 1, 100);
+    // const csp = clamp(coastSmoothness / size, 1, 100);
+    const wmrp = clamp(widthMountainRange / (islandCircumference / 3), 1, 100);
+    const mhmrp = clamp(maxHeightMountainRange / 255, 1, 100);
     this.state = {
       mapName: mapName,
       islandArea: islandArea,
@@ -31,8 +42,8 @@ class Setting extends React.Component {
       coastSmoothnessPercent: coastSmoothness / size,
       numRiverPercentage: numRivers / .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)),
       numMountainRanges: numMountainRanges,
-      widthMountainRangesPercentage: widthMountainRange / (islandCircumference / 3),
-      maxHeightMountainRangePercentage: maxHeightMountainRange / 255,
+      widthMountainRangesPercentage: wmrp,
+      maxHeightMountainRangePercentage: mhmrp,
     }
     
   }
@@ -55,10 +66,9 @@ class Setting extends React.Component {
     setMaxHeightMountainRange(Math.max(maxHeightMountainRange, 150));
     setSquiggliness(this.state.squiggliness);
     setMountainSmoothness(this.state.mountainSmoothness);
-
     //worldSeed = this.state.worldSeed;
-
-    //this.props.setParentState();
+    
+    this.props.setParentState();
   }
 
     setName = (e) => {

@@ -228,10 +228,14 @@ export default function sketch (p) {
     be = new BeachAgent(inland, beachHeight / 10, octave);
     ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness, 1, rand);
+    console.log(ma);
 
     r = new RiverAgent(rand, numRivers);
+    console.log(r);
     const l = [c, b, be, ma];
+    console.log('before generation');
     for (let i = 0; i < l.length; i++) {
+      console.log(i);
       l[i].generate(m);
     }
     console.log(m.getPointsOfType('mountain'));
