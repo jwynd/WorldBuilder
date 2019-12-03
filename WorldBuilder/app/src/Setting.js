@@ -34,6 +34,7 @@ class Setting extends React.Component {
   }
   
   newset () {
+    document.getElementById('size').value = this.state.size;
     document.getElementById('mWidth').value = this.state.width;
     document.getElementById('mHeight').value = this.state.height;
     document.getElementById('mapName').value = this.state.mapName;
@@ -75,72 +76,107 @@ class Setting extends React.Component {
         <input type="text" hidden id="mHeight" value={720}/>
         <Scrollbars
                 style={{width: 450, height: '95vh' }}>
-            
-        <p> Set Map Size </p>
+
+      <p> Set Map Name  </p>
+          <input type="text" name="worldSeed" onChange={e => this.setName(e)}/>
+    
+      <p></p>
+
+      <p> Set Map Seed  </p>
+          <input type="numbers" name="worldSeed" onChange={e => this.setSeed(e)}/>
+    
+      <p></p>
+
+      <p> Set Map Width </p>
+        <InputRange
+          maxValue={2000}
+          minValue={500}
+          value={this.state.width} //Default value
+          onChange={value => this.setState({ width: value })} //Stores user input
+          onChangeComplete={value => console.log(value)}
+        />
+
+      <p> Set Map Height </p>
+        <InputRange
+          maxValue={1500}
+          minValue={100}
+          value={this.state.height} //Default value
+          onChange={value => this.setState({ height: value })} //Stores user input
+          onChangeComplete={value => console.log(value)}
+        />
+
+      <p> Set Map Size </p>
         <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.Size}
-          
-          onChange={value => this.setState({ Size: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.sizePercent} //Default value
+          onChange={value => this.setState({ sizePercent: value })} //Stores user input
+          onChangeComplete={value => console.log(value)}
+        />
 
      <p> Smoothness of Coast </p>
          <InputRange
-          maxValue={8}
+          maxValue={100}
           minValue={0}
-          value={this.state.ConastSmoothness}
-          onChange={value => this.setState({ ConastSmoothness: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.coastSmoothnessPercent}
+          onChange={value => this.setState({ coastSmoothnessPercent: value })}
+          onChangeComplete={value => console.log(value)}
+        />
 
     <p> Set inland Number </p>
           <InputRange
           maxValue={3}
           minValue={1}
-          value={this.state.Inland}
-          onChange={value => this.setState({ Inland: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.inland}
+          onChange={value => this.setState({inland: value})}
+          onChangeComplete={value => console.log(value)}
+        />
 
 
      <p> Set Beach Height </p>
          <InputRange
           maxValue={10}
           minValue={0}
-          value={this.state.BeachHeight}
-          onChange={value => this.setState({ BeachHeight: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.beachHeight}
+          onChange={value => this.setState({beachHeight: value})}
+          onChangeComplete={value => console.log(value)}
+          />
      
     <p> Set Coast Uniformity</p>
           <InputRange
-          maxValue={30}
+          maxValue={3}
           minValue={0}
-          value={this.state.CoastUniformity}
-          onChange={value => this.setState({ CoastUniformity: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.coastUniformity}
+          onChange={value => this.setState({coastUniformity: value})}
+          onChangeComplete={value => console.log(value)}
+          />
 
-    <p> Set Number of Rivers </p>
+    <p> Set Density of Rivers </p>
          <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.NumRivers}
-          onChange={value => this.setState({ NumRivers: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.numRiverPercentage}
+          onChange={value => this.setState({numRiverPercentage: value})}
+          onChangeComplete={value => console.log(value)}
+          />
 
-    <p> Set Number of Mountain Ranges </p>
+    <p> Set Density of Mountain Ranges </p>
          <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.NumMountainRanges}
-          onChange={value => this.setState({ NumMountainRanges: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.numMountainRanges}
+          onChange={value => this.setState({numMountainRanges: value})}
+          onChangeComplete={value => console.log(value)}
+          />
 
-   <p> Set Mountain Width Range </p>
+   <p> Set Mountain Range Width </p>
          <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.WidthMountainRange}
-          onChange={value => this.setState({ WidthMountainRange: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.widthMountainRangesPercentage}
+          onChange={value => this.setState({widthMountainRangesPercentage: value})}
+          onChangeComplete={value => console.log(value)}
+          />
 
 
     <p> Set Squiggliness </p>
@@ -148,16 +184,18 @@ class Setting extends React.Component {
           maxValue={90}
           minValue={0}
           value={this.state.squiggliness}
-          onChange={value => this.setState({ squiggliness: value })}
-          onChangeComplete={value => console.log(value)} />
+          onChange={value => this.setState({squiggliness: value})}
+          onChangeComplete={value => console.log(value)}
+          />
 
     <p> Set Mountain Smoothness </p>
         <InputRange
           maxValue={100}
           minValue={0}
-          value={this.state.MountainSmoothness}
-          onChange={value => this.setState({MountainSmoothness: value })}
-          onChangeComplete={value => console.log(value)} />
+          value={this.state.mountainSmoothness}
+          onChange={value => this.setState({mountainSmoothness: value})}
+          onChangeComplete={value => console.log(value)}
+          />
         <a className="bnt-finish" onClick={this.newset.bind(this)}>Finish</a>
         </Scrollbars>
       </form>
