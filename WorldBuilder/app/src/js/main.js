@@ -274,6 +274,19 @@ export default function sketch (p) {
         widthMountainRange = 2;
         squiggliness = 10;
         mountainSmoothness = 30;
+      } else if (mapName === 'Map 2' && p.mouseIsPressed) {
+        const map1 = dbRead();
+        mapName = map1.mapName;
+        size = map1.size;
+        coastSmoothness = map1.coastSmoothness;
+        inland = map1.inland;
+        beachHeight = map1.beachHeight;
+        coastUniformity = map1.coastUniformity;
+        numRivers = map1.numRivers;
+        numMountainRanges = map1.numMountainRanges;
+        widthMountainRange = map1.widthMountainRange;
+        squiggliness = map1.squiggliness;
+        mountainSmoothness = map1.mountainSmoothness;
       }
     }
   };
