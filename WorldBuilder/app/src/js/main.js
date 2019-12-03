@@ -55,7 +55,7 @@ export var heightmap;
 // Approaching the ceiling (ceiling(lg(mWidth * mHeight)) and ceiling(lg(mWidth * mHeight))-1
 // results in the same island with two agents) too closely leads to suicides and no growth if few enough agents
 
-export var size = 16;
+export var size = 17;
 
 export function setSize (value) {
   size = value;
@@ -107,7 +107,7 @@ export function setBeachHeight (value) {
 // User parameter (abstraction for octave)
 // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
 // 0 <= coastUniformity <= 3
-export var coastUniformity = 3;
+export var coastUniformity = 2;
 
 export function setCoastUniformity (value) {
   coastUniformity = value;
@@ -118,7 +118,7 @@ export function setCoastUniformity (value) {
 // User parameter (number of rivers)
 // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
 // Not an option if there's no mountains
-export var numRivers = 0;
+export var numRivers = 10;
 
 export function setNumRivers (value) {
   numRivers = value;
@@ -129,7 +129,7 @@ export function setNumRivers (value) {
 // User parameter
 // Set number of mountain ranges
 // 0 <= numMountainRanges <= 10
-export var numMountainRanges = 10;
+export var numMountainRanges = 15;
 
 export function setNumMountainRanges (value) {
   numMountainRanges = value;
@@ -195,7 +195,7 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = Math.ceil((islandArea / widthMountainRange) * 0.5);
+  const mountainTokens = Math.ceil((islandArea / widthMountainRange) * 0.02);
 
   // Controls height of mountain peaks
   const maxPeak = maxHeightMountainRange;
@@ -237,7 +237,7 @@ export default function sketch (p) {
 
     r = new RiverAgent(rand, numRivers);
     console.log(r);
-    const l = [c, b, be];
+    const l = [c, b, be, ma, r];
     console.log('before generation');
     for (let i = 0; i < l.length; i++) {
       console.log(i);

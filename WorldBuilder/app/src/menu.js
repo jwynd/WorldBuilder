@@ -70,7 +70,7 @@ class Menu extends React.Component {
                 <ListGroup.Item><a>Load</a></ListGroup.Item>
                 <ListGroup.Item><a>Save</a></ListGroup.Item>
                 {/* <ListGroup.Item><a onClick={ControlledPopup.pop.bind(this)}>Setting</a></ListGroup.Item> */}
-                <ListGroup.Item><a onClick={this.handleSettingClick}>Setting</a></ListGroup.Item>
+                {/* <ListGroup.Item><a onClick={this.handleSettingClick}>Setting</a></ListGroup.Item> */}
 
               </ListGroup>
             </Modal.Body>
