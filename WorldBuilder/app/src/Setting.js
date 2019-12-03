@@ -32,28 +32,34 @@ class Setting extends React.Component {
     }
     
   }
+  
   newset () {
-    console.log(mWidth);
-    mWidth = this.state.width;
-    mHeight = this.state.height;
-    mapName = this.state.mapName;
-    size = this.state.sizePercent * Math.ceil(Math.log2(mWidth * mHeight));
-    coastSmoothness = this.state.coastSmoothnessPercent * size;
-    islandArea = Math.pow(2, size);
-    islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
-    inland = this.state.inland;
-    beachHeight = this.state.beachHeight;
-    coastUniformity = this.state.coastUniformity;
-    numRivers = this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI));
-    numMountainRanges = this.state.numMountainRanges;
-    widthMountainRange = this.state.numMountainRanges * (islandCircumference / 3);
-    widthMountainRange = Math.max(islandCircumference / 10, widthMountainRange);
-    squiggliness = this.state.squiggliness;
-    mountainSmoothness = this.state.mountainSmoothness;
-    //worldSeed = this.state.worldSeed;
+    document.getElementById('mWidth').value = this.state.width;
+    document.getElementById('mHeight').value = this.state.height;
+    document.getElementById('mapName').value = this.state.mapName;
+    document.getElementById('size').value  = this.state.sizePercent * Math.ceil(Math.log2(this.state.width * this.state.height));
+    document.getElementById('coastSmoothness').value  = this.state.coastSmoothnessPercent * this.state.size;
+    document.getElementById('islandArea').value  = Math.pow(2, this.state.size);
+    document.getElementById('islandCircumference').value  = 2 * Math.PI * Math.sqrt(this.state.islandArea / Math.PI);
+    document.getElementById('inland').value = this.state.inland;
+    document.getElementById('beachHeight').value  = this.state.beachHeight;
+    document.getElementById('coastUniformity').value  = this.state.coastUniformity;
+    document.getElementById('numRivers').value  = this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(this.state.islandArea/Math.PI));
+    document.getElementById('numMountainRanges').value  = this.state.numMountainRanges;
+    document.getElementById('widthMountainRange').value = this.state.numMountainRanges * (this.state.islandCircumference / 3);
+    widthMountainRange = Math.max(this.state.islandCircumference / 10, this.state.widthMountainRange);
+    document.getElementById('squiggliness').value  = this.state.squiggliness;
+    document.getElementById('mountainSmoothness').value = this.state.mountainSmoothness;
+    document.getElementById('worldSeed').value = this.state.worldSeed;
 
     this.props.setParentState();
   }
+  
+    setSeed = (e) => {
+      this.setState({
+        worldSeed: e.target.value
+      })
+    }
 
     setName = (e) => {
       this.setState({
@@ -72,6 +78,11 @@ class Setting extends React.Component {
 
       <p> Set Map Name  </p>
           <input type="text" name="worldSeed" onChange={e => this.setName(e)}/>
+    
+      <p></p>
+
+      <p> Set Map Seed  </p>
+          <input type="numbers" name="worldSeed" onChange={e => this.setSeed(e)}/>
     
       <p></p>
 

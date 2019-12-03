@@ -62,8 +62,13 @@ class App extends React.Component {
           <div className ="App">
               <header className="App-header">
 
+                <input type="text" hidden id="mWidth"/>
+                <input type="text" hidden id="mHeight"/>
+                <input type="text" hidden id="mapName"/>
                 <input type="text" hidden id="size"/>
-                <input type="text" hidden id="ConastSmoothness"/>
+                <input type="text" hidden id="coastSmoothness"/>
+                <input type="text" hidden id="islandArea"/>
+                <input type="text" hidden id="islandCircumference"/>
                 <input type="text" hidden id="inland"/>
                 <input type="text" hidden id="beachHeight"/>
                 <input type="text" hidden id="coastUniformity"/>
@@ -72,7 +77,7 @@ class App extends React.Component {
                 <input type="text" hidden id="widthMountainRange"/>
                 <input type="text" hidden id="squiggliness"/>
                 <input type="text" hidden id="mountainSmoothness"/>
-                <input type="text" hidden id="islandArea"/>
+                <input type="text" hidden id="worldSeed"/>
         
                   <div className="fill"></div>
                   <h1 className="App-title">WorldBuilder</h1>
