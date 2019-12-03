@@ -22,9 +22,21 @@ export var mWidth = 1280;
 export let mHeight = 720;
 export let worldSeed = 0xa127a3a25f;
 
+export function setWidth (value) {
+  mWidth = value;
+}
+
+export function setHeight (value) {
+  mHeight = value;
+}
+
 // User parameter
 // Must be alphanumeric and between 1 and 30 characters
 export let mapName = 'New Map';
+
+export function setName (value) {
+  mHeight = value;
+}
 
 // Initially empty variable used to access heightmap once map is generated
 export let heightmap;
@@ -39,16 +51,32 @@ export let heightmap;
 
 export let size = 16;
 
+export function setSize (value) {
+  size = value;
+}
+
 // User parameter (abstraction for number of agents)
 // 0 <= smoothness < size
 // 7-9 is when the star pattern usually starts developing (should probably stick below 7 or 8)
 export let coastSmoothness = 4;
 
+export function setCoastSmoothness (value) {
+  coastSmoothness = value;
+}
+
 // letraint Parameters
 // Used to set the limits for some of the following variables
 export let islandArea = Math.pow(2, size);
 
+export function setIslandArea (value) {
+  islandArea = value;
+}
+
 export let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
+
+export function setIslandCircumference (value) {
+  islandCircumference = value;
+}
 
 // BeachAgent parameters
 
@@ -57,15 +85,27 @@ export let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
 // 1 <= inland <= 3
 export let inland = 3;
 
+export function setInland (value) {
+  inland = value;
+}
+
 // User parameter (Abstraction for beachNoiseMax)
 // Controls how high beaches can reach
 // 0 <= beachHeight <= 10
 export let beachHeight = 5;
 
+export function setBeachHeight (value) {
+  beachHeight = value;
+}
+
 // User parameter (abstraction for octave)
 // Controls how uniform the coastline is (i.e. is it one connected beach or many disconnected beaches?)
 // 0 <= coastUniformity <= 3
 export let coastUniformity = 3;
+
+export function setCoastUniformity (value) {
+  coastUniformity = value;
+}
 
 // RiverAgent parameters
 
@@ -74,6 +114,10 @@ export let coastUniformity = 3;
 // Not an option if there's no mountains
 export let numRivers = 0;
 
+export function setNumRivers (value) {
+  numRivers = value;
+}
+
 // MountainAgent parameters
 
 // User parameter
@@ -81,19 +125,35 @@ export let numRivers = 0;
 // 0 <= numMountainRanges <= 10
 export let numMountainRanges = 10;
 
+export function setNumMountainRanges (value) {
+  numMountainRanges = value;
+}
+
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
 export let widthMountainRange = 10;
+
+export function setWidthMountainRange (value) {
+  widthMountainRange = value;
+}
 
 // User Parameter
 // 0 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
 export let squiggliness = 1;
 
+export function setSquiggliness (value) {
+  squiggliness = value;
+}
+
 // User parameter
 // Controls how quickly mountains drop to the ground
 // 0 <= smoothness <= 100
 export let mountainSmoothness = 50;
+
+export function setMountainSmoothness (value) {
+  mountainSmoothness = value;
+}
 
 export default function sketch (p) {
   let heightmap;

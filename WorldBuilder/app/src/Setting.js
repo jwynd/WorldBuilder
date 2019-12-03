@@ -7,7 +7,10 @@ import 'react-rangeslider/lib/index.css';
 import 'react-input-range/lib/css/index.css';
 import { mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCircumference,
          inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
-         squiggliness, mountainSmoothness, worldSeed} from './js/main.js';
+         squiggliness, mountainSmoothness, worldSeed, setWidth, setHeight, setName, setSize,
+         setCoastSmoothness, setIslandArea, setIslandCircumference, setInland, setBeachHeight,
+         setCoastUniformity, setNumRivers, setNumMountainRanges, setWidthMountainRange,
+         setSquiggliness, setMountainSmoothness} from './js/main.js';
 
 class Setting extends React.Component {
   constructor(props) {
@@ -34,22 +37,22 @@ class Setting extends React.Component {
   }
   newset () {
     console.log(mWidth);
-    mWidth = this.state.width;
-    mHeight = this.state.height;
-    mapName = this.state.mapName;
-    size = this.state.sizePercent * Math.ceil(Math.log2(mWidth * mHeight));
-    coastSmoothness = this.state.coastSmoothnessPercent * size;
-    islandArea = Math.pow(2, size);
-    islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
-    inland = this.state.inland;
-    beachHeight = this.state.beachHeight;
-    coastUniformity = this.state.coastUniformity;
-    numRivers = this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI));
-    numMountainRanges = this.state.numMountainRanges;
-    widthMountainRange = this.state.numMountainRanges * (islandCircumference / 3);
-    widthMountainRange = Math.max(islandCircumference / 10, widthMountainRange);
-    squiggliness = this.state.squiggliness;
-    mountainSmoothness = this.state.mountainSmoothness;
+    setWidth(this.state.width);
+    setHeight(this.state.height);
+    setName(this.state.mapName);
+    setSize(this.state.sizePercent * Math.ceil(Math.log2(mWidth * mHeight)));
+    setCoastSmoothness(this.state.coastSmoothnessPercent * size);
+    setIslandArea(Math.pow(2, size));
+    setIslandCircumference(2 * Math.PI * Math.sqrt(islandArea / Math.PI));
+    setInland(this.state.inland);
+    setBeachHeight(this.state.beachHeight);
+    setCoastUniformity(this.state.coastUniformity);
+    setNumRivers(this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)));
+    setNumMountainRanges(this.state.numMountainRanges);
+    setWidthMountainRange(this.state.numMountainRanges * (islandCircumference / 3));
+    setWidthMountainRange(Math.max(islandCircumference / 10, widthMountainRange));
+    setSquiggliness(this.state.squiggliness);
+    setMountainSmoothness(this.state.mountainSmoothness);
     //worldSeed = this.state.worldSeed;
 
     this.props.setParentState();
