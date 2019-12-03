@@ -6,11 +6,12 @@ import Menu from './menu.js';
 import Login from './Login.js';
 import Map from './Map.js';
 import Setting from './Setting.js';
+import {worldSeed} from './js/main.js';
 class App extends React.Component {
   constructor(props){
     super(props)
     this.state={
-      seed: ''
+      seed: 0
     }
   }
   componentWillMount () {
@@ -28,6 +29,15 @@ class App extends React.Component {
     save_link.dispatchEvent(event)
   }
   setSelfState = () => {
+    this.setState({
+      seed: document.getElementById('worldSeed').value
+    })
+    this.forceUpdate()
+  }
+  setSelfState1 = () => {
+    this.setState({
+      seed: document.getElementById('worldSeed').value
+    })
     this.forceUpdate()
   }
   componentDidMount(){

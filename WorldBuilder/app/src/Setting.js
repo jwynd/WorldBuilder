@@ -30,10 +30,6 @@ class Setting extends React.Component {
       numMountainRanges: numMountainRanges,
       widthMountainRangesPercentage: widthMountainRange * 100 / (islandCircumference / 3),
     }
-
-    console.log('islandArea is ' + this.state.islandArea);
-    console.log('numMountainRange is ' + numMountainRanges)
-    console.log('numMountainRange percentage is ' + this.state.numMountainRangesPercentage)
     
   }
     newset=()=>{
