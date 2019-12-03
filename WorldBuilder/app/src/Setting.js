@@ -22,8 +22,8 @@ class Setting extends React.Component {
       squiggliness: squiggliness,
       mountainSmoothness: mountainSmoothness,
       worldSeed: worldSeed,
-      widthPercent: mWidth * 100 / 2000,
-      heightPercent: mHeight * 100 / 1500,
+      width: mWidth,
+      height: mHeight,
       sizePercent: size * 100 / Math.ceil(Math.log2(mWidth * mHeight)),
       coastSmoothnessPercent: coastSmoothness * 100 / size,
       numRiverPercentage: numRivers * 100 / .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI)),
@@ -37,8 +37,16 @@ class Setting extends React.Component {
     
   }
     newset=()=>{
-      
+      mWidth = this.state.width
+      mHeight = this.state.height
+
       this.props.setParentState()
+    }
+
+    setSeed = (e) => {
+      this.setState({
+        worldSeed: e.target.value
+      })
     }
 
   render() {
@@ -50,26 +58,26 @@ class Setting extends React.Component {
         <Scrollbars
                 style={{width: 450, height: '95vh' }}>
 
-      <p> Set Map Name </p>
-
-      <p> Set Map Seed </p>
-
+      <p> Set Map Seed  </p>
+          <input type="number" name="worldSeed" onChange={e => this.setSeed(e)}/>
+    
+      <p></p>
 
       <p> Set Map Width </p>
         <InputRange
-          maxValue={100}
-          minValue={0}
-          value={this.state.widthPercent} //Default value
-          onChange={value => this.setState({ widthPercent: value })} //Stores user input
+          maxValue={2000}
+          minValue={500}
+          value={this.state.width} //Default value
+          onChange={value => this.setState({ width: value })} //Stores user input
           //onChangeComplete={value => console.log(value)}
         />
 
       <p> Set Map Height </p>
         <InputRange
-          maxValue={100}
-          minValue={0}
-          value={this.state.heightPercent} //Default value
-          onChange={value => this.setState({ heightPercent: value })} //Stores user input
+          maxValue={1500}
+          minValue={100}
+          value={this.state.height} //Default value
+          onChange={value => this.setState({ height: value })} //Stores user input
           //onChangeComplete={value => console.log(value)}
         />
 

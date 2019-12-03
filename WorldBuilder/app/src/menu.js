@@ -40,7 +40,7 @@ class Menu extends React.Component {
     loading.setAttribute('class', 'i-loading')
     loading.style.display = 'block'
     setTimeout(() => {
-      this.props.setParentState1()
+      this.props.setParentState()
     }, 1000)
   }
   getRamNumber=()=>{
