@@ -79,11 +79,11 @@ export let numRivers = 0;
 // User parameter
 // Set number of mountain ranges
 // 0 <= numMountainRanges <= 10
-export let numMountainRanges = 1;
+export let numMountainRanges = 10;
 
 // User parameter
 // islandCircumference / 10 <= widthMountainRange <= islandCircumference / 3
-export let widthMountainRange = 30;
+export let widthMountainRange = 10;
 
 // User parameter
 // 150 <= heightMountainRange <= 255
@@ -92,7 +92,7 @@ export let heightMountainRange = 200;
 // User Parameter
 // 1 <= squiggliness <= 90
 // Equal to minturnangle, maxturnangle = 2*squiggliness
-export let squiggliness = 1;
+export let squiggliness = 50;
 
 // User parameter
 // Controls how quickly mountains drop to the ground
@@ -125,14 +125,14 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = (islandArea / widthMountainRange) * 0.5;
+  const mountainTokens = (islandArea / widthMountainRange) * 0.02;
 
   // Controls height of mountain peaks
   const maxPeak = heightMountainRange;
   const minPeak = maxPeak * 0.7;
 
   // Controls how long an agent walks before turning
-  const maxWalkTime = (1 - (squiggliness / 100)) * mountainTokens;
+  const maxWalkTime = (1 - (squiggliness / 100)) * mountainTokens * 0.2;
   const minWalkTime = maxWalkTime * 0.5;
 
   // Turn angle in degrees
