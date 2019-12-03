@@ -121,19 +121,19 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = 150;
+  const mountainTokens = (islandArea / widthMountainRange) * 0.5;
 
   // Controls height of mountain peaks
-  const maxPeak = 220;
-  const minPeak = maxPeak * 0.5;
+  const maxPeak = 10;
+  const minPeak = maxPeak * 0.7;
 
   // Controls how long an agent walks before turning
   const maxWalkTime = (1 - (squiggliness / 100)) * mountainTokens;
   const minWalkTime = maxWalkTime * 0.5;
 
   // Turn angle in degrees
-  const minTurnAngle = 10;
-  const maxTurnAngle = 70;
+  const minTurnAngle = squiggliness;
+  const maxTurnAngle = squiggliness * 2;
 
   p.setup = function () {
     p.createCanvas(p.windowWidth, p.windowHeight);
