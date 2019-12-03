@@ -32,16 +32,32 @@ class Setting extends React.Component {
     }
     
   }
-    newset=()=>{
-      mWidth = this.state.width
-      mHeight = this.state.height
+  newset () {
+    console.log(mWidth);
+    mWidth = this.state.width;
+    mHeight = this.state.height;
+    mapName = this.state.mapName;
+    size = this.state.sizePercent * Math.ceil(Math.log2(mWidth * mHeight));
+    coastSmoothness = this.state.coastSmoothnessPercent * size;
+    islandArea = Math.pow(2, size);
+    islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
+    inland = this.state.inland;
+    beachHeight = this.state.beachHeight;
+    coastUniformity = this.state.coastUniformity;
+    numRivers = this.state.numRiverPercentage * .05 * (2 * Math.PI * Math.sqrt(islandArea/Math.PI));
+    numMountainRanges = this.state.numMountainRanges;
+    widthMountainRange = this.state.numMountainRanges * (islandCircumference / 3);
+    widthMountainRange = Math.max(islandCircumference / 10, widthMountainRange);
+    squiggliness = this.state.squiggliness;
+    mountainSmoothness = this.state.mountainSmoothness;
+    //worldSeed = this.state.worldSeed;
 
-      this.props.setParentState()
-    }
+    this.props.setParentState();
+  }
 
-    setSeed = (e) => {
+    setName = (e) => {
       this.setState({
-        worldSeed: e.target.value
+        mapName: e.target.value
       })
     }
 
@@ -54,8 +70,8 @@ class Setting extends React.Component {
         <Scrollbars
                 style={{width: 450, height: '95vh' }}>
 
-      <p> Set Map Seed  </p>
-          <input type="number" name="worldSeed" onChange={e => this.setSeed(e)}/>
+      <p> Set Map Name  </p>
+          <input type="text" name="worldSeed" onChange={e => this.setName(e)}/>
     
       <p></p>
 
@@ -168,7 +184,7 @@ class Setting extends React.Component {
           onChange={value => this.setState({mountainSmoothness: value})}
           //onChangeComplete={value => console.log(value)}
           />
-        <a className="bnt-finish" onClick={this.newset.bind(this)}>Finish</a>
+        <a className="bnt-finish" onClick={this.newset()}>Finish</a>
         </Scrollbars>
       </form>
 

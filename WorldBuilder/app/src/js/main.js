@@ -18,7 +18,7 @@ import Random from './random.js';
 // User parameters
 // 0 <= mWidth <= 2000
 // 0 <= mHeight <= 2000
-export let mWidth = 1280;
+export var mWidth = 1280;
 export let mHeight = 720;
 export let worldSeed = 0xa127a3a25f;
 

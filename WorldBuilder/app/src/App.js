@@ -6,12 +6,11 @@ import Menu from './menu.js';
 import Login from './Login.js';
 import Map from './Map.js';
 import Setting from './Setting.js';
-import {worldSeed} from './js/main.js';
 class App extends React.Component {
   constructor(props){
     super(props)
     this.state={
-      seed: 0
+      seed: ''
     }
   }
   componentWillMount () {
@@ -30,13 +29,13 @@ class App extends React.Component {
   }
   setSelfState = () => {
     this.setState({
-      seed: document.getElementById('worldSeed').value
+      seed: document.getElementById('worldseed').value
     })
     this.forceUpdate()
   }
   setSelfState1 = () => {
     this.setState({
-      seed: document.getElementById('worldSeed').value
+      seed: document.getElementById('worldseed1').value
     })
     this.forceUpdate()
   }
