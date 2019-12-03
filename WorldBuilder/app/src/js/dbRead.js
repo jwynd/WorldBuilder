@@ -1,6 +1,10 @@
 // dbWrite
 import Firebase from '../Firebase.js';
-
+import {
+  mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCircumference,
+  inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
+  squiggliness, mountainSmoothness, worldSeed
+} from './main.js';
 function dbRead (mapName) {
   var user = Firebase.auth().currentUser;
   if (user === null) return null;
