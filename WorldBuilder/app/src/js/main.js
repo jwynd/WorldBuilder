@@ -170,8 +170,11 @@ if(document.getElementById('size').value){
     heightmap = p.createImage(mWidth, mHeight);
     heightmap.loadPixels();
 
-    for (let i = 0; i < heightmap.width; ++i) {
-      for (let j = 0; j < heightmap.height; ++j) {
+    for (let i = 1; i < heightmap.width - 1; ++i) {
+      for (let j = 1; j < heightmap.height - 1; ++j) {
+        if(m.point(i, j) === null) {
+          continue;
+        }
         const raw = m.point(i, j).getBiome();
         if (raw !== 'ocean' && raw !== 'mountain') {
          // smoothPoint(m, i, j);
@@ -268,35 +271,35 @@ if(document.getElementById('size').value){
     const diff = 0.75;
     // console.log(map.point(i+1, j).getElevation() - elevation);
 
-    if (elevation < map.point(i + 1, j).getElevation() && map.point(i + 1, j).getElevation() - elevation > diff) {
+    if (map.point(i + 1, j) !== null && elevation < map.point(i + 1, j).getElevation() && map.point(i + 1, j).getElevation() - elevation > diff) {
       score++;
-    } else if (elevation - map.point(i + 1, j).getElevation() > diff) {
+    } else if (map.point(i + 1, j) !== null && elevation - map.point(i + 1, j).getElevation() > diff) {
       score--;
     }
-    if (elevation < map.point(i + 1, j + 1).getElevation() && map.point(i + 1, j + 1).getElevation() - elevation > diff) {
+    if (map.point(i + 1, j + 1) !== null && elevation < map.point(i + 1, j + 1).getElevation() && map.point(i + 1, j + 1).getElevation() - elevation > diff) {
       score++;
-    } else if (elevation - map.point(i + 1, j + 1).getElevation() > diff) {
+    } else if (map.point(i + 1, j + 1) !== null && elevation - map.point(i + 1, j + 1).getElevation() > diff) {
       score--;
     }
-    if (elevation < map.point(i, j + 1).getElevation() && map.point(i, j + 1).getElevation() - elevation > diff) {
+    if (map.point(i, j + 1) !== null && elevation < map.point(i, j + 1).getElevation() && map.point(i, j + 1).getElevation() - elevation > diff) {
       score++;
-    } else if (elevation - map.point(i, j + 1).getElevation() > diff) {
+    } else if (map.point(i, j + 1) !== null && elevation - map.point(i, j + 1).getElevation() > diff) {
       score--;
     }
 
-    if (elevation > map.point(i, j - 1).getElevation() && elevation - map.point(i, j - 1).getElevation() > diff) {
+    if (map.point(i, j - 1) !== null && elevation > map.point(i, j - 1).getElevation() && elevation - map.point(i, j - 1).getElevation() > diff) {
       score++;
-    } else if (map.point(i, j - 1).getElevation() - elevation > diff) {
+    } else if (map.point(i, j - 1) !== null && map.point(i, j - 1).getElevation() - elevation > diff) {
       score--;
     }
-    if (elevation > map.point(i - 1, j - 1).getElevation() && elevation - map.point(i - 1, j - 1).getElevation() > diff) {
+    if (map.point(i - 1, j - 1) !== null && elevation > map.point(i - 1, j - 1).getElevation() && elevation - map.point(i - 1, j - 1).getElevation() > diff) {
       score++;
-    } else if (map.point(i - 1, j - 1).getElevation() - elevation > diff) {
+    } else if (map.point(i - 1, j - 1) !== null && map.point(i - 1, j - 1).getElevation() - elevation > diff) {
       score--;
     }
-    if (elevation > map.point(i - 1, j).getElevation() && elevation - map.point(i - 1, j).getElevation() > diff) {
+    if (map.point(i - 1, j) !== null && elevation > map.point(i - 1, j).getElevation() && elevation - map.point(i - 1, j).getElevation() > diff) {
       score++;
-    } else if (map.point(i - 1, j).getElevation() - elevation > diff) {
+    } else if (map.point(i - 1, j) !== null && map.point(i - 1, j).getElevation() - elevation > diff) {
       score--;
     }
 
