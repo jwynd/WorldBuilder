@@ -21,6 +21,7 @@ class RiverAgent {
       // rcount++;
       Array.prototype.push.apply(altered, this.generateRiver(map)); // only way I found to concatinate arrays
     }
+    this.recDepth = 0;
     return altered;
   }
 
