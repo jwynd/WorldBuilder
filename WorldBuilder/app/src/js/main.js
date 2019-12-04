@@ -349,35 +349,35 @@ export default function sketch (p) {
     const diff = 0.75;
     // console.log(map.point(i+1, j).getElevation() - elevation);
 
-    if (elevation < map.point(i + 1, j).getElevation() && map.point(i + 1, j).getElevation() - elevation > diff) {
+    if (map.point(i + 1, j) !== null && elevation < map.point(i + 1, j).getElevation() && map.point(i + 1, j).getElevation() - elevation > diff) {
       score++;
-    } else if (elevation - map.point(i + 1, j).getElevation() > diff) {
+    } else if (map.point(i + 1, j) !== null && elevation - map.point(i + 1, j).getElevation() > diff) {
       score--;
     }
-    if (elevation < map.point(i + 1, j + 1).getElevation() && map.point(i + 1, j + 1).getElevation() - elevation > diff) {
+    if (map.point(i + 1, j + 1) !== null && elevation < map.point(i + 1, j + 1).getElevation() && map.point(i + 1, j + 1).getElevation() - elevation > diff) {
       score++;
-    } else if (elevation - map.point(i + 1, j + 1).getElevation() > diff) {
+    } else if (map.point(i + 1, j + 1) !== null && elevation - map.point(i + 1, j + 1).getElevation() > diff) {
       score--;
     }
-    if (elevation < map.point(i, j + 1).getElevation() && map.point(i, j + 1).getElevation() - elevation > diff) {
+    if (map.point(i, j + 1) !== null && elevation < map.point(i, j + 1).getElevation() && map.point(i, j + 1).getElevation() - elevation > diff) {
       score++;
-    } else if (elevation - map.point(i, j + 1).getElevation() > diff) {
+    } else if (map.point(i, j + 1) !== null && elevation - map.point(i, j + 1).getElevation() > diff) {
       score--;
     }
 
-    if (elevation > map.point(i, j - 1).getElevation() && elevation - map.point(i, j - 1).getElevation() > diff) {
+    if (map.point(i, j - 1) !== null && elevation > map.point(i, j - 1).getElevation() && elevation - map.point(i, j - 1).getElevation() > diff) {
       score++;
-    } else if (map.point(i, j - 1).getElevation() - elevation > diff) {
+    } else if (map.point(i, j - 1) !== null && map.point(i, j - 1).getElevation() - elevation > diff) {
       score--;
     }
-    if (elevation > map.point(i - 1, j - 1).getElevation() && elevation - map.point(i - 1, j - 1).getElevation() > diff) {
+    if (map.point(i - 1, j - 1) !== null && elevation > map.point(i - 1, j - 1).getElevation() && elevation - map.point(i - 1, j - 1).getElevation() > diff) {
       score++;
-    } else if (map.point(i - 1, j - 1).getElevation() - elevation > diff) {
+    } else if (map.point(i - 1, j - 1) !== null && map.point(i - 1, j - 1).getElevation() - elevation > diff) {
       score--;
     }
-    if (elevation > map.point(i - 1, j).getElevation() && elevation - map.point(i - 1, j).getElevation() > diff) {
+    if (map.point(i - 1, j) !== null && elevation > map.point(i - 1, j).getElevation() && elevation - map.point(i - 1, j).getElevation() > diff) {
       score++;
-    } else if (map.point(i - 1, j).getElevation() - elevation > diff) {
+    } else if (map.point(i - 1, j) !== null && map.point(i - 1, j).getElevation() - elevation > diff) {
       score--;
     }
 
@@ -386,14 +386,14 @@ export default function sketch (p) {
 
   function smoothPoint (map, i, j) {
     let total = map.point(i, j).getElevation() * 3;
-    total += map.point(i - 1, j).getElevation();
-    total += map.point(i - 2, j).getElevation();
-    total += map.point(i, j - 1).getElevation();
-    total += map.point(i, j - 2).getElevation();
-    total += map.point(i + 1, j).getElevation();
-    total += map.point(i + 2, j).getElevation();
-    total += map.point(i, j + 1).getElevation();
-    total += map.point(i, j + 2).getElevation();
+    total += (map.point(i - 1, j) !== null) ? map.point(i - 1, j).getElevation() : 0;
+    total += (map.point(i - 2, j) !== null) ? map.point(i - 2, j).getElevation() : 0;
+    total += (map.point(i, j - 1) !== null) ? map.point(i, j - 1).getElevation() : 0;
+    total += (map.point(i, j - 2) !== null) ? map.point(i, j - 2).getElevation() : 0;
+    total += (map.point(i + 1, j) !== null) ? map.point(i + 1, j).getElevation() : 0;
+    total += (map.point(i + 2, j) !== null) ? map.point(i + 2, j).getElevation() : 0;
+    total += (map.point(i, j + 1) !== null) ? map.point(i, j + 1).getElevation() : 0;
+    total += (map.point(i, j + 2) !== null) ? map.point(i, j + 2).getElevation() : 0;
     total /= 11;
     map.point(i, j).setElevation(total);
   }
