@@ -10,6 +10,7 @@ class RiverAgent {
   constructor (rand, maxRivers = 1) {
     this.maxRivers = maxRivers;
     this.rand = rand;
+    this.recDepth = 0;
   }
 
   // will generate maxRivers
@@ -25,6 +26,7 @@ class RiverAgent {
 
   // will generate 1 river
   generateRiver (map) {
+    if(this.recDepth > 100) return [];
     const points = map.getPointsOfType('shore').concat(map.getPointsOfType('tallShore'));
     const b = this.rand.callRandom(points);
     const m = map.getRandomPointOfType('mountain');
