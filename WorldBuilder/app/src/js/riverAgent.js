@@ -41,7 +41,7 @@ class RiverAgent {
       // move towards a mountain
       // count++;
       prevBiome.push(p.getBiome());
-      p.setBiome('river');
+      if (p.getBiome() !== 'lake') p.setBiome('river');
       const nRaw = map.getNeighbors(p);
 
       d = p.dist(m);
