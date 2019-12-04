@@ -24,7 +24,7 @@ class Setting extends React.Component {
         NumMountainRanges: 10,
         WidthMountainRange: 10,
         Squiggliness: 1,
-        MountainSmoothness: 5,
+        MountainSmoothness: 50,
         WorldSeed: worldSeed,
     };
   }

@@ -73,6 +73,7 @@ let coastUniformity = 3;
 // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
 // Not an option if there's no mountains
 let numRivers = 0;
+//let numRivers = .05 * (2 * Math.pi * Math.sqrt (islandArea/ Math.pi));
 
 // MountainAgent parameters
 
@@ -128,8 +129,8 @@ if(document.getElementById('coastUniformity').value){
 }
 
 if(document.getElementById('numRivers').value){
-  // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
-  //numRivers =  parseInt(document.getElementById('numRivers').value) /100 * .05(2 * Math.pi * Math.sqrt(islandArea/Math.pi))
+  //0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
+  numRivers =  (parseInt(document.getElementById('numRivers').value) / 100 * 0.05 * (2 * Math.pi * Math.sqrt(islandArea/Math.pi)))
 }
 
 if(document.getElementById('numMountainRanges').value){
