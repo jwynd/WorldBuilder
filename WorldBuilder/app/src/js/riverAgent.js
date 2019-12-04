@@ -7,10 +7,8 @@ import Map from './map.js';
 // let rcount = 0;
 class RiverAgent {
   // making weird lines in lakes, and there's a possibility of there not being shorelines
-  constructor (rand, maxRivers = 1, wanderSteps = 1000, wanderCut = 50) {
+  constructor (rand, maxRivers = 1) {
     this.maxRivers = maxRivers;
-    this.wanderSteps = wanderSteps;
-    this.wanderCut = wanderCut;
     this.rand = rand;
   }
 
@@ -63,69 +61,14 @@ class RiverAgent {
         }
         return this.generateRiver(map);
       }
-      p = pickN(n, m);
+      p = pickN(n);
       // console.log(p, count);
     }
     return altered;
   }
-
-  // // pick a random point to wander to.
-  // generateWanderPoint (map, p, dir) {
-  //   const points = [];
-  //   let x;
-  //   let y;
-  //   switch (dir) {
-  //     case 'north':
-  //       x = [floor(-this.wanderSteps / 2), floor(this.wanderSteps / 2)];
-  //       y = [-this.wanderSteps, 0];
-  //       break;
-  //     case 'northeast':
-  //       x = [0, this.wanderSteps];
-  //       y = [-this.wanderSteps, 0];
-  //       break;
-  //     case 'east':
-  //       x = [0, this.wanderSteps];
-  //       y = [floor(-this.wanderSteps / 2), floor(this.wanderSteps / 2)];
-  //       break;
-  //     case 'southeast':
-  //       x = [0, this.wanderSteps];
-  //       y = [0, this.wanderSteps];
-  //       break;
-  //     case 'south':
-  //       x = [floor(-this.wanderSteps / 2), floor(this.wanderSteps / 2)];
-  //       y = [0, this.wanderSteps];
-  //       break;
-  //     case 'southwest':
-  //       x = [-this.wanderSteps, 0];
-  //       y = [0, this.wanderSteps];
-  //       break;
-  //     case 'west':
-  //       x = [-this.wanderSteps, 0];
-  //       y = [floor(-this.wanderSteps / 2), floor(this.wanderSteps / 2)];
-  //       break;
-  //     case 'northwest':
-  //       x = [-this.wanderSteps, 0];
-  //       y = [-this.wanderSteps, 0];
-  //       break;
-  //     default:
-  //       console.error('generateWanderPoints invalid direction');
-  //       return null;
-  //   }
-  //   if (x[0] < 0) x[0] = 0;
-  //   if (x[1] > map.width - 1) x[1] = map.width - 1;
-  //   if (y[0] < 0) y[0] = 0;
-  //   if (y[1] > map.height - 1) y[1] = map.height - 1;
-  //   for (let i = x[0]; i < x[1]; ++i) {
-  //     for (let j = y[0]; j < y[1]; ++j) {
-  //       points.push(map.point(i, j));
-  //     }
-  //   }
-  //   if (points.length === 0) return null;
-  //   return random(points);
-  // }
 }
 
-function pickN (ns, dest) {
+function pickN (ns) {
   let result = ns[0];
   for (const n of ns) {
     if (n.getElevation() < result.getElevation()) {
