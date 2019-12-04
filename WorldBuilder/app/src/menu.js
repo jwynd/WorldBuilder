@@ -5,7 +5,7 @@ import ControlledPopup from './Popup.js'
 import './scss/_modal.scss';
 import './scss/_buttons.scss';
 import { Modal, ListGroup } from 'react-bootstrap';
-
+import { tsTypeQuery } from '@babel/types';
 
 function close() {
   this.setState( {showModalMenu: false} );
@@ -34,6 +34,8 @@ class Menu extends React.Component {
       this.props.setParentState()
     }, 1000)
   }
+  
+
   setSelfState = () => {
     document.getElementById('worldseed1').value=this.getRamNumber()
     let loading = document.getElementById('i-loading')

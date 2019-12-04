@@ -5,7 +5,6 @@ import download from './icons/download.svg';
 import Menu from './menu.js';
 import Login from './Login.js';
 import Map from './Map.js';
-import Setting from './Setting.js';
 class App extends React.Component {
   constructor(props){
     super(props)
@@ -35,10 +34,13 @@ class App extends React.Component {
   }
   setSelfState1 = () => {
     this.setState({
-      seed: document.getElementById('worldseed1').value
+      seed : document.getElementById('worldseed1').value 
     })
     this.forceUpdate()
   }
+
+  
+ 
   componentDidMount(){
     let loading = document.getElementById('i-loading')
     if (loading) {
@@ -73,7 +75,9 @@ class App extends React.Component {
                 <input type="text" hidden id="squiggliness"/>
                 <input type="text" hidden id="mountainSmoothness"/>
                 <input type="text" hidden id="islandArea"/>
-        
+                <input type="text" hidden id="worldSeed"/>
+               
+
                   <div className="fill"></div>
                   <h1 className="App-title">WorldBuilder</h1>
                   <img src={logo} className="App-logo" alt="logo" height="100"/>

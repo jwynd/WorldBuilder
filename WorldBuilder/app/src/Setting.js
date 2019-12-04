@@ -5,15 +5,16 @@ import InputRange from 'react-input-range';
 import './App.scss';
 import 'react-rangeslider/lib/index.css'; 
 import 'react-input-range/lib/css/index.css';
-export { mWidth, mHeight, mapName, heightmap, size, coastSmoothness, islandArea, islandCircumference,
-         inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
-         squiggliness, mountainSmoothness} from './js/main.js';
+import {worldSeed}from './js/main.js';
+//import { mWidth, mHeight, mapName, size, coastSmoothness, islandArea, islandCircumference,
+//         inland, beachHeight, coastUniformity, numRivers, numMountainRanges, widthMountainRange,
+//         squiggliness, mountainSmoothness, worldSeed} from './js/main.js';
 
 class Setting extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
+
         Size: 5,
         ConastSmoothness: 2,
         Inland: 3,
@@ -24,42 +25,51 @@ class Setting extends React.Component {
         WidthMountainRange: 10,
         Squiggliness: 1,
         MountainSmoothness: 5,
+        WorldSeed: worldSeed,
     };
   }
+    //console.log('islandArea is ' + this.state.islandArea);
+    //console.log('numMountainRange is ' + numMountainRanges)
+    //console.log('numMountainRange percentage is ' + this.state.numMountainRangesPercentage)
+    
+  //}
     newset=()=>{
-      // need change to long
       debugger
         let width =  document.getElementById("mWidth").value
         let height =  document.getElementById("mHeight").value
         let temp = this.state.Size/100* Math.ceil((width * height))
         document.getElementById("size").value = this.state.Size
-       // document.getElementById("inland").value = this.state.Inland
-      //  document.getElementById("coastSmoothness").value = this.state.ConastSmoothness
-      //  document.getElementById("coastUniformity").value = this.state.CoastUniformity
-       /* let islandArea = Math.pow(2, temp)
-        let islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI);
-        document.getElementById("conastSmoothness").value = this.ConastSmoothness()/100*temp  
-        document.getElementById("inland").value = this.Inland() 
-        document.getElementById("beachHeight").value = this.BeachHeight()
-        document.getElementById("coastUniformity").value = this.CoastUniformity()
-        document.getElementById("numRivers").value = this.NumRivers()/100*.05(2 * Math.pi * Math.sqrt(islandArea/ Math.pi))
-        document.getElementById("numMountainRanges").value = this.NumMountainRanges()/100* 0.05 * islandArea
-        document.getElementById("widthMountainRange").value = this.WidthMountainRange()/100* islandCircumference / 3
-        document.getElementById("squiggliness").value = this.Squiggliness()
-        document.getElementById("mountainSmoothness").value = this.MountainSmoothness()*/
+
+      //worldSeed.value = 1234;
       this.props.setParentState()
-    } 
-    
+    }
+
+   /* setSeed = (e) => {
+      this.setState({
+        worldSeed: e.target.value
+      })
+      console.log('seed ' + this.state.worldSeed)
+    }
+    */
 
   render() {
     return (
-     
+   
       <form className="form">
         <input type="text" hidden id="mWidth" value={1280}/>
         <input type="text" hidden id="mHeight" value={720}/>
         <Scrollbars
                 style={{width: 450, height: '95vh' }}>
-            
+       <p> Set for Map seed number </p>
+          <InputRange
+          maxValue={1000000}
+          minValue={1}
+          value={this.state.WorldSeed} //Default value
+          onChange={value => this.setState({ WorldSeed: value })} //Stores user input
+          //onChangeComplete={value => console.log(value)}
+          onCHangeComplet={value => console.log(value)}
+        />
+   
         <p> Set Map Size </p>
         <InputRange
           maxValue={100}
@@ -71,7 +81,7 @@ class Setting extends React.Component {
 
      <p> Smoothness of Coast </p>
          <InputRange
-          maxValue={8}
+          maxValue={100}
           minValue={0}
           value={this.state.ConastSmoothness}
           onChange={value => this.setState({ ConastSmoothness: value })}
