@@ -109,7 +109,47 @@ debugger
 
 if(document.getElementById('size').value){
   islandArea = Math.pow(2, parseInt(document.getElementById('size').value))
+  islandCircumference = 2 * Math.PI * Math.sqrt(islandArea / Math.PI)
 }
+if(document.getElementById('inland').value){
+  inland =  parseInt(document.getElementById('inland').value)
+    // be = new BeachAgent(arseInt(document.getElementById('inland').value), beachHeight / 10, octave);
+}
+if(document.getElementById('coastSmoothness').value){
+  coastSmoothness =  parseInt(document.getElementById('coastSmoothness').value)
+}
+
+if(document.getElementById('beachHeight').value){
+  beachHeight =  parseInt(document.getElementById('beachHeight').value)
+}
+
+if(document.getElementById('coastUniformity').value){
+  coastUniformity =  parseInt(document.getElementById('coastUniformity').value)
+}
+
+if(document.getElementById('numRivers').value){
+  // 0 <= numRivers <= .05(2 * pi * sqrt(islandArea/pi))
+  //numRivers =  parseInt(document.getElementById('numRivers').value) /100 * .05(2 * Math.pi * Math.sqrt(islandArea/Math.pi))
+}
+
+if(document.getElementById('numMountainRanges').value){
+ // numMountainRanges =  parseInt(document.getElementById('numMountainRanges').value)
+}
+
+if(document.getElementById('widthMountainRange').value){
+  //widthMountainRange =  parseInt(document.getElementById('widthMountainRange').value)/100*islandCircumference/3
+  //if(widthMountainRange < islandCircumference/10){
+  //  widthMountainRange = islandCircumference/10
+  //}
+  //TypeError: Cannot read property 'remove' of null
+}
+if(document.getElementById('squiggliness').value){
+  squiggliness =  parseInt(document.getElementById('squiggliness').value)
+}
+if(document.getElementById('mountainSmoothness').value){
+  mountainSmoothness =  parseInt(document.getElementById('mountainSmoothness').value)
+}
+
 
   // 1 <= agents <= tokens
   let agents = Math.pow(2, coastSmoothness);
@@ -154,6 +194,7 @@ if(document.getElementById('size').value){
     c = new CoastAgent(point, tokens, limit);
     b = new BiomeAgent();
     be = new BeachAgent(inland, beachHeight / 10, octave);
+
     ma = new MountainAgent(numMountainRanges, mountainTokens, widthMountainRange, minPeak, maxPeak,
       minWalkTime, maxWalkTime, minTurnAngle, maxTurnAngle, mountainSmoothness, 1, rand);
 

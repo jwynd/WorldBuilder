@@ -16,12 +16,12 @@ class Setting extends React.Component {
     this.state = {
 
         Size: 5,
-        ConastSmoothness: 2,
+        ConastSmoothness: 4,
         Inland: 3,
         BeachHeight: 5,
         CoastUniformity: 3,
         NumRivers: 0,
-        NumMountainRanges: 30,
+        NumMountainRanges: 10,
         WidthMountainRange: 10,
         Squiggliness: 1,
         MountainSmoothness: 5,
@@ -39,7 +39,17 @@ class Setting extends React.Component {
         let height =  document.getElementById("mHeight").value
         let temp = this.state.Size/100* Math.ceil((width * height))
         document.getElementById("size").value = this.state.Size
-
+        document.getElementById("coastSmoothness").value = this.state.ConastSmoothness
+        document.getElementById("inland").value = this.state.Inland
+        document.getElementById("beachHeight").value = this.state.BeachHeight
+        document.getElementById("coastUniformity").value = this.state.CoastUniformity
+        document.getElementById("numRivers").value = this.state.NumRivers
+        document.getElementById("numMountainRanges").value = this.state.NumMountainRanges
+        document.getElementById("widthMountainRange").value = this.state.WidthMountainRange
+        document.getElementById("squiggliness").value = this.state.Squiggliness
+        document.getElementById("mountainSmoothness").value = this.state.MountainSmoothness
+   
+        
       //worldSeed.value = 1234;
       this.props.setParentState()
     }
@@ -81,7 +91,7 @@ class Setting extends React.Component {
 
      <p> Smoothness of Coast </p>
          <InputRange
-          maxValue={100}
+          maxValue={7}
           minValue={0}
           value={this.state.ConastSmoothness}
           onChange={value => this.setState({ ConastSmoothness: value })}
@@ -106,7 +116,7 @@ class Setting extends React.Component {
      
     <p> Set Coast Uniformity</p>
           <InputRange
-          maxValue={30}
+          maxValue={3}
           minValue={0}
           value={this.state.CoastUniformity}
           onChange={value => this.setState({ CoastUniformity: value })}
@@ -122,7 +132,7 @@ class Setting extends React.Component {
 
     <p> Set Number of Mountain Ranges </p>
          <InputRange
-          maxValue={100}
+          maxValue={10}
           minValue={0}
           value={this.state.NumMountainRanges}
           onChange={value => this.setState({ NumMountainRanges: value })}
