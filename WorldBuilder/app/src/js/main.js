@@ -177,7 +177,7 @@ if(document.getElementById('size').value){
         }
         const raw = m.point(i, j).getBiome();
         if (raw !== 'ocean' && raw !== 'mountain') {
-         // smoothPoint(m, i, j);
+          smoothPoint(m, i, j);
         }
       }
     }
@@ -305,23 +305,21 @@ if(document.getElementById('size').value){
 
     return score;
   }
-}
-/*
+
   function smoothPoint (map, i, j) {
     let total = map.point(i, j).getElevation() * 3;
-    total += map.point(i - 1, j).getElevation();
-    total += map.point(i - 2, j).getElevation();
-    total += map.point(i, j - 1).getElevation();
-    total += map.point(i, j - 2).getElevation();
-    total += map.point(i + 1, j).getElevation();
-    total += map.point(i + 2, j).getElevation();
-    total += map.point(i, j + 1).getElevation();
-    total += map.point(i, j + 2).getElevation();
+    total += (map.point(i - 1, j) !== null) ? map.point(i - 1, j).getElevation() : 0;
+    total += (map.point(i - 2, j) !== null) ? map.point(i - 2, j).getElevation() : 0;
+    total += (map.point(i, j - 1) !== null) ? map.point(i, j - 1).getElevation() : 0;
+    total += (map.point(i, j - 2) !== null) ? map.point(i, j - 2).getElevation() : 0;
+    total += (map.point(i + 1, j) !== null) ? map.point(i + 1, j).getElevation() : 0;
+    total += (map.point(i + 2, j) !== null) ? map.point(i + 2, j).getElevation() : 0;
+    total += (map.point(i, j + 1) !== null) ? map.point(i, j + 1).getElevation() : 0;
+    total += (map.point(i, j + 2) !== null) ? map.point(i, j + 2).getElevation() : 0;
     total /= 11;
     map.point(i, j).setElevation(total);
   }
 }
-*/
 // let heightmap;
 // let m;
 // let c;
