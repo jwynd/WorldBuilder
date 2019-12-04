@@ -195,7 +195,7 @@ export default function sketch (p) {
   // MountainAgent parameters
 
   // Controls the length of a mountain range
-  const mountainTokens = Math.ceil((islandArea / widthMountainRange) * 0.02);
+  const mountainTokens = Math.ceil((islandArea / widthMountainRange) * 0.03);
 
   // Controls height of mountain peaks
   const maxPeak = maxHeightMountainRange;
