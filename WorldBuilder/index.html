@@ -1,51 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+  <link rel="stylesheet" href="./style.css">
   <head>
-    <style>
-      @import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
-    </style> 
-    <title>Hello!</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js" defer></script>
-    <script src="/script.js" defer></script>
-    <!--
-    <script src="./js/xxhash.min.js" defer></script>
-    <script src="./js/biomeAgent.js" defer></script>
-    <script src="./js/mountain_agent.js" defer></script>
-    <script src="./js/riverAgent.js" defer></script>
-    <script src="./js/coastAgent.js" defer></script>
-    <script src="./js/generateMap.js" defer></script>
-    <script src="./js/main.js" defer></script>-->
-  </head>  
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <script src="js/ui.js"></script>
+    <script src="js/p5.js"></script>
+    <script src="js/point.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/coastAgent.js"></script>
+    <script src="js/biomeAgent.js"></script>
+    <script src="js/mountainAgent.js"></script>
+    <script src="js/riverAgent.js"></script>
+    <script src="js/beachAgent.js"></script>
+    <script src="js/main.js"></script>
+  </head>
   <body>
-    <div id="root"></div>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-        https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
+    <h1>WorldBuilder</h1>
+    
+    <div></div>
 
-    <script>
-      // Your web app's Firebase configuration
-      var firebaseConfig = {
-        apiKey: "AIzaSyBYNTCRZrUuNlhZD5C-1umjaoCGVoY_x24",
-        authDomain: "worldbuilder-6346f.firebaseapp.com",
-        databaseURL: "https://worldbuilder-6346f.firebaseio.com",
-        projectId: "worldbuilder-6346f",
-        storageBucket: "worldbuilder-6346f.appspot.com",
-        messagingSenderId: "443368502877",
-        appId: "1:443368502877:web:fe8ed29afcdd5268f87fb4",
-        measurementId: "G-3N8NQGFVN7"
-      };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      firebase.analytics();
-    </script>
+    <main>
+          <b>Size</b>
+          <input id="sizeSlider" class="slider" type="range" value="0.85" min="0.5" max="1" step="0.01" onchange="sizeChange()">
+    
+          <div></div>
+    
+          <b>Symmetry</b>
+          <input id="smoothSlider" class="slider" type="range" value="0.2353" min="0" max="1" step="0.01" onchange="smoothChange()">
+    
+          <div></div>
+    
+          <b>Beach Size</b>
+          <input id="inlandSlider" class="slider" type="range" value="0.666667" min="0.333333" max="1" step="0.01" onchange="inlandChange()">
+    
+          <div></div>
+    
+          <b>Beach Steepness</b>
+          <input id="heightSlider" class="slider" type="range" value="0.5" min="0" max="1" step="0.01" onchange="heightChange()">
+    
+          <div></div>
+    
+          <b>Coast Uniformity</b>
+          <input id="uniformitySlider" class="slider" type="range" value="0.666667" min="0" max="1" step="0.01" onchange="uniformityChange()">
+    
+          <div></div>
+    
+          <b>River Density</b>
+          <input id="riverSlider" class="slider" type="range" value="0.155837" min="0" max="1" step="0.01" onchange="riverChange()">
+    
+          <div></div>
+    
+          <b>Mountain Density</b>
+          <input id="numMountainSlider" class="slider" type="range" value="1" min="0" max="1" step="0.01" onchange="numMountainChange()">
+        
+    
+          <div></div>
+    
+          <b>Width of Mountain Ranges</b>
+          <input id="widthMountainSlider" class="slider" type="range" value="1" min="0.1" max="1" step="0.01" onchange="widthMountainChange()">
+    
+          <div></div>
+    
+          <b>Height of Mountain Ranges</b>
+          <input id="heightMountainSlider" class="slider" type="range" value="0.8" min="0.6" max="1" step="0.01" onchange="heightMountainChange()">
+          
+          <!-- 
+          <div></div>
+          
+          <b>Nonlinearity of Mountain Ranges</b>
+          <input id="squigglinessSlider" class="slider" type="range" value="0.555556" min="0.0111111" max="1" step="0.01" onchange="squigglinessChange()">
+          <b id="squigglinessText">0</b>
+          -->
+    
+          <div></div>
+    
+          <b>Mountain Steepness</b>
+          <input id="smoothMountainSlider" class="slider" type="range" value="0.5" min="0" max="1" step="0.01" onchange="smoothMountainChange()">
+          <div></div>
+          <input id="genButton" type="button" class="button" value="Generate!" onclick="genFunc()">
+          <div></div>
+    </main>
+
+
+
+
   </body>
 </html>
